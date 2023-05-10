@@ -56,6 +56,6 @@ It is NOT associated to the Pharo launcher, which is to say that the actions thi
 ### Changing the associated Pharo image
 To change the associated Pharo image to this Stream Deck profile, simply open the Stream Deck application, click on the gear icon symbolizing the Settings, click the Profiles tab, then click the Pharo profile before clicking on the drop-down menu and selecting "Other...", being the last option of said list. A file explorer will open, prompting you to choose another .exe file.
 
-Contrary to what could be thought at first glance, this Stream Deck profile doesn't point to a file with the extension .image, but to the virtual machine associated to said image, since the current implementation of Stream Deck profiles can only lead them to be associated to .exe files. These virtual machines are located by default in C:\Users\`user`\Documents\Pharo\vms\`imageName`\Pharo.exe
+Contrary to what could be thought at first glance, this Stream Deck profile doesn't point to a file with the extension .image, but to the virtual machine associated to said image, since the current implementation of Stream Deck profiles can only lead them to be associated to .exe files. These virtual machines are located by default in C:\Users\*user*\Documents\Pharo\vms\*imageName*\Pharo.exe
 
 `imageName` having a name like 100-x64, or in regular expression terms (Regex): (0-9){3}-x64
