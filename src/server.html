@@ -21,7 +21,8 @@
         var socket = null;
         var websocketInterval = null;
         var connect_socket = function() {
-            socket = new WebSocket("ws://localhost:8080/pharoEndpoint");
+            //secure variant of the WebSocket (wss://) fixes unwanted resets of the connection
+            socket = new WebSocket("wss://localhost:8080/pharoEndpoint");
             if (isOpen(socket)) {
                 clearWebsocketInterval(websocketInterval);
             }
