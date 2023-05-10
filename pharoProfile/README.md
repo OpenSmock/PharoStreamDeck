@@ -1,6 +1,6 @@
 # Stream Deck Pharo Profile
 Features buttons executing some essential Pharo keyboard shortcuts, which can be quite convoluted (all keyboard shortcuts mentioned in parenthesis are as shown on Windows on the Pharo IDE as of 10/05/2023):
-Designed for a Stream Deck XL, with each horizontal line being dedicated a specific part of the Pharo IDE, containing 28 pushable buttons in total, 2 of them being repeated for the sake of convenience, and the 4 first buttons of each line being there to indicate what their respective line has in terms of functionalities.
+Designed for a Stream Deck XL, with each horizontal line being dedicated a specific part of the Pharo IDE, containing 28 pushable buttons in total, two of them being repeated for the sake of convenience, and the first four buttons of each line being there to indicate what their respective line has in terms of functionalities.
 The images provided all come from the standard icons library provided by Elgato by default.
 System Browser actions are not supported at the moment.
 
