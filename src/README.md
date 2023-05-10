@@ -1,1 +1,1 @@
-Informations complémentaires sur le code
+Complementary informations
