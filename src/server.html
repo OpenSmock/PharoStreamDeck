@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+    h1 {
+        color: green;
+    }
+      
+    h2 {
+        font-family: Impact;
+    }
+      
+    body {
+        text-align: center;
+    }
+    </style>
+</head>
+  
+<body>
+    <p>
+        <b>
+            Click on Below Button 
+            To Get Current URL
+        </b>
+    </p>
+  
+    <button onclick="GetURL()"> Get URL </button>
+    <p id="url"></p>
+       
+    <script>
+    var socket = null;
+    var connect_socket = function() { 
+        socket = new WebSocket("ws://localhost:8888/pharoEndpoint");     
+    }
+ 
+    function getURL() {
+        var gfg = document.URL;
+        var message = document.getElementById("url").innerHTML = gfg;
+        console.log(message);
+        socket.send(message);
+    }
+   connect_socket();
+    </script>
+</body>
+
+</html>
