@@ -1,6 +1,19 @@
-| server client |
-server := ZnWebSocket startServerOn: 8888 prefix: 'pharoEndpoint' do: [ :webSocket |
-        [ webSocket runWith: [ :message | self inform: 'Received message: ', message
-printString ] ]
-        on: ConnectionClosed, PrimitiveFailed do: [ "ignore close" ].
-         self inform: 'The server is closed' ].
+| json jsonObject |
+jsonObject := Dictionary new
+	at: 'event' put: 'inRegisterEvent';
+	at: 'uuid' put: 'inPluginUUID';
+	yourself.
+json := STONJSON toString: jsonObject.
+
+"Creates a ZnManagingMultiThreadedServer HTTP port 8888, which needs to be terminated through the Process Browser if another server is to be launched"
+server := ZnWebSocket startServerOn: 8080 prefix: 'pharoEndpoint' do: 
+	[ :webSocket |
+      [ webSocket runWith: 
+			[ :message | self inform: 'Received message: ', message
+printString.
+			webSocket sendMessage: json.
+			]
+		]
+      on: ConnectionClosed, PrimitiveFailed do: [ "ignore close" ].
+      self inform: 'The server is closed' 
+	].
