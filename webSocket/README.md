@@ -2,9 +2,12 @@
 This project permits the communication between a Web page wrote in HTML and JavaScript and a server written in Pharo.
 Its primary features are as described below:
 - Automatic reconnection to the server until one is launched
-- Secure connection by use of the secure WebSocket variant, wss://
-- Communication possible between the server and the Web page, through JSON strings sent in the WebSockets (use of the following methods: JSON.stringify() and JSON.parse() for the JavaScript side, STONJSON toString: and STONJSON fromString: for the Pharo side of things)
-- Web page checks if the WebSocket is open before sending a message through the isOpen method
+- Secure connection by use of the secure WebSocket variant wss://
+- Communication possible between the server and the Web page through JSON strings sent in a WebSocket (use of the following methods: JSON.stringify() and JSON.parse() for the JavaScript side, STONJSON toString: and STONJSON fromString: for the Pharo side)
+- Web page checks if the WebSocket is open before sending a message through the isOpen() method
+
+## Testing this project
+Launch server.html, execute the code contained within server.st in a Playground, then you should see some data sent from Pharo being shown in the Developer Tools of your Web browser (opened via F12), and the URL of server.html being sent to Pharo.
 
 ## Complementary informations
 ### Pharo
