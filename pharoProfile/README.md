@@ -4,7 +4,7 @@ Designed for a Stream Deck XL, with each horizontal line being dedicated a speci
 The images provided all come from the standard icons library provided by Elgato by default.
 System Browser actions are not supported at the moment.
 
-
+![profile](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/209b50cf-acaf-4026-8f99-9b781b9cd05d)
 
 ## System actions 
 ### as available in Pharo IDE tabs, being the first horizontal line of the Stream Deck profile
