@@ -4,10 +4,11 @@ Designed for a Stream Deck XL, with each horizontal line being dedicated a speci
 The images provided all come from the standard icons library provided by Elgato by default.
 System Browser actions are not supported at the moment.
 
-![profile](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/5378ccb7-13ec-4a59-b37c-dc509f0b302b)
+![profile](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/e9d6a12b-8e3c-4446-999f-5c48ec1bf64e)
 
 ## System actions 
 ### as available in Pharo IDE tabs, being the first horizontal line of the Stream Deck profile
+
 - Save (Ctrl+Shift+S)
 - Iceberg (Ctrl+O+I)
 - System Browser (Ctrl+O+B)
