@@ -10,4 +10,4 @@ This project shows a Web page programmed in HTML and JavaScript can communicate 
 This project shows how Stream Deck buttons can interact with the Pharo IDE by using some dedicated keyboard shortcuts.
 
 ## YearSelector
-This project shows how a plugin made in Pharo can interact with the Stream Deck by selecting some specific values.
+This project shows how a plugin made in Pharo can interact with the Stream Deck. It's possible to select values with the plugin (and the dedicated Stream Deck profile available next to it) or with some messages sent in Pharo.
