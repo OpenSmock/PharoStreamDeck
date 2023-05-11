@@ -4,7 +4,7 @@ Elgato Stream Deck utils for Pharo \
 
 # Contents of this GitHub repository
 ## Basic WebSocket communication
-This project shows how to communicate between a Web page programmed in HTML and JavaScript, and a server programmed in Pharo which uses a WebSocket and JSON data.
+This project shows a Web page programmed in HTML and JavaScript can communicate with a server programmed in Pharo, by using a WebSocket and JSON data.
 
 ## Pharo Stream Deck Profile
 This project shows how Stream Deck buttons can interact with the Pharo IDE by using some dedicated keyboard shortcuts.
