@@ -7,7 +7,7 @@ Its primary features are as described below:
 - Web page checks if the WebSocket is open before sending a message through the isOpen() method
 
 ## Testing this project
-Launch server.html, execute the code contained within server.st in a Playground, then you should see some data sent from Pharo being shown in the Developer Tools of your Web browser (opened via F12), and the URL of server.html being sent to Pharo.
+Launch server.html, execute the code contained within server.st in a Playground, then you should see some data sent from Pharo being shown in the Developer Tools of your Web browser (opened via F12), and the URL of server.html (starting with file://, the location of your file in your file explorer) being sent to Pharo.
 
 ## Complementary informations
 ### Pharo
