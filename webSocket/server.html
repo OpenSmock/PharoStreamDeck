@@ -20,7 +20,7 @@
         var socket = null;
         var websocketInterval = null;
         var connect_socket = function () {
-            //secure WebSocket variant (wss://) doesn't permit to send messages in this context
+            //secure WebSocket variant (wss://) doesn't permit sending messages in this context
             socket = new WebSocket("ws://localhost:8080/pharoEndpoint");
             if (isOpen(socket)) {
                 clearWebsocketInterval(websocketInterval);
