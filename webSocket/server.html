@@ -20,22 +20,22 @@
         //no need to refresh the page if a server is started
         var socket = null;
         var websocketInterval = null;
-        var connect_socket = function() {
-            //secure variant of the WebSocket (wss://) fixes unwanted resets of the connection
-            socket = new WebSocket("wss://localhost:8080/pharoEndpoint");
+        var connect_socket = function () {
+            //secure WebSocket variant (wss://) doesn't permit to send messages in this context
+            socket = new WebSocket("ws://localhost:8080/pharoEndpoint");
             if (isOpen(socket)) {
                 clearWebsocketInterval(websocketInterval);
             }
 
             //only fired when Pharo sends a message to the webpage,
             //not when this webpage sends a message to itself through socket.send()
-            socket.onmessage = function(event) {
-                //JSON syntax and sending a file client-side
+            socket.onmessage = function (event) {
+                //JSON syntax and how to send a file from a client-side perspective
                 /*var json = {
                     "event": "setSettings",
-					"context": context,
-					"payload": settings
-				};*/
+                    "context": context,
+                    "payload": settings
+                };*/
                 //JSON.stringify(json));
 
                 //event.data is undefined if left unparsed
@@ -46,17 +46,16 @@
                 console.log("uuid : " + uuid);
             }
 
-            socket.onclose = function() {
-                //console.log("New socket");
+            socket.onclose = function () {
                 //launch another WebSocket if the first one were to fail
+                //in ms, equivalent to 1s
                 setTimeout(connect_socket, 1000);
-                if(websocketInterval !== null) {
+                if (websocketInterval !== null) {
                     clearWebsocketInterval(websocketInterval);
                 }
             }
         }
 
-        //in ms, equivalent to 1s
         //permits the initialization of an interval
         //which will in turn create multiple ZnManagingMultiThreadedServer HTTP Worker processes
         //refreshing the Web page through F5 destroys them
