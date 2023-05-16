@@ -1,0 +1,254 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>com.thales.yearSelectorJS</title>
+	<meta charset="utf-8" />
+</head>
+
+<body>
+	<script>
+		var websocket = null;
+		var pluginUUID = null;
+		var settingsCache = {};
+		var DestinationEnum = Object.freeze({ "HARDWARE_AND_SOFTWARE": 0, "HARDWARE_ONLY": 1, "SOFTWARE_ONLY": 2 });
+		var yearWitnessArray = [];
+		var lastContext;
+
+		var yearSelectorAction = {
+			type: "com.thales.yearSelectorJS.action",
+
+			onKeyDown: function (context, settings, coordinates, userDesiredState) {
+			},
+
+			//clicking on a YearWitness resets the value
+			onKeyUp: function (context, settings, coordinates, userDesiredState) {
+				var year = 0;
+				if (settings != null && settings.hasOwnProperty('yearSelector')) {
+					yearSelector = settings["yearSelector"];
+				}
+				//takes value defined in the Property Inspector (yearSelector) for the current instance, year is a global variable accessible by all instances of the plugin
+				year = yearSelector;
+
+				updatedSettings = {};
+				updatedSettings["year"] = year;
+
+				//highlights key pressed
+				const highlightedImage = "img/actionIconHighlighted.png";
+				loadImageAsDataUri(highlightedImage, function (image) {
+					var json = {
+						"event": "setImage",
+						"context": context,
+						"payload": {
+							"image": image,
+							"target": DestinationEnum.HARDWARE_AND_SOFTWARE
+						}
+					};
+					websocket.send(JSON.stringify(json));
+				},);
+
+				//not executed for the first key press, but for the ones that come after
+				updatedSettings["lastContext"] = this.GetLastContext();
+				//for getting the current yearWitness
+				this.SetGlobalSettings(updatedSettings);
+				//see event in connectElgatoStreamDeckSocket, resets background of last key pressed
+				this.GetGlobalSettings(pluginUUID);
+				//used to remember last key pressed
+				lastContext = context;
+				settingsCache[context] = updatedSettings;
+				//needs to be a global setting in order to be available to other instances of the plugin, including YearWitness
+				this.SetLastContext(updatedSettings);
+			},
+
+			onWillAppear: function (context, settings, coordinates) {
+				var yearSelector = 0;
+				if (settings != null && settings.hasOwnProperty('yearSelector')) {
+					yearSelector = settings["yearSelector"];
+				}
+				settingsCache[context] = { 'yearSelector': yearSelector };
+				this.SetTitle(context, yearSelector);
+			},
+
+			SetTitle: function (context, yearSelector) {
+				var json = {
+					"event": "setTitle",
+					"context": context,
+					"payload": {
+						"title": "" + yearSelector,
+						"target": DestinationEnum.HARDWARE_AND_SOFTWARE
+					}
+				};
+				websocket.send(JSON.stringify(json));
+			},
+
+			//for variable yearSelector, defined in the Property Inspector and only available to the current instance
+			SetSettings: function (context, settings) {
+				var json = {
+					"event": "setSettings",
+					"context": context,
+					"payload": settings
+				};
+				websocket.send(JSON.stringify(json));
+			},
+
+			//for variable year, one value for every instance of the plugin
+			SetGlobalSettings: function (settings) {
+				var json = {
+					"event": "setGlobalSettings",
+					"context": pluginUUID,
+					"payload": settings
+				};
+				websocket.send(JSON.stringify(json));
+			},
+
+			//another setGlobalSettings, used to keep track of the last context to reset the preivous key pressed before the current one
+			SetLastContext: function (settings) {
+				lastContext = context;
+			},
+
+			GetLastContext: function () {
+				return lastContext;
+			},
+
+			//for variable year, one value for every instance of the plugin
+			GetGlobalSettings: function (settings) {
+				var json = {
+					"event": "getGlobalSettings",
+					"context": pluginUUID,
+				};
+				websocket.send(JSON.stringify(json));
+			},
+
+			AddToSettings: function (context, newSettings) {
+				settingsCache[context]
+			}
+		};
+
+		var yearWitnessAction = {
+			type: "com.thales.yearSelectorJS.yearWitness",
+
+			SetTitle: function (context, yearWitness) {
+				var json = {
+					"event": "setTitle",
+					"context": context,
+					"payload": {
+						"title": "" + yearWitness,
+						"target": DestinationEnum.HARDWARE_AND_SOFTWARE
+					}
+				};
+				websocket.send(JSON.stringify(json));
+			},
+		}
+
+		function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, inInfo) {
+			pluginUUID = inPluginUUID;
+			//port is 28196
+
+			// Open the web socket
+			websocket = new WebSocket("ws://127.0.0.1:" + inPort);
+
+			function registerPlugin(inPluginUUID) {
+				var json = {
+					"event": inRegisterEvent,
+					"uuid": inPluginUUID
+				};
+				websocket.send(JSON.stringify(json));
+			};
+
+			websocket.onopen = function () {
+				// WebSocket is connected, send message
+				registerPlugin(pluginUUID);
+			};
+
+			websocket.onmessage = function (evt) {
+				// Received message from Stream Deck
+				var jsonObj = JSON.parse(evt.data);
+				var event = jsonObj['event'];
+				var action = jsonObj['action'];
+				var context = jsonObj['context'];
+				var jsonPayload = jsonObj['payload'] || {};
+
+				if (event == "keyDown") {
+					var settings = jsonPayload['settings'];
+					var coordinates = jsonPayload['coordinates'];
+					var userDesiredState = jsonPayload['userDesiredState'];
+					yearSelectorAction.onKeyDown(context, settings, coordinates, userDesiredState);
+				}
+				//not a else if since it's triggered during the keyUp event, and the two need to be executed
+				//automatic refresh for YearWitness
+				if (event == "didReceiveGlobalSettings") {
+					var settings = jsonPayload['settings'];
+					//corresponds to last key pressed
+					var yearWitness = settings.year;
+					//every yearWitness is updated
+					//they need to know their context, since it's the unique identifier of an instance of an action
+					//and it isn't the current key pressed, which will generally be a YearSelector
+					//pressing a YearWitness will reset its value to 0
+					yearWitnessArray.forEach(function (item, index) {
+						yearWitnessAction.SetTitle(yearWitnessArray[index], yearWitness);
+					});
+
+					//resets background of last key pressed
+					const defaultImage = "img/actionIcon.png";
+					loadImageAsDataUri(defaultImage, function (image) {
+						var json = {
+							"event": "setImage",
+							"context": settings.lastContext,
+							"payload": {
+								"image": image,
+								"target": DestinationEnum.HARDWARE_AND_SOFTWARE
+							}
+						};
+						websocket.send(JSON.stringify(json));
+					},);
+				}
+				else if (event == "keyUp") {
+					var settings = jsonPayload['settings'];
+					var coordinates = jsonPayload['coordinates'];
+					var userDesiredState = jsonPayload['userDesiredState'];
+					yearSelectorAction.onKeyUp(context, settings, coordinates, userDesiredState);
+				}
+				else if (event == "willAppear") {
+					var settings = jsonPayload['settings'];
+					var coordinates = jsonPayload['coordinates'];
+					yearSelectorAction.onWillAppear(context, settings, coordinates);
+					//no punctuation apart from the dots that act as separators, case-sensitive since it's a string
+					if (action == "com.thales.yearselectorjs.yearwitness") {
+						yearWitnessArray.push(context);
+					}
+				}
+				else if (event == "sendToPlugin") {
+					if (jsonPayload.hasOwnProperty('setValue')) {
+						var newValue = jsonPayload.setValue;
+						//value of the instance (0-5-10-15-20)
+						yearSelectorAction.SetSettings(context, { "yearSelector": newValue });
+						//marks on the key what value will be taken
+						yearSelectorAction.SetTitle(context, newValue);
+					}
+				}
+			};
+
+			websocket.onclose = function () {
+				// Websocket is closed
+			};
+		};
+
+		function loadImageAsDataUri(url, callback) {
+			var image = new Image();
+
+			image.onload = function () {
+				var canvas = document.createElement("canvas");
+
+				canvas.width = this.naturalWidth;
+				canvas.height = this.naturalHeight;
+
+				var ctx = canvas.getContext("2d");
+				ctx.drawImage(this, 0, 0);
+				callback(canvas.toDataURL("image/png"));
+			};
+			image.src = url;
+		};
+	</script>
+</body>
+
+</html>
