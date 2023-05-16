@@ -5,6 +5,7 @@
       "Name": "YearSelector",
       "States": [
         {
+          "Image": "img/actionIcon",
           "TitleAlignment": "middle",
           "FontSize": "16"
         }
@@ -19,6 +20,7 @@
       "Name": "YearWitness",
       "States": [
         {
+          "Image": "img/actionIcon",
           "TitleAlignment": "middle",
           "FontSize": "16"
         }
@@ -34,7 +36,7 @@
   "Description": "This plugin shows a value with the YearWitness action and permits to choose from a list of values available from the Property Inspector with the YearSelector action",
   "Name": "YearSelectorJS",
   "Icon": "img/pluginIcon",
-  "URL": "add main GitHub",
+  "URL": "https://github.com/OpenSmock/PharoStreamDeck",
   "Version": "1.0",
   "Category": "YearSelector",
   "CategoryIcon": "img/pluginIcon",
