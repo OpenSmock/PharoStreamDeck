@@ -4,7 +4,7 @@ Prerequisite :
 
 Download the plugin and the profile, then double-click on them both. \
 The profile will be available from the profile list without overriding other Stream Deck profiles. \
-The profile will have no effect without the plugin, since the actions cannot have any effect. \
+The profile will have no effect without the plugin, since the actions cannot have any effect.
 
 # How to use it
 The YearSelector action permits the user to set a value to be taken by the plugin when clicked (5, 10, 15 or 20). \
