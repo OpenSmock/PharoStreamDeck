@@ -1,5 +1,5 @@
 # YearSelector
-This project shows how a plugin programmed in Pharo for the Elgato Stream Deck can interact with it.
+This project shows how a plugin for the Elgato Stream Deck can interact with it.
 As such, a Stream Deck profile is provided alongside the plugin in order to see its functionality in action.
 
 ![clicked YearSelector profile](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/a4ecf106-4308-4840-930d-9d61baeea9ef)
