@@ -2,6 +2,8 @@
 This project shows how a plugin for the Elgato Stream Deck can interact with it. \
 As such, a Stream Deck profile is provided alongside the plugin in order to see its functionality in action.
 
+![yearSelector profile](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/9e970b04-69df-46e2-a807-286cb1cfbf3e)
+
 ![clicked YearSelector profile](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/a4ecf106-4308-4840-930d-9d61baeea9ef)
 
 ## How it functions
