@@ -9,6 +9,7 @@ As such, a Stream Deck profile is provided alongside the plugin in order to see 
 ## How it functions
 A user can tap one of the Stream Deck keys contained in the aforementioned Stream Deck profile, or place on one of the Stream Deck keys the single action of this plugin, titled **YearSelector**, in the action list. On the Stream Deck, the pressed key will change color and appear blue, while the previous highlighted key will revert back to its original color. \
 A JavaScript version exists as well as a Pharo version, each one having the same objective.
+When the application is launched (e.g. a Stream Deck task isn't present in the Task Manager), the values will be reset (a YearWitness won't keep track of its value).
 
 ### Pharo version
 A key pressed is a change that's also made apparent in Pharo, where a notification is sent to inform the user that the value "year" has changed. \
