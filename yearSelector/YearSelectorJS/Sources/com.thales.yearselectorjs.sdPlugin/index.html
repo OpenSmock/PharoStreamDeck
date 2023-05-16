@@ -18,9 +18,7 @@
 		var yearSelectorAction = {
 			type: "com.thales.yearselectorjs.action",
 
-			onKeyDown: function (context, settings, coordinates, userDesiredState) {
-			},
-
+			//onKeyDown isn't needed here, but follows the same function signature as onKeyUp
 			//clicking on a YearWitness resets the value
 			onKeyUp: function (context, settings, coordinates, userDesiredState) {
 				var year = 0;
@@ -202,6 +200,7 @@
 						websocket.send(JSON.stringify(json));
 					},);
 				}
+				//keyDown isn't needed here, but has access to the same variables that keyUp has access to
 				else if (event == "keyUp") {
 					var settings = jsonPayload['settings'];
 					var coordinates = jsonPayload['coordinates'];
