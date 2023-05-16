@@ -12,7 +12,7 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Permits the user to choose a value and highlights the last key pressed. This value is then displayed on a YearWitness",
-      "UUID": "com.thales.yearSelectorjs.action",
+      "UUID": "com.thales.yearselectorjs.action",
       "PropertyInspectorPath": "yearSelector_pi.html"
     },
     {
@@ -27,7 +27,7 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Shows the year value, pressing it resets the value to 0",
-      "UUID": "com.thales.yearSelectorjs.yearwitness"
+      "UUID": "com.thales.yearselectorjs.yearwitness"
     }
   ],
   "SDKVersion": 2,
