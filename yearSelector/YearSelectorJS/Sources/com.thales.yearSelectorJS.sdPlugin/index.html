@@ -16,7 +16,7 @@
 		var lastContext;
 
 		var yearSelectorAction = {
-			type: "com.thales.yearSelectorJS.action",
+			type: "com.thales.yearselectorjs.action",
 
 			onKeyDown: function (context, settings, coordinates, userDesiredState) {
 			},
@@ -125,7 +125,7 @@
 		};
 
 		var yearWitnessAction = {
-			type: "com.thales.yearSelectorJS.yearWitness",
+			type: "com.thales.yearselectorjs.yearwitness",
 
 			SetTitle: function (context, yearWitness) {
 				var json = {
@@ -212,7 +212,7 @@
 					var settings = jsonPayload['settings'];
 					var coordinates = jsonPayload['coordinates'];
 					yearSelectorAction.onWillAppear(context, settings, coordinates);
-					//no punctuation apart from the dots that act as separators, case-sensitive since it's a string
+					//no punctuation apart from the dots that act as separators for the unique identifier
 					if (action == "com.thales.yearselectorjs.yearwitness") {
 						yearWitnessArray.push(context);
 					}
