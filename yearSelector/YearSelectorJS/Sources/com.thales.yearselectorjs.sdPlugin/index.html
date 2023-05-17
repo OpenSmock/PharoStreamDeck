@@ -50,7 +50,7 @@
 				//for getting the current yearWitness
 				this.SetGlobalSettings(updatedSettings);
 				//see event in connectElgatoStreamDeckSocket, resets background of last key pressed
-				this.GetGlobalSettings(pluginUUID);
+				this.GetGlobalSettings();
 				//used to remember last key pressed
 				lastContext = context;
 				settingsCache[context] = updatedSettings;
@@ -109,7 +109,7 @@
 			},
 
 			//for variable year, one value for every instance of the plugin
-			GetGlobalSettings: function (settings) {
+			GetGlobalSettings: function () {
 				var json = {
 					"event": "getGlobalSettings",
 					"context": pluginUUID,
