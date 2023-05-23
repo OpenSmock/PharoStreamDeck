@@ -43,7 +43,7 @@ System Browser actions are not supported at the moment.
 - Update list (Ctrl+U)
 
 ## Installation
-Download the file, then double-click it. If the Stream Deck application is installed on your computer, the profile will be imported on it with the "Pharo" name.
+Download the file, then double-click it. If the Stream Deck application is installed on your computer (available [here](https://www.elgato.com/us/en/s/downloads) in the Stream Deck system category), the profile will be imported on it with the "Pharo" name.
 
 Note: some of the keyboard shortcuts used in this profile require the SuperMacro plugin (available [here](https://github.com/BarRaider/streamdeck-supermacro), or directly via the Stream Deck store). As a matter of fact, some Pharo keyboard shortcuts require simultaneous alphabetical keys pushes, a type of action which cannot be done with the current implementation of the keyboard shortcut action provided by Elgato by default, which is available in the System portion of the action list. 
 
