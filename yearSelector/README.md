@@ -14,8 +14,8 @@ A JavaScript version exists as well as a Pharo version, each one having the same
 When the application is launched (e.g. a Stream Deck task isn't present in the Task Manager), the values will be reset (a YearWitness won't keep track of its value).
 
 ### Pharo version
-A key pressed is a change that's also made apparent in Pharo, where a notification is sent to inform the user that the value "year" has changed. \
-It's also possible to directly send a message in Pharo to the concerned class (titled YearSelector), which will impact the highlighted key on the Stream Deck.
+![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/6e3cd0dd-d41a-476e-aaf7-17bb6abf0adb)
+![english stream deck diagram drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/4c8689be-3953-449c-a826-cfabc424eed6)
 
 ## Complementary informations
 ### Pharo
