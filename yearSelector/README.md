@@ -11,7 +11,7 @@ Right : YearSelector actions
 ## How it functions
 A user can tap one of the Stream Deck keys contained in the aforementioned Stream Deck profile, or place on one of the Stream Deck keys one of the actions of this plugin, titled **YearSelector** and **YearWitness**, available from the action list. On the Stream Deck, the pressed key will change color and appear blue, while the previous highlighted key will revert back to its original color. \
 A JavaScript version exists as well as a Pharo version, each one having the same objective. \
-When the application is launched (e.g. a Stream Deck task isn't present in the Task Manager), the values will be reset (a YearWitness won't keep track of its value).
+When the application is launched (e.g. a Stream Deck task isn't present in the Task Manager), the values will be reset (a YearWitness won't keep track of its value, but a YearWitness keeps track of the value selected in its Property Inspector).
 
 ### Pharo version
 ![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/6e3cd0dd-d41a-476e-aaf7-17bb6abf0adb)
