@@ -14,8 +14,7 @@ A JavaScript version exists as well as a Pharo version, each one having the same
 When the application is launched (e.g. a Stream Deck task isn't present in the Task Manager), the values will be reset (a YearWitness won't keep track of its value, but a YearWitness keeps track of the value selected in its Property Inspector).
 
 ### Pharo version
-![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/6e3cd0dd-d41a-476e-aaf7-17bb6abf0adb)
-![english stream deck diagram drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/4c8689be-3953-449c-a826-cfabc424eed6)
+![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/a40b340a-78a8-43eb-9198-5e9eaae65e5a)
 
 ## Complementary informations
 ### Pharo
