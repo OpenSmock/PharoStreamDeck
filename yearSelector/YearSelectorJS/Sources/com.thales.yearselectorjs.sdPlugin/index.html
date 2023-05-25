@@ -13,7 +13,7 @@
 		var settingsCache = {};
 		var DestinationEnum = Object.freeze({ "HARDWARE_AND_SOFTWARE": 0, "HARDWARE_ONLY": 1, "SOFTWARE_ONLY": 2 });
 		var yearWitnessArray = [];
-		var lastContext;
+		var lastContext = null;
 
 		var yearSelectorAction = {
 			type: "com.thales.yearselectorjs.action",
@@ -55,7 +55,7 @@
 				lastContext = context;
 				settingsCache[context] = updatedSettings;
 				//needs to be a global setting in order to be available to other instances of the plugin, including YearWitness
-				this.SetLastContext(updatedSettings);
+				this.SetLastContext(lastContext);
 			},
 
 			onWillAppear: function (context, settings, coordinates) {
@@ -99,15 +99,6 @@
 				websocket.send(JSON.stringify(json));
 			},
 
-			//another setGlobalSettings, used to keep track of the last context to reset the preivous key pressed before the current one
-			SetLastContext: function (settings) {
-				lastContext = context;
-			},
-
-			GetLastContext: function () {
-				return lastContext;
-			},
-
 			//for variable year, one value for every instance of the plugin
 			GetGlobalSettings: function () {
 				var json = {
@@ -115,6 +106,15 @@
 					"context": pluginUUID,
 				};
 				websocket.send(JSON.stringify(json));
+			},
+
+			//another setGlobalSettings, used to keep track of the last context to reset the preivous key pressed before the current one
+			SetLastContext: function (context) {
+				lastContext = context;
+			},
+
+			GetLastContext: function () {
+				return lastContext;
 			},
 
 			AddToSettings: function (context, newSettings) {
@@ -166,12 +166,7 @@
 				var context = jsonObj['context'];
 				var jsonPayload = jsonObj['payload'] || {};
 
-				if (event == "keyDown") {
-					var settings = jsonPayload['settings'];
-					var coordinates = jsonPayload['coordinates'];
-					var userDesiredState = jsonPayload['userDesiredState'];
-					yearSelectorAction.onKeyDown(context, settings, coordinates, userDesiredState);
-				}
+				//onKeyDown is based on the same structure that the keuUp event follows
 				//not a else if since it's triggered during the keyUp event, and the two need to be executed
 				//automatic refresh for YearWitness
 				if (event == "didReceiveGlobalSettings") {
@@ -200,6 +195,7 @@
 						websocket.send(JSON.stringify(json));
 					},);
 				}
+				//keyDown is based on the same structure that the keyUp event follows
 				//keyDown isn't needed here, but has access to the same variables that keyUp has access to
 				else if (event == "keyUp") {
 					var settings = jsonPayload['settings'];
