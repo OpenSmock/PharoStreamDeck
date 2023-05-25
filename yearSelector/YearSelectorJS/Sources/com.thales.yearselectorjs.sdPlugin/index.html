@@ -214,7 +214,7 @@
 						yearWitnessArray.push(context);
 					}
 				}
-				//when the user switches between profiles or delete an action, empty yearWitnessArray to not accumulate them (they're created during willAppear)
+				//when the user switches between profiles or deletes an action, empty yearWitnessArray to not accumulate yearWitnesses, since they're created during willAppear
 				else if (event == "willDisappear") {
 					yearWitnessArray = [];
 				}
