@@ -8,6 +8,8 @@
 
 <body>
 	<script>
+		//script primarily based on this Elgato plugin
+		//https://github.com/elgatosf/streamdeck-numberdisplay/tree/master/Sources/com.elgato.numberdisplay.sdPlugin
 		var websocket = null;
 		var pluginUUID = null;
 		var settingsCache = {};
@@ -211,6 +213,10 @@
 					if (action == "com.thales.yearselectorjs.yearwitness") {
 						yearWitnessArray.push(context);
 					}
+				}
+				//when the user switches between profiles or delete an action, empty yearWitnessArray to not accumulate them (they're created during willAppear)
+				else if (event == "willDisappear") {
+					yearWitnessArray = [];
 				}
 				else if (event == "sendToPlugin") {
 					if (jsonPayload.hasOwnProperty('setValue')) {
