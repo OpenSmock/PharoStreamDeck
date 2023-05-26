@@ -14,7 +14,8 @@
             <div class="sdpi-item-label">Change year</div>
             <select class="sdpi-item-value select setvalueSelect"
                 onchange="sendValueToPlugin(Number(event.target.value), 'setValue')">
-                <option selected value="5">5</option>
+                <option value="">Select a value</option>
+                <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="15">15</option>
                 <option value="20">20</option>
@@ -47,8 +48,11 @@
             if (param === 'setValue') {
                 oValueSelector && Array.prototype.forEach.call(oValueSelector.options, function (o) {
                     const val = Math.round(value);
-                    if (o.value !== val) {
-                        oValueSelector.value = val;
+                    if(value != "") {
+                        const val = Math.round(value);
+                        if (o.value !== val) {
+                            oValueSelector.value = val;
+                        }
                     }
                 })
             }
