@@ -2,11 +2,12 @@
 This project shows how a plugin for the Elgato Stream Deck can interact with it. \
 As such, a Stream Deck profile is provided alongside the plugin in order to see its functionality in action.
 
-![yearSelector profile](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/9e970b04-69df-46e2-a807-286cb1cfbf3e) \
+![js1](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/80b0d12e-17f7-4779-838d-68a0e61de41d) \
+
 Left : YearWitness actions (not the text accompanying it) \
 Right : YearSelector actions
 
-![clicked YearSelector profile](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/a4ecf106-4308-4840-930d-9d61baeea9ef)
+![js2](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/b84a5d97-8a30-4773-95bc-4a609efff82c)
 
 ## How it functions
 A user can tap one of the Stream Deck keys contained in the aforementioned Stream Deck profile, or place on one of the Stream Deck keys one of the actions of this plugin, titled **YearSelector** and **YearWitness**, available from the action list. On the Stream Deck, the pressed key will change color and appear blue, while the previous highlighted key will revert back to its original color. \
