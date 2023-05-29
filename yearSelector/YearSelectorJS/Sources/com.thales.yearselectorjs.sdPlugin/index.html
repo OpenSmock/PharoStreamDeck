@@ -209,12 +209,16 @@
 					var settings = jsonPayload['settings'];
 					var coordinates = jsonPayload['coordinates'];
 					yearSelectorAction.onWillAppear(context, settings, coordinates);
+
 					//no punctuation apart from the dots that act as separators for the unique identifier
 					if (action == "com.thales.yearselectorjs.yearwitness") {
 						yearWitnessArray.push(context);
 					}
+
+					//to reset the last pressed key to its original black background
+					yearSelectorAction.GetGlobalSettings();
 				}
-				//when the user switches between profiles or delete an action, empty yearWitnessArray to not accumulate them (they're created during willAppear)
+				//when the user switches between profiles or deletes an action, empty yearWitnessArray to not accumulate yearWitnesses since they're all created during willAppear
 				else if (event == "willDisappear") {
 					yearWitnessArray = [];
 				}
