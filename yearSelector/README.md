@@ -21,10 +21,11 @@ It also functions the same way, having a YearSelector action and a YearWitness a
 In terms of structure, the MyYearSelector folder is a Pharo package which comports a YearSelector class, being the Pharo code, and a YearSelectorTest class.
 The YearSelectorPharo JavaScript part folder is a mix between ![basic WebSocket communication](https://github.com/OpenSmock/PharoStreamDeck/tree/main/webSocket) and [YearSelectorJS](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS).
 
-How this plugin works and communicate with the differents parts involved is explained in this image : \
-![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/039e6561-4e3f-45fa-b296-3eb353edef76)
 For now, an instance of a YearSelector needs to be created in Pharo to launch a server and the first WebSocket.
 In a Playground, execute the following line of code : `YearSelector new`
+
+How this plugin works and communicate with the differents parts involved is explained in this image : \
+![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/039e6561-4e3f-45fa-b296-3eb353edef76)
 
 ## Complementary informations
 ### Pharo
