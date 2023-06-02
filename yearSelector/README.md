@@ -27,7 +27,8 @@ For now, an instance of a YearSelector needs to be created in Pharo to launch a 
 In a Playground, execute the following line of code : `YearSelector new`
 
 How this plugin works and communicate with the differents parts involved is explained in this image : \
-![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/039e6561-4e3f-45fa-b296-3eb353edef76)
+
+![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/8c82ab61-47c6-4566-b1a1-7181ac434522)
 
 ## Complementary informations
 ### Pharo
