@@ -14,7 +14,9 @@ A user can tap one of the Stream Deck keys contained in the aforementioned Strea
 A JavaScript version exists as well as a Pharo version, each one having the same objective. \
 When the application is launched (e.g. a Stream Deck task isn't present in the Task Manager), the values will be reset (a YearWitness won't keep track of its value, but a YearWitness keeps track of the value selected in its Property Inspector).
 
-### Pharo version
+## Pharo version
+This version shows how Pharo, JavaScript and the Stream Deck SDK as well as JSON data sent through WebSockets can interact.
+
 The Pharo profile is organized in the same way that the JavaScipt version is. \
 It also functions the same way, having a YearSelector action and a YearWitness action.
 
