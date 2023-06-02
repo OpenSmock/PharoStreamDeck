@@ -39,7 +39,7 @@
 				//equals to Stream Deck <-- Plugin <-- Pharo part
 				//treatment by one of the SDK events (websocket being the WebSocket between the plugin and Pharo)
 				//only sends stringified JSON
-				console.log("socket event: " + event.data);
+				//console.log("socket event: " + event.data);
 				websocket.send(event.data);
 			}
 
@@ -171,7 +171,7 @@
 
 			websocket.onmessage = function (evt) {
 				// Received message from Stream Deck
-				console.log("event.data: " + evt.data);
+				//console.log("event.data: " + evt.data);
 				var jsonObj = JSON.parse(evt.data);
 				var event = jsonObj['event'];
 				var action = jsonObj['action'];
