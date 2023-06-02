@@ -2,144 +2,149 @@
 <html>
 
 <head>
-	<title>com.thales.yearSelectorJS</title>
+	<title>com.thales.yearSelectorPharo</title>
 	<meta charset="utf-8" />
 </head>
 
 <body>
 	<script>
-		//script primarily based on this Elgato plugin
+		//this file transmits data to Pharo, which sends back formatted JSON strings to be used by the Stream Deck SDK
+		//2 WebSockets at play: one for the communication between the Stream Deck and this file (which is opened using the inPort parameter given to connectElgatoStreamDeckSocket(), second part of the code)
+		//code taken from https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS 
+		//the other for communicating between this file and Pharo, by using a server (first part of the code)
+		//code taken from https://github.com/OpenSmock/PharoStreamDeck/tree/main/webSocket
+		//Stream Deck first sends its initialization data (when the Stream Deck is plugged in, and the application launched) to the plugin via a WebSocket, which is to say this file since it's referenced in the CodePath field of the manifest.json file
+		//Then this file transmits event data to Pharo through the second WebSocket, with Pharo having launched a server
+		//Pharo then formats the received JSON strings to be interpreted by the SDK events, then send them back to this file
+		//Finally, this file transmits these JSON strings to the Stream Deck for the actions to be executed
+
+		//first part of the code
+		//the Web page needs to be loaded first, then the server
+		//webSocketInterval is the variable that permits an automatic connection to the WebSocket
+		//no need to refresh the page if a server is started
+		//socket being the WebSocket performing the communication between the Stream Deck and this file
+		var socket = null;
+		var websocketInterval = null;
+
+		var connect_socket = function () {
+			//secure WebSocket variant (wss://) doesn't permit sending messages in this context, since the server launched in Pharo is HTTP and not HTTPS
+			//creates only one ZnManagingMultiThreadedServer HTTP Worker in this context in Pharo
+			socket = new WebSocket("ws://localhost:8080/pharoBridge");
+
+			//only fired when Pharo sends a message to the webpage,
+			//not when this webpage sends a message to itself through socket.send()
+			socket.onmessage = function (event) {
+				//Plugin <-- Pharo part in terms of data exchange
+				//also Stream Deck <-- Plugin part
+				//equals to Stream Deck <-- Plugin <-- Pharo part
+				//treatment by one of the SDK events (websocket being the WebSocket between the plugin and Pharo)
+				//only sends stringified JSON
+				console.log("socket event: " + event.data);
+				websocket.send(event.data);
+			}
+
+			socket.onclose = function () {
+				//launch another WebSocket if the first one were to fail
+				//in ms, equivalent to 1s
+				setTimeout(connect_socket, 1000);
+			}
+		}
+
+		function isOpen(socket) {
+			if (socket.readyState === WebSocket.OPEN) {
+				return true;
+			}
+			return false;
+		}
+
+		function isConnected(socket) {
+			if (socket.readyState === WebSocket.CONNECTING || socket.readyState === WebSocket.OPEN) {
+				return true;
+			}
+			return false;
+		}
+
+		//second part of the code
+		//primarily based on this Elgato plugin
 		//https://github.com/elgatosf/streamdeck-numberdisplay/tree/master/Sources/com.elgato.numberdisplay.sdPlugin
+		//websocket being the WebSocket performing the communication between this file and Pharo
 		var websocket = null;
 		var pluginUUID = null;
-		var settingsCache = {};
 		var DestinationEnum = Object.freeze({ "HARDWARE_AND_SOFTWARE": 0, "HARDWARE_ONLY": 1, "SOFTWARE_ONLY": 2 });
+		var settingsCache = {};
 		var yearWitnessArray = [];
-		var lastContext = null;
 
+		//Plugin --> Pharo part
 		var yearSelectorAction = {
-			type: "com.thales.yearselectorjs.action",
+			type: "com.thales.yearselectorpharo.action",
+
+			//only parameters are sent in the form of stringified JSON data, treatment and formatting of JSON strings is done in Pharo
+			//each variable is associated to its eponym field, apart from the event field that differs
 
 			//onKeyDown isn't needed here, but follows the same function signature as onKeyUp
 			//clicking on a YearWitness resets the value
-			onKeyUp: function (context, settings, coordinates, userDesiredState) {
-				var year = 0;
-				if (settings != null && settings.hasOwnProperty('yearSelector')) {
-					yearSelector = settings["yearSelector"];
-				}
-				//takes value defined in the Property Inspector (yearSelector) for the current instance, year is a global variable accessible by all instances of the plugin
-				year = yearSelector;
-
-				updatedSettings = {};
-				updatedSettings["year"] = year;
-
-				//highlights key pressed
-				const highlightedImage = "img/actionIconHighlighted.png";
-				loadImageAsDataUri(highlightedImage, function (image) {
-					var json = {
-						"event": "setImage",
-						"context": context,
-						"payload": {
-							"image": image,
-							"target": DestinationEnum.HARDWARE_AND_SOFTWARE
-						}
-					};
-					websocket.send(JSON.stringify(json));
-				},);
-
-				//not executed for the first key press, but for the ones that come after
-				updatedSettings["lastContext"] = this.GetLastContext();
-				//for getting the current yearWitness
-				this.SetGlobalSettings(updatedSettings);
-				//see event in connectElgatoStreamDeckSocket, resets background of last key pressed
-				this.GetGlobalSettings();
-				//used to remember last key pressed
-				lastContext = context;
-				settingsCache[context] = updatedSettings;
-				//needs to be a global setting in order to be available to other instances of the plugin, including YearWitness
-				this.SetLastContext(lastContext);
-			},
-
-			onWillAppear: function (context, settings, coordinates) {
-				var yearSelector = 0;
-				if (settings != null && settings.hasOwnProperty('yearSelector')) {
-					yearSelector = settings["yearSelector"];
-				}
-				settingsCache[context] = { 'yearSelector': yearSelector };
-				this.SetTitle(context, yearSelector);
-			},
-
-			SetTitle: function (context, yearSelector) {
+			onKeyUp: function (action, context, settings, coordinates, userDesiredState) {
 				var json = {
-					"event": "setTitle",
+					//the field event is used for identifying this function in Pharo (isn't normally transmitted)
+					"event": "keyUp",
+					"action": action,
 					"context": context,
-					"payload": {
-						"title": "" + yearSelector,
-						"target": DestinationEnum.HARDWARE_AND_SOFTWARE
-					}
+					//settings already contains a settings field which contains the year value
+					"payload": settings,
+					"coordinates": coordinates,
+					"userDesiredState": userDesiredState,
 				};
-				websocket.send(JSON.stringify(json));
+				//JSON.stringify sends it all as a string which is then parsed in Pharo
+				if (isOpen(socket)) {
+					socket.send(JSON.stringify(json));
+				}
 			},
 
-			//for variable yearSelector, defined in the Property Inspector and only available to the current instance
-			SetSettings: function (context, settings) {
+			onWillAppear: function (action, context, settings, coordinates) {
 				var json = {
-					"event": "setSettings",
+					//the event field is used for identifying this function in Pharo (isn't normally transmitted)
+					"event": "willAppear",
+					"action": action,
 					"context": context,
-					"payload": settings
+					"payload": settings,
+					"coordinates": coordinates,
 				};
-				websocket.send(JSON.stringify(json));
+				if (isOpen(socket)) {
+					socket.send(JSON.stringify(json));
+				}
 			},
 
-			//for variable year, one value for every instance of the plugin
-			SetGlobalSettings: function (settings) {
-				var json = {
-					"event": "setGlobalSettings",
-					"context": pluginUUID,
-					"payload": settings
-				};
-				websocket.send(JSON.stringify(json));
-			},
-
-			//for variable year, one value for every instance of the plugin
-			GetGlobalSettings: function () {
-				var json = {
-					"event": "getGlobalSettings",
-					"context": pluginUUID,
-				};
-				websocket.send(JSON.stringify(json));
-			},
-
-			//another setGlobalSettings, used to keep track of the last context to reset the preivous key pressed before the current one
-			SetLastContext: function (context) {
-				lastContext = context;
-			},
-
-			GetLastContext: function () {
-				return lastContext;
-			},
-
-			AddToSettings: function (context, newSettings) {
-				settingsCache[context]
-			}
+			//setTitle, setSettings, setGlobalSettings and getGlobalSettings are done in Pharo
 		};
 
 		var yearWitnessAction = {
-			type: "com.thales.yearselectorjs.yearwitness",
+			type: "com.thales.yearselectorpharo.yearwitness",
 
-			SetTitle: function (context, yearWitness) {
+			//setTitle is done in Pharo
+
+			onWillDisappear: function () {
 				var json = {
-					"event": "setTitle",
-					"context": context,
-					"payload": {
-						"title": "" + yearWitness,
-						"target": DestinationEnum.HARDWARE_AND_SOFTWARE
-					}
+					"event": "willDisappear"
 				};
-				websocket.send(JSON.stringify(json));
+				if (isOpen(socket)) {
+					socket.send(JSON.stringify(json));
+				}
 			},
 		}
 
+		function handleSend(socket, stringifiedJson) {
+			if (isOpen(socket)) {
+				socket.send(stringifiedJson);
+			} else if (socket.readyState == WebSocket.CONNECTING) {
+				//waits for the open event
+				//exceeds maximum call size without the arrow function (synchronous repeated calls)
+				socket.addEventListener("open", () => handleSend(socket, stringifiedJson));
+			}
+		};
+
+		//Stream Deck --> Plugin part
+		//this function remains mostly the same in this Pharo version with some modifications detailed further below
+		//since it delegates the events received to Pharo through the use of a second WebSocket
 		function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, inInfo) {
 			pluginUUID = inPluginUUID;
 			//port is 28196
@@ -152,7 +157,11 @@
 					"event": inRegisterEvent,
 					"uuid": inPluginUUID
 				};
-				websocket.send(JSON.stringify(json));
+				var stringifiedJson = JSON.stringify(json);
+
+				//launches the second WebSocket immediately, so that the uuid and willAppear event are handled ASAP
+				connect_socket();
+				handleSend(socket, stringifiedJson);
 			};
 
 			websocket.onopen = function () {
@@ -162,73 +171,37 @@
 
 			websocket.onmessage = function (evt) {
 				// Received message from Stream Deck
+				console.log("event.data: " + evt.data);
 				var jsonObj = JSON.parse(evt.data);
 				var event = jsonObj['event'];
 				var action = jsonObj['action'];
 				var context = jsonObj['context'];
 				var jsonPayload = jsonObj['payload'] || {};
 
-				//onKeyDown is based on the same structure that the keuUp event follows
-				//not a else if since it's triggered during the keyUp event, and the two need to be executed
-				//automatic refresh for YearWitness
-				if (event == "didReceiveGlobalSettings") {
-					var settings = jsonPayload['settings'];
-					//corresponds to last key pressed
-					var yearWitness = settings.year;
-					//every yearWitness is updated
-					//they need to know their context, since it's the unique identifier of an instance of an action
-					//and it isn't the current key pressed, which will generally be a YearSelector
-					//pressing a YearWitness will reset its value to 0
-					yearWitnessArray.forEach(function (item, index) {
-						yearWitnessAction.SetTitle(yearWitnessArray[index], yearWitness);
-					});
+				//didReceiveGlobalSettings treatment isn't needed for this project, handled in the getGlobalSettings part in Pharo
 
-					//resets background of last key pressed
-					const defaultImage = "img/actionIcon.png";
-					loadImageAsDataUri(defaultImage, function (image) {
-						var json = {
-							"event": "setImage",
-							"context": settings.lastContext,
-							"payload": {
-								"image": image,
-								"target": DestinationEnum.HARDWARE_AND_SOFTWARE
-							}
-						};
-						websocket.send(JSON.stringify(json));
-					},);
-				}
-				//keyDown is based on the same structure that the keyUp event follows
-				//keyDown isn't needed here, but has access to the same variables that keyUp has access to
-				else if (event == "keyUp") {
+				if (event == "keyUp") {
 					var settings = jsonPayload['settings'];
 					var coordinates = jsonPayload['coordinates'];
 					var userDesiredState = jsonPayload['userDesiredState'];
-					yearSelectorAction.onKeyUp(context, settings, coordinates, userDesiredState);
+					yearSelectorAction.onKeyUp(action, context, settings, coordinates, userDesiredState);
 				}
 				else if (event == "willAppear") {
 					var settings = jsonPayload['settings'];
 					var coordinates = jsonPayload['coordinates'];
-					yearSelectorAction.onWillAppear(context, settings, coordinates);
+					//added action parameter for yearWitnessSet in Pharo
+					yearSelectorAction.onWillAppear(action, context, settings, coordinates);
 
-					//no punctuation apart from the dots that act as separators for the unique identifier
-					if (action == "com.thales.yearselectorjs.yearwitness") {
-						yearWitnessArray.push(context);
-					}
-
-					//to reset the last pressed key to its original black background
-					yearSelectorAction.GetGlobalSettings();
+					//yearWitnessArray became yearWitnessSet in Pharo
 				}
-				//when the user switches between profiles or deletes an action, empty yearWitnessArray to not accumulate yearWitnesses since they're all created during willAppear
+				//when the user switches between profiles or deletes an action, empty yearWitnessArray to not accumulate yearWitness instances since they're all created during willAppear
 				else if (event == "willDisappear") {
-					yearWitnessArray = [];
+					yearWitnessAction.onWillDisappear();
 				}
 				else if (event == "sendToPlugin") {
-					if (jsonPayload.hasOwnProperty('setValue')) {
-						var newValue = jsonPayload.setValue;
-						//value of the instance (0-5-10-15-20)
-						yearSelectorAction.SetSettings(context, { "yearSelector": newValue });
-						//marks on the key what value will be taken
-						yearSelectorAction.SetTitle(context, newValue);
+					//event.data is undefined if left unparsed, can't send it directly
+					if (isOpen(socket)) {
+						socket.send(JSON.stringify(jsonObj));
 					}
 				}
 			};
@@ -236,22 +209,6 @@
 			websocket.onclose = function () {
 				// Websocket is closed
 			};
-		};
-
-		function loadImageAsDataUri(url, callback) {
-			var image = new Image();
-
-			image.onload = function () {
-				var canvas = document.createElement("canvas");
-
-				canvas.width = this.naturalWidth;
-				canvas.height = this.naturalHeight;
-
-				var ctx = canvas.getContext("2d");
-				ctx.drawImage(this, 0, 0);
-				callback(canvas.toDataURL("image/png"));
-			};
-			image.src = url;
 		};
 	</script>
 </body>
