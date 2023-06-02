@@ -21,7 +21,7 @@ The Pharo profile is organized in the same way that the JavaScipt version is. \
 It also functions the same way, having a YearSelector action and a YearWitness action.
 
 In terms of structure, the MyYearSelector folder is a Pharo package which comports a YearSelector class, being the Pharo code, and a YearSelectorTest class.
-The YearSelectorPharo JavaScript part folder is a mix between ![basic WebSocket communication](https://github.com/OpenSmock/PharoStreamDeck/tree/main/webSocket) and [YearSelectorJS](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS).
+The YearSelectorPharo JavaScript part folder is a mix between [basic WebSocket communication](https://github.com/OpenSmock/PharoStreamDeck/tree/main/webSocket) and [YearSelectorJS](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS).
 
 For now, an instance of a YearSelector needs to be created in Pharo to launch a server and the first WebSocket.
 In a Playground, execute the following line of code : `YearSelector new`
