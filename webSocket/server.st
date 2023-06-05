@@ -1,5 +1,4 @@
 | json jsonObject |
-"is used to send JSON data to JavaScript, which logs the contents of its fields in the Developer Tools (F12 in a Web browser)"
 jsonObject := Dictionary new
 	at: 'event' put: 'inRegisterEvent';
 	at: 'uuid' put: 'inPluginUUID';
