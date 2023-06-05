@@ -57,13 +57,6 @@
 			return false;
 		}
 
-		function isConnected(socket) {
-			if (socket.readyState === WebSocket.CONNECTING || socket.readyState === WebSocket.OPEN) {
-				return true;
-			}
-			return false;
-		}
-
 		//second part of the code
 		//primarily based on this Elgato plugin
 		//https://github.com/elgatosf/streamdeck-numberdisplay/tree/master/Sources/com.elgato.numberdisplay.sdPlugin
