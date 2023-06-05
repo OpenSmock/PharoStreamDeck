@@ -519,7 +519,8 @@ YearSelector >> willDisappear [
 { #category : #accessing }
 YearSelector >> year: anObject [
 
-	"verify that anObject is equal to one of the numbers returned by the authorizedNumbers method, which are values transmitted from the Property Inspector. This global variable is no longer necessary for this class"
+	"verify that anObject is equal to one of the numbers returned by the authorizedNumbers method, which are values transmitted from the Property Inspector."
+	"This global variable is no longer necessary for the YearSelector class"
 
 	| numbers |
 	numbers := self authorizedNumbers.
