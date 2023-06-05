@@ -429,11 +429,11 @@ YearSelector >> setTitleAndSettingsYearWitness: jsonObj [
 	jsonSettings := Dictionary new
 		                at: 'event' put: 'setSettings';
 		                at: 'context' put: context;
-		                at: 'payload'
-		                at: 'settings'
-		                at: 'year'
-		                put: yearObj;
 		                yourself.
+	((jsonSettings at: 'payload' ifAbsentPut: [ Dictionary new])
+		                       at: 'settings' ifAbsentPut: [ Dictionary new] )
+		                       at: 'year'
+		                       put: yearObj.
 	jsonFormattedSettings := STONJSON toString: jsonSettings.
 
 	"is used to send all the setTitle and setSettings events that are necessary when more than one YearWitness instance is present on the current displayed Stream Deck profile"
