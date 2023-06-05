@@ -2,26 +2,40 @@
 This project shows how a plugin for the Elgato Stream Deck can interact with it. \
 As such, a Stream Deck profile is provided alongside the plugin in order to see its functionality in action.
 
-![yearSelector profile](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/9e970b04-69df-46e2-a807-286cb1cfbf3e) \
+![templateYS](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/be07240b-ace2-4aa6-ba96-465fe82a884d)
+
 Left : YearWitness actions (not the text accompanying it) \
 Right : YearSelector actions
 
-![clicked YearSelector profile](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/a4ecf106-4308-4840-930d-9d61baeea9ef)
+![templateYS2](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/1a4657df-7691-4ae3-a7d6-ed432287ab53)
 
 ## How it functions
-A user can tap one of the Stream Deck keys contained in the aforementioned Stream Deck profile, or place on one of the Stream Deck keys the single action of this plugin, titled **YearSelector**, in the action list. On the Stream Deck, the pressed key will change color and appear blue, while the previous highlighted key will revert back to its original color. \
+A user can tap one of the Stream Deck keys contained in the aforementioned Stream Deck profile, or place on one of the Stream Deck keys one of the actions of this plugin, titled **YearSelector** and **YearWitness**, available from the action list. On the Stream Deck, the pressed key will change color and appear blue, while the previous highlighted key will revert back to its original color. \
 A JavaScript version exists as well as a Pharo version, each one having the same objective. \
-When the application is launched (e.g. a Stream Deck task isn't present in the Task Manager), the values will be reset (a YearWitness won't keep track of its value).
+When the application is launched (e.g. a Stream Deck task isn't present in the Task Manager), the values will be reset (a YearWitness won't keep track of its value, but a YearWitness keeps track of the value selected in its Property Inspector).
 
-### Pharo version
-A key pressed is a change that's also made apparent in Pharo, where a notification is sent to inform the user that the value "year" has changed. \
-It's also possible to directly send a message in Pharo to the concerned class (titled YearSelector), which will impact the highlighted key on the Stream Deck.
+## Pharo version
+This version shows how Pharo, JavaScript and the Stream Deck SDK as well as JSON data sent through WebSockets can interact.
+
+The Pharo profile is organized in the same way that the JavaScipt version is. \
+It also functions the same way, having a YearSelector action and a YearWitness action.
+
+In terms of structure, the MyYearSelector folder is a Pharo package which comports a YearSelector class, being the Pharo code, and a YearSelectorTest class.
+The YearSelectorPharo JavaScript part folder is a mix between [basic WebSocket communication](https://github.com/OpenSmock/PharoStreamDeck/tree/main/webSocket) and [YearSelectorJS](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS).
+
+For now, an instance of a YearSelector needs to be created in Pharo to launch a server and the first WebSocket.
+In a Playground, execute the following line of code : `YearSelector new`
+
+How this plugin works and communicate with the differents parts involved is explained in this image : \
+
+![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/8c82ab61-47c6-4566-b1a1-7181ac434522)
 
 ## Complementary informations
 ### Pharo
 [WebSocket (using Zinc)](https://github.com/svenvc/docs/blob/master/zinc/zinc-websockets-paper.md) \
 [JSON support](https://github.com/pharo-open-documentation/pharo-wiki/blob/master/ExternalProjects/Export/JSON.md) \
-[MOOC](https://www.youtube.com/watch?v=JUKIjdjGjBU)
+[MOOC](https://www.youtube.com/watch?v=JUKIjdjGjBU&list=PL2okA_2qDJ-kCHVcNXdO5wsUZJCY31zwf)
 
 ### Elgato Stream Deck
-[Stream Deck SDK](https://developer.elgato.com/documentation)
+[Stream Deck SDK](https://developer.elgato.com/documentation) \
+[NumberDisplay plugin](https://developer.elgato.com/documentation/stream-deck/samples/numberdisplay)

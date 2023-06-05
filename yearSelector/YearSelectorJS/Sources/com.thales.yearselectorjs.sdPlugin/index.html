@@ -8,19 +8,19 @@
 
 <body>
 	<script>
+		//script primarily based on this Elgato plugin
+		//https://github.com/elgatosf/streamdeck-numberdisplay/tree/master/Sources/com.elgato.numberdisplay.sdPlugin
 		var websocket = null;
 		var pluginUUID = null;
 		var settingsCache = {};
 		var DestinationEnum = Object.freeze({ "HARDWARE_AND_SOFTWARE": 0, "HARDWARE_ONLY": 1, "SOFTWARE_ONLY": 2 });
 		var yearWitnessArray = [];
-		var lastContext;
+		var lastContext = null;
 
 		var yearSelectorAction = {
 			type: "com.thales.yearselectorjs.action",
 
-			onKeyDown: function (context, settings, coordinates, userDesiredState) {
-			},
-
+			//onKeyDown isn't needed here, but follows the same function signature as onKeyUp
 			//clicking on a YearWitness resets the value
 			onKeyUp: function (context, settings, coordinates, userDesiredState) {
 				var year = 0;
@@ -52,12 +52,12 @@
 				//for getting the current yearWitness
 				this.SetGlobalSettings(updatedSettings);
 				//see event in connectElgatoStreamDeckSocket, resets background of last key pressed
-				this.GetGlobalSettings(pluginUUID);
+				this.GetGlobalSettings();
 				//used to remember last key pressed
 				lastContext = context;
 				settingsCache[context] = updatedSettings;
 				//needs to be a global setting in order to be available to other instances of the plugin, including YearWitness
-				this.SetLastContext(updatedSettings);
+				this.SetLastContext(lastContext);
 			},
 
 			onWillAppear: function (context, settings, coordinates) {
@@ -101,22 +101,22 @@
 				websocket.send(JSON.stringify(json));
 			},
 
-			//another setGlobalSettings, used to keep track of the last context to reset the preivous key pressed before the current one
-			SetLastContext: function (settings) {
-				lastContext = context;
-			},
-
-			GetLastContext: function () {
-				return lastContext;
-			},
-
 			//for variable year, one value for every instance of the plugin
-			GetGlobalSettings: function (settings) {
+			GetGlobalSettings: function () {
 				var json = {
 					"event": "getGlobalSettings",
 					"context": pluginUUID,
 				};
 				websocket.send(JSON.stringify(json));
+			},
+
+			//another setGlobalSettings, used to keep track of the last context to reset the preivous key pressed before the current one
+			SetLastContext: function (context) {
+				lastContext = context;
+			},
+
+			GetLastContext: function () {
+				return lastContext;
 			},
 
 			AddToSettings: function (context, newSettings) {
@@ -168,12 +168,7 @@
 				var context = jsonObj['context'];
 				var jsonPayload = jsonObj['payload'] || {};
 
-				if (event == "keyDown") {
-					var settings = jsonPayload['settings'];
-					var coordinates = jsonPayload['coordinates'];
-					var userDesiredState = jsonPayload['userDesiredState'];
-					yearSelectorAction.onKeyDown(context, settings, coordinates, userDesiredState);
-				}
+				//onKeyDown is based on the same structure that the keuUp event follows
 				//not a else if since it's triggered during the keyUp event, and the two need to be executed
 				//automatic refresh for YearWitness
 				if (event == "didReceiveGlobalSettings") {
@@ -202,6 +197,8 @@
 						websocket.send(JSON.stringify(json));
 					},);
 				}
+				//keyDown is based on the same structure that the keyUp event follows
+				//keyDown isn't needed here, but has access to the same variables that keyUp has access to
 				else if (event == "keyUp") {
 					var settings = jsonPayload['settings'];
 					var coordinates = jsonPayload['coordinates'];
@@ -212,10 +209,18 @@
 					var settings = jsonPayload['settings'];
 					var coordinates = jsonPayload['coordinates'];
 					yearSelectorAction.onWillAppear(context, settings, coordinates);
+
 					//no punctuation apart from the dots that act as separators for the unique identifier
 					if (action == "com.thales.yearselectorjs.yearwitness") {
 						yearWitnessArray.push(context);
 					}
+
+					//to reset the last pressed key to its original black background
+					yearSelectorAction.GetGlobalSettings();
+				}
+				//when the user switches between profiles or deletes an action, empty yearWitnessArray to not accumulate yearWitnesses since they're all created during willAppear
+				else if (event == "willDisappear") {
+					yearWitnessArray = [];
 				}
 				else if (event == "sendToPlugin") {
 					if (jsonPayload.hasOwnProperty('setValue')) {

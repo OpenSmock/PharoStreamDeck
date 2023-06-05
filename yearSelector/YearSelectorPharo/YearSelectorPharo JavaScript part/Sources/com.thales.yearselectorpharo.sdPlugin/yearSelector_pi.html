@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>com.thales.yearSelectorJS PI</title>
+    <title>com.thales.yearSelectorPharo PI</title>
     <link rel="stylesheet" href="sdpi.css">
     <script src="common.js"></script>
 </head>
@@ -47,7 +47,6 @@
             // console.log("SENDING VALUE TO PLUGIN: ", value, uuid, pluginAction);
             if (param === 'setValue') {
                 oValueSelector && Array.prototype.forEach.call(oValueSelector.options, function (o) {
-                    const val = Math.round(value);
                     if(value != "") {
                         const val = Math.round(value);
                         if (o.value !== val) {

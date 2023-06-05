@@ -2,7 +2,7 @@
   "Actions": [
     {
       "Icon": "img/pluginIcon",
-      "Name": "YearSelectorJS",
+      "Name": "YearSelectorPharo",
       "States": [
         {
           "Image": "img/actionIcon",
@@ -12,12 +12,12 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Permits the user to choose a value and highlights the last key pressed. This value is then displayed on a YearWitness",
-      "UUID": "com.thales.yearselectorjs.action",
+      "UUID": "com.thales.yearselectorpharo.action",
       "PropertyInspectorPath": "yearSelector_pi.html"
     },
     {
       "Icon": "img/yearWitnessIcon",
-      "Name": "YearWitnessJS",
+      "Name": "YearWitnessPharo",
       "States": [
         {
           "Image": "img/actionIcon",
@@ -27,12 +27,12 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Shows the year value, pressing it resets the value to 0",
-      "UUID": "com.thales.yearselectorjs.yearwitness"
+      "UUID": "com.thales.yearselectorpharo.yearwitness"
     }
   ],
   "Profiles": [
     {
-      "Name": "YearSelectorJS",
+      "Name": "YearSelectorPharo",
       "DeviceType": 2,
       "Readonly": false,
       "DontAutoSwitchWhenInstalled": false
@@ -42,11 +42,11 @@
   "Author": "Eliott GUEVEL",
   "CodePath": "index.html",
   "Description": "This plugin shows a value with the YearWitness action and permits to choose from a list of values available from the Property Inspector with the YearSelector action",
-  "Name": "YearSelectorJS",
+  "Name": "YearSelectorPharo",
   "Icon": "img/pluginIcon",
   "URL": "https://github.com/OpenSmock/PharoStreamDeck",
   "Version": "1.0",
-  "Category": "YearSelectorJS",
+  "Category": "YearSelectorPharo",
   "CategoryIcon": "img/pluginIcon",
   "OS": [
     {

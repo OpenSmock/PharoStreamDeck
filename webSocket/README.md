@@ -12,7 +12,7 @@ Launch server.html, execute the code contained within server.st in a Playground,
 ### Pharo
 [WebSocket (using Zinc)](https://github.com/svenvc/docs/blob/master/zinc/zinc-websockets-paper.md) \
 [JSON support](https://github.com/pharo-open-documentation/pharo-wiki/blob/master/ExternalProjects/Export/JSON.md) \
-[MOOC](https://www.youtube.com/watch?v=JUKIjdjGjBU)
+[MOOC](https://www.youtube.com/watch?v=JUKIjdjGjBU&list=PL2okA_2qDJ-kCHVcNXdO5wsUZJCY31zwf)
 
 ### Elgato Stream Deck
 [Stream Deck SDK](https://developer.elgato.com/documentation)
