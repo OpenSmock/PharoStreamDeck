@@ -10,4 +10,5 @@ Uses a second WebSocket in order to communicate with Pharo
 [MOOC](https://www.youtube.com/watch?v=JUKIjdjGjBU&list=PL2okA_2qDJ-kCHVcNXdO5wsUZJCY31zwf)
 
 ### Elgato Stream Deck
-[Stream Deck SDK](https://developer.elgato.com/documentation)
+[Stream Deck SDK](https://developer.elgato.com/documentation) \
+[NumberDisplay plugin](https://developer.elgato.com/documentation/stream-deck/samples/numberdisplay)
