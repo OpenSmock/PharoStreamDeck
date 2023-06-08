@@ -40,18 +40,9 @@ YearSelector >> WebSocket [
 ]
 
 { #category : #accessing }
-YearSelector >> currentContext [
-
-	"used for knowing when there are multiple YearSelector instances with the same year value which one ws clicked (see how didReceiveSettings is handled in initialize)"
-
-	^ currentContext
-]
-
-{ #category : #accessing }
 YearSelector >> currentContext: anObject [
 
 	"used for knowing when there are multiple YearSelector instances with the same year value which one ws clicked (see how didReceiveSettings is handled in initialize)"
-
 	currentContext := anObject
 ]
 
@@ -92,13 +83,13 @@ YearSelector >> getSettings: context [
 { #category : #accessing }
 YearSelector >> initialize [
 
-	| server json jsonObject arrayEvents jsonSettings jsonHighlightedImage jsonTitle jsonWillAppear context currentContextNow |
+	| server json jsonObject arrayEvents jsonSettings jsonHighlightedImage jsonTitle jsonWillAppear context |
 	super initialize.
 
 	yearWitnessSet := OrderedCollection new.
 	yearSelectorSet := OrderedCollection new.
 	arrayJsonSetTitleYearWitness := OrderedCollection new.
-	currentContext := '0'.
+	currentContext := ''.
 	throughKeyUp := 0.
 
 	"Creates a ZnManagingMultiThreadedServer HTTP port 8080 process, which needs to be terminated 	through the Process Browser if another server is to be launched"
@@ -152,13 +143,10 @@ YearSelector >> initialize [
 					          json := self setImage: jsonObject ].
 
 				          "received when the getSettings event is sent, is used to receive the year value through a context of a YearSelector instance"
-				          event = 'didReceiveSettings' ifTrue: [ "if the event is sent through keyUp, only highlight the clicked key""if the event is sent through MyApp, highlight all YearSelector instances having the same year value"
+				          event = 'didReceiveSettings' ifTrue: [ "if the event is sent through keyUp, only highlight the clicked key"
+					"if the event is sent through MyApp, highlight all YearSelector instances having the same year value"
 					          context := jsonObject at: 'context'.
-					currentContextNow := self currentContext.
-					          ""
-					self inform: 'context: ' , context.
-					self inform: 'currentContextNow: ' , currentContextNow asString.
-					          context = currentContextNow ifTrue: [
+					          context = currentContext ifTrue: [
 						          throughKeyUp := throughKeyUp + 1 ].
 					          throughKeyUp = 0 ifTrue: [
 						          myApp highlightYearSelectorReceive: jsonObject ] ].
@@ -210,8 +198,6 @@ YearSelector >> keyUp: jsonObj [
 		                yourself.
 	"STONJSON toString conversion is performed in setSettings, setGlobalSettings and getGlobalSettings"
 	jsonFormattedSettings := self setSettings: jsonSettings.
-	
-	self currentContext: context.
 
 	"setGlobalSettings and getGlobalSettings (called in setGlobalSettings) have no object given to them since their event is always the same, they just need a uuid and a year (the second one is only needed for setGlobalSettings) which are instance variables of the YearSelector class"
 	jsonContext := Dictionary new
@@ -262,6 +248,9 @@ YearSelector >> keyUp: jsonObj [
 
 	"updates the instance variable year of the MyApp class, which is needed to update the yearWitness instances through commands sent in the Pharo IDE"
 	myApp year: yearObj.
+	
+	"called after since year: resets currentContext"
+	self currentContext: context.
 
 	"returns the different events"
 	arrayEvents := Array new: 3.
