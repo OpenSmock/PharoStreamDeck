@@ -37,32 +37,31 @@ YearSelectorTest >> testAccessDictionaryDepthThree [
 "methods 
 at: at: at:, 
 at: at: at: ifAbsent,
-at: at: at: ifAbsentPut,
-at: at: at: put:
+putIfAbsentInDictionary: at: at: put: (which is equivalent to a at: at: at: put: method with ifAbsentPut: methods thrown in)
 needed to be implemented in the Dictionary class, 
 located in the Collections-Unordered package included in Pharo by default"
 
 | d settingsYear currentYear lastContext settingsLastContext |
 currentYear := '2023'.
 lastContext := '019'.
-d := Dictionary new
-	at: 'payload' at: 'settings' at: 'year' put: currentYear;
-	at: 'payload' at: 'settings' at: 'lastContext' put: lastContext;
-	yourself.
+
+d := Dictionary new.
+d putIfAbsentInDictionary: 'payload' at: 'settings' at: 'year' put: currentYear.
+d putIfAbsentInDictionary: 'payload' at: 'settings' at: 'lastContext' put: lastContext.
 
 settingsYear := d at: 'payload' at: 'settings' at: 'year'.
 settingsLastContext := d at: 'payload' at: 'settings' at: 'lastContext'.
+
 self assert: settingsYear equals: currentYear.
 self assert: settingsLastContext equals: lastContext
 ]
 
 { #category : #tests }
 YearSelectorTest >> testEventField [
-"can't include a test which would test the communication between JavaScript and Pharo since the WebSocket is contained in the initialize method, and can't be saved through a variable to be used to send a message to it. The only way is to follow in order the other data exchanges, starting with the Stream Deck to the plugin."
-| y jsonObject json jsonFormatted event jsonGlobalSettings |
+"can't include a test which would test the communication between JavaScript and Pharo since the WebSocket is contained in the initialize method, and can't be saved through a variable to be used to send a message to it. The only way is to follow in order the data exchanges, starting with the Stream Deck to the plugin."
+| y jsonObject jsonFormatted event jsonGlobalSettings |
 jsonObject := Dictionary new
-	at: 'event' put: 'Event';
-	at: 'uuid' put: 'UUID';
+	at: 'year' put: 10;
 	yourself.
 
 y := YearSelector new.
@@ -70,22 +69,5 @@ y := YearSelector new.
 jsonGlobalSettings := y getGlobalSettings: jsonObject.
 jsonFormatted := STONJSON fromString: jsonGlobalSettings.
 event := jsonFormatted at: 'event'.
-self assert: event equals: 'Event'
-]
-
-{ #category : #tests }
-YearSelectorTest >> testOtherYearValue [
-
-| y |
-y := YearSelector new.
-y year: 5.
-self assert: y year equals: 5
-]
-
-{ #category : #tests }
-YearSelectorTest >> testYearInitialize [
-
-| y |
-y := YearSelector new.
-self assert: y year equals: 0
+self assert: event equals: 'setImage'
 ]
