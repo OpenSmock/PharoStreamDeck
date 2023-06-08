@@ -1,11 +1,11 @@
 Class {
-	#name : #BaselineOFMyYearSelector,
+	#name : #BaselineOfMyYearSelector,
 	#superclass : #Object,
 	#category : #BaselineOfMyYearSelector
 }
 
 { #category : #baselines }
-BaselineOFMyYearSelector >> baseline: spec [
+BaselineOfMyYearSelector >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [
@@ -14,7 +14,7 @@ BaselineOFMyYearSelector >> baseline: spec [
 ]
 
 { #category : #baselines }
-BaselineOFMyYearSelector >> dependencies: spec [
+BaselineOfMyYearSelector >> dependencies: spec [
 
 	spec baseline: #MyYearSelector with: [
 		spec repository:
