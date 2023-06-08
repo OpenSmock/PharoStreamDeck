@@ -134,7 +134,8 @@ MyApp >> modifyYearWitnessValue [
 	json := Dictionary new
 		        at: 'year' put: year;
 		        yourself.
-	plugin getGlobalSettings: json
+	plugin getGlobalSettings: json.
+	plugin sendUpdateYearWitnesses: plugin WebSocket
 	"plugin yearWitnessSet do: [ :each | 
 		json := Dictionary new
 			        at: 'context' put: each;
@@ -151,18 +152,19 @@ MyApp >> sendGetImage: webSocket [
 	arraySetImage do: [ :each | webSocket sendMessage: each ].
 
 	"removes the previous elements stocked in order to not stack multiple times the same context with different values"
-	arraySetImage removeAll: arraySetImage
+	arraySetImage removeAll
 ]
 
 { #category : #initialization }
 MyApp >> sendGetSettings: webSocket [
 
-	"gets the settings for every YearSelector instance"
+	"gets the settings for every YearSelector instance by sending a setSettings event which adds a paremeter to the settings of every instance, deleting it afterhand"
+	"done that way since the setSettings event sent in keyUp is necessary to keep track of each instance's value, also calls a didReceiveSettings event which updated every YearSelector having the same value as the one clicked"
 
 	arrayGetSettings do: [ :each | webSocket sendMessage: each ].
 
 	"removes the previous elements stocked in order to not stack multiple times the same context with different values"
-	arrayGetSettings removeAll: arrayGetSettings
+	arrayGetSettings removeAll
 ]
 
 { #category : #initialization }
@@ -181,6 +183,9 @@ MyApp >> year: anObject [
 	| numbers numberInList |
 	numbers := self authorizedNumbers.
 	numberInList := 0.
+	"resets values handled in didReceiveSettings treatment which is located in the initialize method of YearSelector"
+	plugin throughKeyUp: 0.
+	plugin currentContext: '0'.
 
 	1 to: numbers size do: [ :i | 
 		anObject = (numbers at: i) ifTrue: [ 

@@ -24,7 +24,9 @@ Class {
 		'arrayJsonSetTitleYearWitness',
 		'yearSelectorSet',
 		'WebSocket',
-		'myApp'
+		'myApp',
+		'currentContext',
+		'throughKeyUp'
 	],
 	#category : #MyYearSelector
 }
@@ -38,6 +40,22 @@ YearSelector >> WebSocket [
 ]
 
 { #category : #accessing }
+YearSelector >> currentContext [
+
+	"used for knowing when there are multiple YearSelector instances with the same year value which one ws clicked (see how didReceiveSettings is handled in initialize)"
+
+	^ currentContext
+]
+
+{ #category : #accessing }
+YearSelector >> currentContext: anObject [
+
+	"used for knowing when there are multiple YearSelector instances with the same year value which one ws clicked (see how didReceiveSettings is handled in initialize)"
+
+	currentContext := anObject
+]
+
+{ #category : #accessing }
 YearSelector >> getGlobalSettings: jsonObj [
 
 	"not automatically called when setGlobalSettings is called, which is why this method is needed"
@@ -45,7 +63,6 @@ YearSelector >> getGlobalSettings: jsonObj [
 	"here, the getGlobalSettings event has no need to be sent to the plugin since the actions directly take place in Pharo"
 
 	| yearObj json |
-	
 	yearObj := jsonObj at: 'year'.
 	
 	"creates a link between yearWitnessSet and arrayJsonSetTitleYearWitness"
@@ -75,20 +92,22 @@ YearSelector >> getSettings: context [
 { #category : #accessing }
 YearSelector >> initialize [
 
-	| server json jsonObject arrayEvents jsonSettings jsonHighlightedImage jsonTitle jsonWillAppear |
+	| server json jsonObject arrayEvents jsonSettings jsonHighlightedImage jsonTitle jsonWillAppear context currentContextNow |
 	super initialize.
 
 	yearWitnessSet := OrderedCollection new.
 	yearSelectorSet := OrderedCollection new.
 	arrayJsonSetTitleYearWitness := OrderedCollection new.
+	currentContext := '0'.
+	throughKeyUp := 0.
 
 	"Creates a ZnManagingMultiThreadedServer HTTP port 8080 process, which needs to be terminated 	through the Process Browser if another server is to be launched"
 	server := ZnWebSocket
 		          startServerOn: 8080
 		          prefix: 'pharoBridge'
-		          do: [ :webSocket | 
-			          [ 
-			          webSocket runWith: [ :message | 
+		          do: [ :webSocket |
+			          [
+			          webSocket runWith: [ :message |
 				          | event |
 				          WebSocket := webSocket.
 				          "self inform: 'Received message: ' , message printString.""treats the data received accordingly, redirecting events to their respective method"
@@ -97,11 +116,11 @@ YearSelector >> initialize [
 
 				          "custom fields (i.e. ones that aren't required by an event as described in the SDK) are sent through the payload attribute of a JSON string"
 				          "string associated to inRegisterEvent in JavaScript"
-				          event = 'registerPlugin' ifTrue: [ 
+				          event = 'registerPlugin' ifTrue: [
 					          json := self registerPlugin: jsonObject ].
 
 				          "called when a key is pressed, is only a received event, doesn't need to be sent back to the plugin"
-				          event = 'keyUp' ifTrue: [ 
+				          event = 'keyUp' ifTrue: [
 					          arrayEvents := self keyUp: jsonObject.
 
 					          jsonSettings := arrayEvents at: 1.
@@ -115,7 +134,7 @@ YearSelector >> initialize [
 					          self sendUpdateYearWitnesses: webSocket ].
 
 				          "called when one of the keys of the YearSelectorPharo plugin is present on the current displayed plugin"
-				          event = 'willAppear' ifTrue: [ 
+				          event = 'willAppear' ifTrue: [
 					          arrayEvents := self willAppear: jsonObject.
 
 					          jsonTitle := arrayEvents at: 1.
@@ -129,15 +148,23 @@ YearSelector >> initialize [
 				          "setTitle and setSettings are called when selecting a value from the Property Inspector list"
 
 				          "setImage is directly received when the plugin received the didReciveGlobalSettings event in order to reset the background of the last key pressed"
-				          event = 'setImage' ifTrue: [ 
+				          event = 'setImage' ifTrue: [
 					          json := self setImage: jsonObject ].
 
 				          "received when the getSettings event is sent, is used to receive the year value through a context of a YearSelector instance"
-				          event = 'didReceiveSettings' ifTrue: [ 
-					          myApp highlightYearSelectorReceive: jsonObject ].
+				          event = 'didReceiveSettings' ifTrue: [ "if the event is sent through keyUp, only highlight the clicked key""if the event is sent through MyApp, highlight all YearSelector instances having the same year value"
+					          context := jsonObject at: 'context'.
+					currentContextNow := self currentContext.
+					          ""
+					self inform: 'context: ' , context.
+					self inform: 'currentContextNow: ' , currentContextNow asString.
+					          context = currentContextNow ifTrue: [
+						          throughKeyUp := throughKeyUp + 1 ].
+					          throughKeyUp = 0 ifTrue: [
+						          myApp highlightYearSelectorReceive: jsonObject ] ].
 
 				          "event received when a value is changed from the Property Inspector of a YearSeletor instance"
-				          event = 'sendToPlugin' ifTrue: [ 
+				          event = 'sendToPlugin' ifTrue: [
 					          arrayEvents := self sendToPlugin: jsonObject.
 
 					          jsonSettings := arrayEvents at: 1.
@@ -148,7 +175,7 @@ YearSelector >> initialize [
 
 				          event = 'keyUp' | (event = 'sendToPlugin')
 				          | (event = 'willAppear')
-				          | (event = 'didReceiveSettings') ifFalse: [ 
+				          | (event = 'didReceiveSettings') ifFalse: [
 					          webSocket sendMessage: json ] ] ]
 				          on: ConnectionClosed , PrimitiveFailed
 				          do: [ "ignore close" ].
@@ -157,10 +184,9 @@ YearSelector >> initialize [
 
 { #category : #accessing }
 YearSelector >> keyUp: jsonObj [
-
 	"sends multiple events (setSettings, setGlobalSettings which sends getGlobalSettings so that the plugin receives a didReceiveGlobalSettings event)"
 
-	| jsonSettings context arrayEvents jsonFormattedSettings settings coordinates jsonSetHighlightedImage jsonFormattedSetHighlightedImage highlightedImage jsonContext yearObj action jsonWillAppear jsonFormattedWillAppear jsonImage arraySetImage jsonFormattedImage defaultImage |
+	| jsonSettings context arrayEvents jsonFormattedSettings settings coordinates jsonSetHighlightedImage jsonFormattedSetHighlightedImage highlightedImage jsonContext yearObj action jsonWillAppear jsonFormattedWillAppear arraySetImage jsonFormattedImage defaultImage jsonDefaultImage |
 	action := jsonObj at: 'action'.
 	context := jsonObj at: 'context'.
 	settings := jsonObj at: 'payload' at: 'settings'.
@@ -170,11 +196,11 @@ YearSelector >> keyUp: jsonObj [
 	highlightedImage := 'img/actionIconHighlighted.png'.
 
 	"resets value to 0 if a yearWitness is pressed (for setTitle and setSettings)"
-	action = 'com.thales.yearselectorpharo.yearwitness' ifTrue: [ 
+	action = 'com.thales.yearselectorpharo.yearwitness' ifTrue: [
 		settings := 0.
 		yearObj := 0 ].
 
-	action = 'com.thales.yearselectorpharo.action' ifTrue: [ 
+	action = 'com.thales.yearselectorpharo.action' ifTrue: [
 		yearObj := settings at: 'year' ].
 
 	jsonSettings := Dictionary new
@@ -184,8 +210,10 @@ YearSelector >> keyUp: jsonObj [
 		                yourself.
 	"STONJSON toString conversion is performed in setSettings, setGlobalSettings and getGlobalSettings"
 	jsonFormattedSettings := self setSettings: jsonSettings.
+	
+	self currentContext: context.
 
-	"setGlobalSettings and getGlobalSettings (called in setGlobalSettings) have no object given to them since their event is always the same, they just need a uuid and a year (the second one is only needed for setGlobalSettings) which are class variables of the YearSelector class"
+	"setGlobalSettings and getGlobalSettings (called in setGlobalSettings) have no object given to them since their event is always the same, they just need a uuid and a year (the second one is only needed for setGlobalSettings) which are instance variables of the YearSelector class"
 	jsonContext := Dictionary new
 		               at: 'context' put: context;
 		               at: 'year' put: yearObj;
@@ -212,16 +240,26 @@ YearSelector >> keyUp: jsonObj [
 
 	"used to reset keys highlighted by a command sent in the Pharo IDE using the MyApp class, these messages are sent before jsonFormattedSetHighlightedImage"
 	arraySetImage := OrderedCollection new.
-	yearSelectorSet do: [ :each | 
-		jsonImage := Dictionary new
-			             at: 'context' put: each;
-			             at: 'image' put: defaultImage;
-			             yourself.
 
-		jsonFormattedImage := self setImage: jsonImage.
+	yearWitnessSet do: [ :each |
+		jsonDefaultImage := Dictionary new
+			                    at: 'context' put: each;
+			                    at: 'image' put: defaultImage;
+			                    yourself.
+
+		jsonFormattedImage := self setImage: jsonDefaultImage.
+		arraySetImage add: jsonFormattedImage ].
+	
+	yearSelectorSet do: [ :each |
+		jsonDefaultImage := Dictionary new
+			                    at: 'context' put: each;
+			                    at: 'image' put: defaultImage;
+			                    yourself.
+
+		jsonFormattedImage := self setImage: jsonDefaultImage.
 		arraySetImage add: jsonFormattedImage ].
 	self sendDefaultImages: arraySetImage.
-	
+
 	"updates the instance variable year of the MyApp class, which is needed to update the yearWitness instances through commands sent in the Pharo IDE"
 	myApp year: yearObj.
 
@@ -241,20 +279,6 @@ YearSelector >> myAppInitialize: myAppInstance [
 	"saves the instance of myApp created through the new message to use it to call its methods, such as highlightYearSelectorReceive: "
 
 	myApp := myAppInstance
-]
-
-{ #category : #nil }
-YearSelector >> putIfAbsentInDictionary: aVal at: aVal2 at: aVal3 put: value [
-
-	"equivalent to the previously implemented at: at: at: methods"
-	"previous syntax looked like this: "
-	"((jsonFormattedObject at: 'payload' ifAbsentPut: [ Dictionary new ])
-		 at: 'settings'
-		 ifAbsentPut: [ Dictionary new ]) at: 'year' put: yearObj."
-
-	((self at: aVal ifAbsentPut: [ Dictionary new ])
-		 at: aVal2
-		 ifAbsentPut: [ Dictionary new ]) at: aVal3 put: value
 ]
 
 { #category : #accessing }
@@ -281,7 +305,7 @@ YearSelector >> sendDefaultImages: arraySetImage [
 	arraySetImage do: [ :each | WebSocket sendMessage: each ].
 
 	"removes the previous elements stocked in order to not stack multiple times the same context with different values"
-	arraySetImage removeAll: arraySetImage
+	arraySetImage removeAll
 ]
 
 { #category : #accessing }
@@ -306,14 +330,13 @@ YearSelector >> sendToPlugin: jsonObj [
 
 { #category : #accessing }
 YearSelector >> sendUpdateYearWitnesses: webSocket [
-
 	"updates every yearWitness instance"
 
-	arrayJsonSetTitleYearWitness do: [ :each | 
+	arrayJsonSetTitleYearWitness do: [ :each |
 		webSocket sendMessage: each ].
 
 	"removes the previous elements stocked in order to not stack multiple times the same context with different values"
-	arrayJsonSetTitleYearWitness removeAll: arrayJsonSetTitleYearWitness
+	arrayJsonSetTitleYearWitness removeAll
 ]
 
 { #category : #accessing }
@@ -443,7 +466,8 @@ YearSelector >> setTitleAndSettingsYearWitness: jsonObj [
 	| yearObj context jsonTitle jsonFormattedTitle jsonSettings jsonFormattedSettings |
 	"this method is used to update every yearWitness instance through their context, which is the unique value that represents an instance""
 	it updates their title as well as their settings, so that willAppear: can load their new values when changing profiles"
-	"used by getGlobalSettings: ""with context being each element sent to this method"
+	"used by getGlobalSettings: "
+	"with context being each element sent to this method"
 	context := jsonObj at: 'context'.
 	yearObj := jsonObj at: 'year'.
 
@@ -507,6 +531,14 @@ YearSelector >> setTitlePI: jsonObj [
 ]
 
 { #category : #accessing }
+YearSelector >> throughKeyUp: anObject [
+
+	"used to reset the value in the year: method of MyApp"
+
+	throughKeyUp := anObject
+]
+
+{ #category : #accessing }
 YearSelector >> uuid: anObject [
 
 	"used for the globalSettings event (get and set) for their context field. These settings are preserved between instances, notably for the year variable"
@@ -554,8 +586,9 @@ YearSelector >> willDisappear [
 
 	"removes all yearWitness instances through their context, as well as all setTitle events for yearWitness when the user changes to a profile that doesn't contain an instance of an action from the YearSelectorPharo plugin"
 
-	yearWitnessSet removeAll: yearWitnessSet.
-	arrayJsonSetTitleYearWitness removeAll: arrayJsonSetTitleYearWitness
+	yearWitnessSet removeAll.
+	yearSelectorSet removeAll.
+	arrayJsonSetTitleYearWitness removeAll
 ]
 
 { #category : #accessing }

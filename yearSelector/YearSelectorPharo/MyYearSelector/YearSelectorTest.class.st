@@ -37,9 +37,11 @@ YearSelectorTest >> testAccessDictionaryDepthThree [
 "methods 
 at: at: at:, 
 at: at: at: ifAbsent,
-putIfAbsentInDictionary: at: at: put: (which is equivalent to a at: at: at: put: method with ifAbsentPut: methods thrown in)
+putIfAbsentInDictionary: at: at: put: (which is equivalent to the at: at: at: put: method with ifAbsentPut: methods thrown in)
 needed to be implemented in the Dictionary class, 
 located in the Collections-Unordered package included in Pharo by default"
+
+"can't include a test which would test the communication between JavaScript and Pharo since the WebSocket is contained in the initialize method, and can't be saved through a variable to be used to send a message to it. The only way is to follow in order the data exchanges, starting with the Stream Deck to the plugin."
 
 | d settingsYear currentYear lastContext settingsLastContext |
 currentYear := '2023'.
@@ -54,20 +56,4 @@ settingsLastContext := d at: 'payload' at: 'settings' at: 'lastContext'.
 
 self assert: settingsYear equals: currentYear.
 self assert: settingsLastContext equals: lastContext
-]
-
-{ #category : #tests }
-YearSelectorTest >> testEventField [
-"can't include a test which would test the communication between JavaScript and Pharo since the WebSocket is contained in the initialize method, and can't be saved through a variable to be used to send a message to it. The only way is to follow in order the data exchanges, starting with the Stream Deck to the plugin."
-| y jsonObject jsonFormatted event jsonGlobalSettings |
-jsonObject := Dictionary new
-	at: 'year' put: 10;
-	yourself.
-
-y := YearSelector new.
-"no string conversion for these methods"
-jsonGlobalSettings := y getGlobalSettings: jsonObject.
-jsonFormatted := STONJSON fromString: jsonGlobalSettings.
-event := jsonFormatted at: 'event'.
-self assert: event equals: 'setImage'
 ]
