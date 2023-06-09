@@ -36,7 +36,7 @@ The MyApp package is a way to interact with the YearSelector package (the aggreg
 ![MyApp and YearSelector drawio (2)](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/e4eeaec7-7118-4088-94dd-5d4371ecee23)
 
 Here's what it looks like after executing this Pharo line of code and launching the Stream Deck application, same as before: \
-<img width="120" alt="myapp new" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/fac66d2a-015c-47ad-91ec-feac009b294b"> \
+<img width="368" alt="myapp new1" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/c639c200-bec8-40a3-af51-690ef730dd31"> \
 <img width="572" alt="defaultProfile" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/6e119585-7956-4961-9231-6e65538ae11b">
 
 Then executing this second line of Pharo code: \
