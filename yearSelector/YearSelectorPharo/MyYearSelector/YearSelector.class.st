@@ -25,7 +25,6 @@ Class {
 		'yearSelectorSet',
 		'WebSocket',
 		'myApp',
-		'currentContext',
 		'throughKeyUp'
 	],
 	#category : #MyYearSelector
@@ -37,13 +36,6 @@ YearSelector >> WebSocket [
 	"used for highlightYearSelector: in the MyApp class"
 
 	^ WebSocket
-]
-
-{ #category : #accessing }
-YearSelector >> currentContext: anObject [
-
-	"used for knowing when there are multiple YearSelector instances with the same year value which one ws clicked (see how didReceiveSettings is handled in initialize)"
-	currentContext := anObject
 ]
 
 { #category : #accessing }
@@ -83,13 +75,12 @@ YearSelector >> getSettings: context [
 { #category : #accessing }
 YearSelector >> initialize [
 
-	| server json jsonObject arrayEvents jsonSettings jsonHighlightedImage jsonTitle jsonWillAppear context |
+	| server json jsonObject arrayEvents jsonSettings jsonHighlightedImage jsonTitle jsonWillAppear |
 	super initialize.
 
 	yearWitnessSet := OrderedCollection new.
 	yearSelectorSet := OrderedCollection new.
 	arrayJsonSetTitleYearWitness := OrderedCollection new.
-	currentContext := ''.
 	throughKeyUp := 0.
 
 	"Creates a ZnManagingMultiThreadedServer HTTP port 8080 process, which needs to be terminated 	through the Process Browser if another server is to be launched"
@@ -138,17 +129,14 @@ YearSelector >> initialize [
 				          "setGlobalSettings getGlobalSettings, setTitle and setSettings are only invoked, they're not received as is"
 				          "setTitle and setSettings are called when selecting a value from the Property Inspector list"
 
-				          "setImage is directly received when the plugin received the didReciveGlobalSettings event in order to reset the background of the last key pressed"
+				          "setImage is directly received when the plugin receives the didReceiveGlobalSettings event in order to reset the background of the last key pressed"
 				          event = 'setImage' ifTrue: [
 					          json := self setImage: jsonObject ].
 
 				          "received when the getSettings event is sent, is used to receive the year value through a context of a YearSelector instance"
 				          event = 'didReceiveSettings' ifTrue: [ "if the event is sent through keyUp, only highlight the clicked key"
 					"if the event is sent through MyApp, highlight all YearSelector instances having the same year value"
-					          context := jsonObject at: 'context'.
-					          context = currentContext ifTrue: [
-						          throughKeyUp := throughKeyUp + 1 ].
-					          throughKeyUp = 0 ifTrue: [
+					          throughKeyUp ifFalse: [
 						          myApp highlightYearSelectorReceive: jsonObject ] ].
 
 				          "event received when a value is changed from the Property Inspector of a YearSeletor instance"
@@ -182,6 +170,8 @@ YearSelector >> keyUp: jsonObj [
 
 	defaultImage := 'img/actionIcon.png'.
 	highlightedImage := 'img/actionIconHighlighted.png'.
+	
+	self throughKeyUp: true.
 
 	"resets value to 0 if a yearWitness is pressed (for setTitle and setSettings)"
 	action = 'com.thales.yearselectorpharo.yearwitness' ifTrue: [
@@ -247,10 +237,7 @@ YearSelector >> keyUp: jsonObj [
 	self sendDefaultImages: arraySetImage.
 
 	"updates the instance variable year of the MyApp class, which is needed to update the yearWitness instances through commands sent in the Pharo IDE"
-	myApp year: yearObj.
-	
-	"called after since year: resets currentContext"
-	self currentContext: context.
+	myApp yearUpdate: yearObj.
 
 	"returns the different events"
 	arrayEvents := Array new: 3.
@@ -517,6 +504,14 @@ YearSelector >> setTitlePI: jsonObj [
 	jsonTitle := STONJSON toString: jsonFormattedObject.
 
 	^ jsonTitle
+]
+
+{ #category : #accessing }
+YearSelector >> throughKeyUp [
+
+	"used to know if only one key needs to be updated (thtough keyUp: ) or multiple (through highlightYearSelectorSend/Receive: "
+
+	^ throughKeyUp
 ]
 
 { #category : #accessing }

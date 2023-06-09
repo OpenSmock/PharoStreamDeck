@@ -71,7 +71,6 @@ MyApp >> highlightYearSelectorReceive: jsonObj [
 			                        at: 'context' put: context;
 			                        at: 'image' put: highlightedImage;
 			                        yourself.
-
 		jsonImage := plugin setImage: jsonHighlightedImage.
 		arraySetImage add: jsonImage ].
 
@@ -100,6 +99,7 @@ MyApp >> highlightYearSelectorSend [
 	"context is linked to a year value by the getSettings event (multiple instances of the event are sent through arrayGetSettings) which makes the plugin receive a didReceiveSettings event transmitting the year value, which is updated if keyUp: is triggered"
 
 	| jsonSettings |
+	
 	plugin yearSelectorSet do: [ :each | 
 		jsonSettings := plugin getSettings: each.
 		arrayGetSettings add: jsonSettings.
@@ -136,12 +136,6 @@ MyApp >> modifyYearWitnessValue [
 		        yourself.
 	plugin getGlobalSettings: json.
 	plugin sendUpdateYearWitnesses: plugin WebSocket
-	"plugin yearWitnessSet do: [ :each | 
-		json := Dictionary new
-			        at: 'context' put: each;
-			        at: 'year' put: year;
-			        yourself.
-		plugin setTitleAndSettingsYearWitness: json ]"
 ]
 
 { #category : #initialization }
@@ -175,7 +169,6 @@ MyApp >> year [
 
 { #category : #initialization }
 MyApp >> year: anObject [
-
 	"verify that anObject is equal to one of the numbers returned by the authorizedNumbers method, which are values transmitted from the Property Inspector."
 
 	"also calls other methods to change every YearWitness instance's value as well as highlight YearSelector values with the chosen (valid) year value."
@@ -183,17 +176,23 @@ MyApp >> year: anObject [
 	| numbers numberInList |
 	numbers := self authorizedNumbers.
 	numberInList := 0.
-	"resets values handled in didReceiveSettings treatment which is located in the initialize method of YearSelector"
-	plugin throughKeyUp: 0.
-	plugin currentContext: '0'.
 
-	1 to: numbers size do: [ :i | 
-		anObject = (numbers at: i) ifTrue: [ 
+	1 to: numbers size do: [ :i |
+		anObject = (numbers at: i) ifTrue: [
 			year := anObject.
 			numberInList := numberInList + 1 ] ].
-	numberInList = 0 ifTrue: [ 
+	numberInList = 0 ifTrue: [
 		self inform: 'Invalid number, see authorizedNumbers method' ].
 
 	self modifyYearWitnessValue.
+	"since the year: method is only called with MyApp, is used to update all the yearWitness instances"
+	plugin throughKeyUp: false.
 	self highlightYearSelectorSend
+]
+
+{ #category : #initialization }
+MyApp >> yearUpdate: anObject [
+	"since the year: method calls other functions, is only used in keyUp; "
+	
+	year := anObject
 ]
