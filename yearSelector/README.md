@@ -31,7 +31,7 @@ How this plugin works and communicate with the differents parts involved is expl
 ![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/8c82ab61-47c6-4566-b1a1-7181ac434522)
 
 ## MyApp package
-The MyApp package is a way to interact with the YearSelector package (the aggregation link being here since it's possible to only launch a YearSelector instance without launching a MyApp instance, detailed further below in the UML diagram).
+The MyApp package is a way to interact with the YearSelector package (the aggregation link being here since it's possible to only launch a YearSelector instance without launching a MyApp instance, detailed further below in the UML diagram):
 
 ![MyApp and YearSelector drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/f56fdeb7-6fc6-4f95-8185-636ef497063f)
 
