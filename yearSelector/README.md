@@ -30,6 +30,11 @@ How this plugin works and communicate with the differents parts involved is expl
 
 ![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/8c82ab61-47c6-4566-b1a1-7181ac434522)
 
+## MyApp package
+The MyApp package is a way to interact with the YearSelector package (the aggregation link being here since it's possible to only launch a YearSelector instance without launching a MyApp instance, detailed further below in the UML diagram).
+
+![MyApp and YearSelector drawio (2)](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/e4eeaec7-7118-4088-94dd-5d4371ecee23)
+
 ## Complementary informations
 ### Pharo
 [WebSocket (using Zinc)](https://github.com/svenvc/docs/blob/master/zinc/zinc-websockets-paper.md) \
