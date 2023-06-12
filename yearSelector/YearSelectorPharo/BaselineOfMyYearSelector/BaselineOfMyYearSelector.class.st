@@ -1,11 +1,11 @@
 Class {
-	#name : #BaselineOFMyYearSelector,
+	#name : #BaselineOfMyYearSelector,
 	#superclass : #Object,
 	#category : #BaselineOfMyYearSelector
 }
 
 { #category : #baselines }
-BaselineOFMyYearSelector >> baseline: spec [
+BaselineOfMyYearSelector >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [
@@ -14,7 +14,10 @@ BaselineOFMyYearSelector >> baseline: spec [
 ]
 
 { #category : #baselines }
-BaselineOFMyYearSelector >> dependencies: spec [
+BaselineOfMyYearSelector >> dependencies: spec [
+	spec 
+		baseline: #MyYearSelector
+		with: [ 'https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorPharo/MyYearSelector' ].
 	spec
 		baseline: #Zinc
 		with: [ spec repository: 'https://github.com/svenvc/zinc' ]
