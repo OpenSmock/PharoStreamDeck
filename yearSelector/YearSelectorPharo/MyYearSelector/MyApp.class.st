@@ -1,28 +1,22 @@
 "
-Please comment me using the following template inspired by Class Responsibility Collaborator (CRC) design:
+For the Class part:  I represent a container for the YearSelector class, which is to say that launching an instance of MyApp launches an instance of YearSelector.
 
-For the Class part:  State a one line summary. For example, ""I represent a paragraph of text"".
+For the Responsibility part: I contain the YearSelector class by using methods that can directly modify its state, such as the year selected. It's a way to influence multiple YearSelector instances selected at once, as well as the value shown on YearWitness instances.
 
-For the Responsibility part: I contain the YearSelector class by using methods that can directly modify its state, such as the year selected.
-
-For the Collaborators Part: State my main collaborators and one line about how I interact with them. 
+For the Collaborators Part: My main collaborator is the YearSelector class, which interacts with index.html as well as the Stream Deck.
 
 Public API and Key Messages
+How to create instances:
+m := MyApp new
 
-- message one   
-- message two 
-- (for bonus points) how to create instances.
+How to interact with this class:
+m year: 10 (checks if the value is possible to affect through the authorizedNumbers method)
 
-   One simple example is simply gorgeous.
- 
-Internal Representation and Key Implementation Points.
-
-    Instance Variables
-	plugin:		<Object>
-	year:		<Object>
-
-
-    Implementation Points
+Instance variables
+plugin knows which plugin is used (namely YearSelector)
+year is used to memoriez the year value which is shown on YearWitness instances
+arrayGetSettings is used to keep track of all the getSettings events that need to be sent to know which YearSelector instances to highlight when the year: method is called
+arraySetImage is used to send to the plugin multiple times the same image (highlighted blue background) for every YearSelector instance that matches the year value sent through the year: method
 "
 Class {
 	#name : #MyApp,

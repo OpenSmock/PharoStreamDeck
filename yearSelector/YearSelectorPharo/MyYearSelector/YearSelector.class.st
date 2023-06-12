@@ -1,19 +1,19 @@
 "
-For the Class part: I represent a year selector, with values being specific integers (1, 5, 10, 15, 20).
+For the Class part: I represent a year selector, with values being specific integers (1, 5, 10, 15, 20) defined in the yearSelector_pi.html file.
 
-For the Responsibility part: my main responsability is to choose a value and interact with the Elgato Stream Deck. As such, a value can be chosen through code or through a button press on the Stream Deck (see YearSelectorPharo Stream Deck profile).
+For the Responsibility part: my main responsability is to handle operations that were previously done on the JavaScript side of things. Through a second WebSocket, this class can interact with the Elgato Stream Deck. As such, values can only be chosen through button presses on the Stream Deck through the use of this class alone (see YearSelectorPharo Stream Deck profile).
 
-For the Collaborators part: My main collaborator is the Stream Deck application, which permits the use of profiles and placing actions on their grids through the YearSelector plugin.
+For the Collaborators part: my main collaborator is the Stream Deck application, which permits the use of profiles and placing actions on their grids through the YearSelector plugin.
 
 How to create instances:
-| yearSelector |
-yearSelector := YearSelector new.
+YearSelector new.
 
 year isn't used anymore, since the year value that is shared between the instances of this plugin is transmitted through JSON data and events (setTitle and setSettings)
 uuid is the unique value identifying the plugin (inPluginUUID in JavaScript code). It's sent via the registration procedure, so recuperated from the connectElgatoStreamDeckSocket() function (https://developer.elgato.com/documentation/stream-deck/sdk/registration-procedure/#compiled-plugin-registration) and is used in the setGlobalSettings: method for its context field, since globalSettings events require more than a context value to share a setting between instances of the plugin (see SDK documentation - events sent https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setglobalsettings)
-lastContext memorizes the context (being the unique value that can identify a Stream Deck key) of the key pressed before the last one, so that its background can be reset to its original black background
 yearWitnessSet memorizes the context of every YearWitness instance, so that it can update them whenever a YearSelector instance is pressed. It's refilled every time the willAppear event is triggered, so when the YearSelectorPharo profile is the profile shown on the Stream Deck, for example
 arrayJsonSetTitleYearWitness stocks the setTitle events that need to be sent to the plugin in order to update every YearWitness instance to showw the correct value pressed. It uses yearWitnessSet to know which Stream Deck keys are YearWitness instances
+myApp memorizes if the plugin was launched through the MyApp class
+throughKeyUp is a boolean used to know if a key was pressed or if a command was sent through the Pharo IDE
 "
 Class {
 	#name : #YearSelector,
