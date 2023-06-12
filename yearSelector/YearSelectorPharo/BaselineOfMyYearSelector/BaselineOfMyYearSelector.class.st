@@ -17,7 +17,7 @@ BaselineOfMyYearSelector >> baseline: spec [
 BaselineOfMyYearSelector >> dependencies: spec [
 	spec 
 		baseline: #MyYearSelector
-		with: [ 'https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorPharo/MyYearSelector' ].
+		with: [ spec repository: 'https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorPharo/MyYearSelector' ].
 	spec
 		baseline: #Zinc
 		with: [ spec repository: 'https://github.com/svenvc/zinc' ]
