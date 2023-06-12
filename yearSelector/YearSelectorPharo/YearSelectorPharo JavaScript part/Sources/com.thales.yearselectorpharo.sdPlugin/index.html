@@ -191,7 +191,8 @@
 				else if (event == "willDisappear") {
 					yearWitnessAction.onWillDisappear();
 				}
-				else if (event == "sendToPlugin") {
+				//didReceiveSettings is used for the MyApp class, for the highlightYearSelectorReceive: method
+				else if (event == "sendToPlugin" || event == "didReceiveSettings") {
 					//event.data is undefined if left unparsed, can't send it directly
 					if (isOpen(socket)) {
 						socket.send(JSON.stringify(jsonObj));
