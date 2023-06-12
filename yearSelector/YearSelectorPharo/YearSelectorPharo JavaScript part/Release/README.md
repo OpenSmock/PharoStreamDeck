@@ -7,7 +7,7 @@ The profile will be available from the profile list without overriding other Str
 The profile will have no effect without the plugin since the actions cannot have any effect by themselves. \
 <img width="122" alt="pluginpharo" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/17ad9f18-965c-4d56-adb9-13cb9df518b1">
 
-# How to import the Pharo packages
+# How to import the necessary Pharo packages
 ```
 Metacello new
                baseline: 'MyYearSelector';
