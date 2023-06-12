@@ -1,4 +1,4 @@
-lass {
+Class {
 	#name : #BaselineOFMyYearSelector,
 	#superclass : #Object,
 	#category : #BaselineOfMyYearSelector
