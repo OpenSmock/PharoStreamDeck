@@ -162,21 +162,21 @@ MyApp >> year [
 ]
 
 { #category : #initialization }
-MyApp >> year: anObject [
-	"verify that anObject is equal to one of the numbers returned by the authorizedNumbers method, which are values transmitted from the Property Inspector."
+MyApp >> year: aNumber [
+	"verify that aNumber is equal to one of the numbers returned by the authorizedNumbers method, which are values transmitted from the Property Inspector."
 
 	"also calls other methods to change every YearWitness instance's value as well as highlight YearSelector values with the chosen (valid) year value."
 
-	| numbers numberInList |
-	numbers := self authorizedNumbers.
-	numberInList := 0.
+	| numbers |
+	year = aNumber ifTrue: [ ^ self ].
 
-	1 to: numbers size do: [ :i |
-		anObject = (numbers at: i) ifTrue: [
-			year := anObject.
-			numberInList := numberInList + 1 ] ].
-	numberInList = 0 ifTrue: [
-		self inform: 'Invalid number, see authorizedNumbers method' ].
+	numbers := self authorizedNumbers.
+	numbers
+		detect: [ :e | e = aNumber ]
+		ifFound: [ :e | year := e ]
+		ifNone: [
+			self inform: 'Invalid number, see authorizedNumbers method'.
+			^ self ].
 
 	self modifyYearWitnessValue.
 	"since the year: method is only called with MyApp, is used to update all the yearWitness instances"
