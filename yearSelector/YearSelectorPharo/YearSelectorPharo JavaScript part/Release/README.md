@@ -26,3 +26,5 @@ Here's what it looks like after executing this Pharo line of code and launching 
 Then executing this second line of Pharo code: \
 <img width="270" alt="myapp year10 2" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/6437d3f7-a4b0-46f7-bb54-5f77eb57799a"> \
 <img width="571" alt="myapp year 10" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/121a09f6-d583-4f72-8bf7-3d3136ae98f9">
+
+Of course, clicking on the Stream Deck keys still only highlights the key pressed, an operation which can't highlight multiple keys at the same time.
