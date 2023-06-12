@@ -12,7 +12,7 @@ m := MyApp new
 How to interact with this class:
 m year: 10 (checks if the value is possible to affect through the authorizedNumbers method)
 
-Instance variables
+Instance variables:
 plugin knows which plugin is used (namely YearSelector)
 year is used to memoriez the year value which is shown on YearWitness instances
 arrayGetSettings is used to keep track of all the getSettings events that need to be sent to know which YearSelector instances to highlight when the year: method is called
