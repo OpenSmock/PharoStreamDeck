@@ -7,12 +7,14 @@ The profile will be available from the profile list without overriding other Str
 The profile will have no effect without the plugin, since the actions cannot have any effect.
 
 # How to use it
-The YearSelector action permits the user to set a value to be taken by the plugin when clicked (5, 10, 15 or 20). \
+The YearSelectorPharo action permits the user to set a value to be taken by the plugin when clicked (5, 10, 15 or 20). \
 When a key is pressed, its background color will be set to blue, and the last key pressed will revert to its original state (which is to say that its background will lose its blue status).
+<img width="101" alt="yearselectorpharo" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/444077e9-cc21-4f63-8ee0-549932f8f2d2">
 
-The YearWitness action shows which value is currently taken by the plugin global variable. \
-Every YearWitness has the same value, since it's a global variable available to every instance of the plugin, which is different from how a YearSelector instance handles its internal value, being chosen from the Property Inspector list. \
-Pressing a YearWitness value will put the value back to 0 and will also make its background blue.
+The YearWitnessPharo action shows which value is currently taken by the plugin global variable. \
+Every YearWitness has the same value, since it's a global variable available to every instance of the plugin, which is different from how a YearSelectorPharo instance handles its internal value, being chosen from the Property Inspector list. \
+Pressing a YearWitnessPharo value will put the value back to 0 and will also make its background blue.
+<img width="108" alt="yearwitnesspharo" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/5b0adb6c-794e-42f1-a4c1-d38e6a83f6bc">
 
 ## MyApp package
 The MyApp package is a way to interact with the YearSelector package (the aggregation link being here since it's possible to launch a YearSelector instance without launching a MyApp instance, detailed further below in the UML diagram):
