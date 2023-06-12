@@ -17,7 +17,7 @@ Metacello new
                load
 ```
 
-# How to use the plugin in the Stream Deck application
+# How to use the plugin
 The YearSelectorPharo action permits the user to set a value to be taken by the plugin when clicked (5, 10, 15 or 20). \
 When a key is pressed, its background color will be set to blue, and the last key pressed will revert to its original state (which is to say that its background will lose its blue status). \
 <img width="101" alt="yearselectorpharo" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/444077e9-cc21-4f63-8ee0-549932f8f2d2">
