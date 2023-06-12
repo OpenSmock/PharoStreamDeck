@@ -28,7 +28,7 @@ In a Playground, execute the following line of code : `YearSelector new`
 
 How this plugin works and communicate with the differents parts involved is explained in this image :
 
-![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/8c82ab61-47c6-4566-b1a1-7181ac434522)
+![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/6f4ce01d-0e77-4a1a-b5ad-8457bf6763aa)
 
 ## MyApp package
 The MyApp package is a way to interact with the YearSelector package (the aggregation link being here since it's possible to only launch a YearSelector instance without launching a MyApp instance, detailed further below in the UML diagram):
