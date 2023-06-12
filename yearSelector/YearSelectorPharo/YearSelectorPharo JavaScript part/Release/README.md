@@ -14,7 +14,6 @@ Metacello new
                baseline: 'MyYearSelector';
                repository: 'github://OpenSmock/PharoStreamDeck:Dev/yearSelector/YearSelectorPharo';
                onConflictUseIncoming;
-               ignoreImage;
                load
 ```
 
