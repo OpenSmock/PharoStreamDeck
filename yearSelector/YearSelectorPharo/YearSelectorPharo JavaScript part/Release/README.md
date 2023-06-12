@@ -1,5 +1,5 @@
 # How to install
-Prerequisite :
+Prerequisite:
 - the Elgato Stream Deck application is installed on your device
 
 Download the plugin and the profile, then double-click on them both. \
