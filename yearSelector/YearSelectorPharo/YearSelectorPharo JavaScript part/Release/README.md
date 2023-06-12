@@ -15,7 +15,7 @@ Every YearWitness has the same value, since it's a global variable available to 
 Pressing a YearWitness value will put the value back to 0 and will also make its background blue.
 
 ## MyApp package
-The MyApp package is a way to interact with the YearSelector package (the aggregation link being here since it's possible to only launch a YearSelector instance without launching a MyApp instance, detailed further below in the UML diagram):
+The MyApp package is a way to interact with the YearSelector package (the aggregation link being here since it's possible to launch a YearSelector instance without launching a MyApp instance, detailed further below in the UML diagram):
 
 ![MyApp and YearSelector drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/f56fdeb7-6fc6-4f95-8185-636ef497063f)
 
