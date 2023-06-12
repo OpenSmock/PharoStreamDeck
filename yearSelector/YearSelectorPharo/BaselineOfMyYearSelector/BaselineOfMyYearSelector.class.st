@@ -1,6 +1,6 @@
 Class {
 	#name : #BaselineOfMyYearSelector,
-	#superclass : #Object,
+	#superclass : #BaselineOf,
 	#category : #BaselineOfMyYearSelector
 }
 
