@@ -238,6 +238,7 @@ YearSelector >> keyUp: jsonObj [
 	self sendDefaultImages: arraySetImage.
 
 	"updates the instance variable year of the MyApp class, which is needed to update the yearWitness instances through commands sent in the Pharo IDE"
+	"change yearUpdate to year: for same behaviour on the Stream Deck keys as sending a command like m year: 10, m being an instance of MyApp"
 	myApp yearUpdate: yearObj.
 
 	"returns the different events"
