@@ -1,7 +1,7 @@
 "
 For the Class part: I represent a year selector, with values being specific integers (1, 5, 10, 15, 20) defined in the yearSelector_pi.html file.
 
-For the Responsibility part: my main responsability is to handle operations that were previously done on the JavaScript side of things. Through a second WebSocket, this class can interact with the Elgato Stream Deck. As such, values can only be chosen through button presses on the Stream Deck through the use of this class alone (see YearSelectorPharo Stream Deck profile).
+For the Responsibility part: my main responsability is to handle operations that were previously done on the JavaScript side of things. Through a second WebSocket, this class can interact with the Elgato Stream Deck. As such, values can only be chosen through button presses on the Stream Deck through the use of this class alone (see PharoPlugin Stream Deck profile).
 
 For the Collaborators part: my main collaborator is the Stream Deck application, which permits the use of profiles and placing actions on their grids through the YearSelector plugin.
 
@@ -9,24 +9,19 @@ How to create instances:
 YearSelector new.
 
 Instance variables: 
-year isn't used anymore, since the year value that is shared between the instances of this plugin is transmitted through JSON data and events (setTitle and setSettings)
+year is the year value shown on the YearWitness instances
 uuid is the unique value identifying the plugin (inPluginUUID in JavaScript code). It's sent via the registration procedure, so recuperated from the connectElgatoStreamDeckSocket() function (https://developer.elgato.com/documentation/stream-deck/sdk/registration-procedure/#compiled-plugin-registration) and is used in the setGlobalSettings: method for its context field, since globalSettings events require more than a context value to share a setting between instances of the plugin (see SDK documentation - events sent https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setglobalsettings)
 yearWitnessSet memorizes the context of every YearWitness instance, so that it can update them whenever a YearSelector instance is pressed. It's refilled every time the willAppear event is triggered, so when the YearSelectorPharo profile is the profile shown on the Stream Deck, for example
-arrayJsonSetTitleYearWitness stocks the setTitle events that need to be sent to the plugin in order to update every YearWitness instance to showw the correct value pressed. It uses yearWitnessSet to know which Stream Deck keys are YearWitness instances
-myApp memorizes if the plugin was launched through the MyApp class
-throughKeyUp is a boolean used to know if a key was pressed or if a command was sent through the Pharo IDE
+arrayJsonSetTitleAndSettingsYearWitness stocks the setTitle events that need to be sent to the plugin in order to update every YearWitness instance to showw the correct value pressed. It uses yearWitnessSet to know which Stream Deck keys are YearWitness instances
 "
 Class {
 	#name : #YearSelector,
-	#superclass : #Object,
+	#superclass : #PluginSharedActions,
 	#instVars : [
-		'uuid',
 		'yearWitnessSet',
-		'arrayJsonSetTitleYearWitness',
 		'yearSelectorSet',
-		'WebSocket',
-		'myApp',
-		'throughKeyUp'
+		'year',
+		'arrayJSONSetTitleAndSettingsYearWitness'
 	],
 	#category : #MyYearSelector
 }
@@ -37,6 +32,12 @@ YearSelector >> WebSocket [
 	"used for highlightYearSelector: in the MyApp class"
 
 	^ WebSocket
+]
+
+{ #category : #accessing }
+YearSelector >> arrayJSONSetTitleAndSettingsPluginWitness [
+
+	^ arrayJSONSetTitleAndSettingsYearWitness
 ]
 
 { #category : #accessing }
@@ -76,87 +77,12 @@ YearSelector >> getSettings: context [
 { #category : #accessing }
 YearSelector >> initialize [
 
-	| server json jsonObject arrayEvents jsonSettings jsonHighlightedImage jsonTitle jsonWillAppear |
 	super initialize.
-
+	
 	yearWitnessSet := OrderedCollection new.
 	yearSelectorSet := OrderedCollection new.
-	arrayJsonSetTitleYearWitness := OrderedCollection new.
-	throughKeyUp := 0.
-
-	"Creates a ZnManagingMultiThreadedServer HTTP port 8080 process, which needs to be terminated 	through the Process Browser if another server is to be launched"
-	server := ZnWebSocket
-		          startServerOn: 8080
-		          prefix: 'pharoBridge'
-		          do: [ :webSocket |
-			          [
-			          webSocket runWith: [ :message |
-				          | event |
-				          WebSocket := webSocket.
-				          "self inform: 'Received message: ' , message printString.""treats the data received accordingly, redirecting events to their respective method"
-				          jsonObject := STONJSON fromString: message.
-				          event := jsonObject at: 'event'.
-
-				          "custom fields (i.e. ones that aren't required by an event as described in the SDK) are sent through the payload attribute of a JSON string"
-				          "string associated to inRegisterEvent in JavaScript"
-				          event = 'registerPlugin' ifTrue: [
-					          json := self registerPlugin: jsonObject ].
-
-				          "called when a key is pressed, is only a received event, doesn't need to be sent back to the plugin"
-				          event = 'keyUp' ifTrue: [
-					          arrayEvents := self keyUp: jsonObject.
-
-					          jsonSettings := arrayEvents at: 1.
-					          jsonHighlightedImage := arrayEvents at: 2.
-					          jsonWillAppear := arrayEvents at: 3.
-
-					          webSocket sendMessage: jsonSettings.
-					          webSocket sendMessage: jsonHighlightedImage.
-					          webSocket sendMessage: jsonWillAppear.
-
-					          self sendUpdateYearWitnesses: webSocket ].
-
-				          "called when one of the keys of the YearSelectorPharo plugin is present on the current displayed plugin"
-				          event = 'willAppear' ifTrue: [
-					          arrayEvents := self willAppear: jsonObject.
-
-					          jsonTitle := arrayEvents at: 1.
-					          jsonSettings := arrayEvents at: 2.
-					          "updates every yearWitness value if the current Stream Deck profile is changed (default value being 0)"
-					          webSocket sendMessage: jsonTitle.
-					          webSocket sendMessage: jsonSettings ].
-
-				          event = 'willDisappear' ifTrue: [ self willDisappear ].
-				          "setGlobalSettings getGlobalSettings, setTitle and setSettings are only invoked, they're not received as is"
-				          "setTitle and setSettings are called when selecting a value from the Property Inspector list"
-
-				          "setImage is directly received when the plugin receives the didReceiveGlobalSettings event in order to reset the background of the last key pressed"
-				          event = 'setImage' ifTrue: [
-					          json := self setImage: jsonObject ].
-
-				          "received when the getSettings event is sent, is used to receive the year value through a context of a YearSelector instance"
-				          event = 'didReceiveSettings' ifTrue: [ "if the event is sent through keyUp, only highlight the clicked key"
-					"if the event is sent through MyApp, highlight all YearSelector instances having the same year value"
-					          throughKeyUp ifFalse: [
-						          myApp highlightYearSelectorReceive: jsonObject ] ].
-
-				          "event received when a value is changed from the Property Inspector of a YearSeletor instance"
-				          event = 'sendToPlugin' ifTrue: [
-					          arrayEvents := self sendToPlugin: jsonObject.
-
-					          jsonSettings := arrayEvents at: 1.
-					          jsonTitle := arrayEvents at: 2.
-
-					          webSocket sendMessage: jsonSettings.
-					          webSocket sendMessage: jsonTitle ].
-
-				          event = 'keyUp' | (event = 'sendToPlugin')
-				          | (event = 'willAppear')
-				          | (event = 'didReceiveSettings') ifFalse: [
-					          webSocket sendMessage: json ] ] ]
-				          on: ConnectionClosed , PrimitiveFailed
-				          do: [ "ignore close" ].
-			          self inform: 'The server is closed' ]
+	arrayJSONSetTitleAndSettingsYearWitness := OrderedCollection new.
+	year := 0
 ]
 
 { #category : #accessing }
@@ -260,6 +186,30 @@ YearSelector >> myAppInitialize: myAppInstance [
 ]
 
 { #category : #accessing }
+YearSelector >> pluginSelectorSet [
+
+	^ yearSelectorSet
+]
+
+{ #category : #initialization }
+YearSelector >> pluginValue [
+
+	^ year
+]
+
+{ #category : #initialization }
+YearSelector >> pluginValue: aYear [
+
+	year := aYear
+]
+
+{ #category : #accessing }
+YearSelector >> pluginWitnessSet [
+
+	^ yearWitnessSet
+]
+
+{ #category : #accessing }
 YearSelector >> registerPlugin: jsonObj [
 
 	"the uuid field is only transmitted when registerPlugin() is called in index.html"
@@ -273,6 +223,12 @@ YearSelector >> registerPlugin: jsonObj [
 
 	json := STONJSON toString: jsonObj.
 	^ json
+]
+
+{ #category : #events }
+YearSelector >> selectorAction [ 
+
+	^ 'com.thales.pharostreamdeck.yearselector'
 ]
 
 { #category : #accessing }
@@ -575,6 +531,18 @@ YearSelector >> willDisappear [
 	yearWitnessSet removeAll.
 	yearSelectorSet removeAll.
 	arrayJsonSetTitleYearWitness removeAll
+]
+
+{ #category : #accessing }
+YearSelector >> witnessAction [ 
+
+	^ 'com.thales.pharostreamdeck.yearwitness'
+]
+
+{ #category : #initialization }
+YearSelector >> year [
+
+	^ year
 ]
 
 { #category : #accessing }

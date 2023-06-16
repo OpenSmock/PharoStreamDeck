@@ -17,18 +17,32 @@ plugin knows which plugin is used (namely YearSelector)
 year is used to memoriez the year value which is shown on YearWitness instances
 arrayGetSettings is used to keep track of all the getSettings events that need to be sent to know which YearSelector instances to highlight when the year: method is called
 arraySetImage is used to send to the plugin multiple times the same image (highlighted blue background) for every YearSelector instance that matches the year value sent through the year: method
+arrayPlugin is used for methods relative to plugin values in the MyApp class, to keep track of all the plugins so that a YearSelector and a PercentSelector can be launched and modified at the same time""
 "
 Class {
 	#name : #MyApp,
 	#superclass : #Object,
 	#instVars : [
 		'plugin',
-		'year',
-		'arrayGetSettings',
-		'arraySetImage'
+		'pluginSharedActions',
+		'arrayPlugin',
+		'launchedServer',
+		'serverState'
 	],
 	#category : #MyYearSelector
 }
+
+{ #category : #initialization }
+MyApp >> arrayPluginAdd: pluginSelector [
+
+	| arrayPluginContents |
+	arrayPluginContents := arrayPlugin arrayPluginContents.
+	(arrayPluginContents includes: pluginSelector) ifFalse: [ "each plugin is aware of the existence of the other plugins, so that the arrayPluginValue: with: method in PluginSharedActions can determine which plugin to reference to update values" "ifFalse: so that a plugin can't be referenced multiple times by every plugin" "arrayPlugin do: [ :each |
+		each arrayPlugin ifNotNil: [
+			(each arrayPlugin includes: aPlugin) ifFalse: [
+				each arrayPlugin add: aPlugin ] ] ]"
+		arrayPluginContents add: pluginSelector ]
+]
 
 { #category : #initialization }
 MyApp >> authorizedNumbers [
@@ -101,22 +115,73 @@ MyApp >> highlightYearSelectorSend [
 ]
 
 { #category : #initialization }
-MyApp >> initPlugin: myAppInstance [
+MyApp >> initArrayPlugins [
+	"each plugin is aware of the existence of the other plugins, so that the arrayPluginValue: with: method in PluginSharedActions can determine which plugin to reference to update their respective Witness instances' value"
 
-	"also triggers myAppInitialize in the YearSelector class so that YearSelector can access the methods of MyApp (highlightYearSelectorReceive: notably) without having YearSelector dependent on MyApp (aggregation link, YearSelector can still be launched alone, see GitHub diagram)"
+	| arrayPluginContents currentPlugin |
+	arrayPluginContents := arrayPlugin arrayPluginContents.
+	"ifFalse: so that a plugin can't be referenced multiple times by every plugin"
+	"arrayPlugin do: [ :each |
+		each arrayPlugin ifNotNil: [
+			(each arrayPlugin includes: aPlugin) ifFalse: [
+				each arrayPlugin add: aPlugin ] ] ]"
+	
+	"two loops here, YearSelector knows itself and the PercentSelector, PercentSelector knows itself and the YearSelector, would be the same for three and more plugins launched"
+	arrayPluginContents do: [ :each |
+		arrayPluginContents do: [ :each2 | 
+			currentPlugin := each arrayPluginGet.
+			currentPlugin add: each2 ] ]
+]
 
-	plugin := YearSelector new.
-	plugin myAppInitialize: myAppInstance
+{ #category : #initialization }
+MyApp >> initPlugin: aPlugin [
+
+	| pluginSelector |
+	pluginSelector := aPlugin new.
+	self launchServerPlugin: pluginSelector.
+	arrayPlugin arrayPluginContents add: pluginSelector
+]
+
+{ #category : #initialization }
+MyApp >> initPlugins [
+	"aggregation link between MyApp and YearSelector and MyApp and PercentSelector, YearSelector and PercentSelector can still be launched alone, see GitHub diagram)"
+
+	arrayPlugin := ArrayPlugin new.
+	
+	launchedServer := LaunchedServer new.
+	serverState := launchedServer launchedServerState.
+	
+	self initPlugin: YearSelector.
+	self initPlugin: PercentSelector.
+	
+	self initArrayPlugins.
+	self initServer
+
+	"Subscribe to plugin events"
+	
+]
+
+{ #category : #initialization }
+MyApp >> initServer [
+	
+	| pluginSelector arrayPluginContents |
+	arrayPluginContents := arrayPlugin arrayPluginContents.
+	pluginSelector := arrayPluginContents at: 1.
+	pluginSelector initServer
 ]
 
 { #category : #initialization }
 MyApp >> initialize [
+	"MyApp is a simple interface for YearSelector and PercentSelector which explains its lack of methods"
 
-	year := 0.
-	arrayGetSettings := OrderedCollection new.
-	arraySetImage := OrderedCollection new.
-	
-	self initPlugin: self
+	self initPlugins
+]
+
+{ #category : #initialization }
+MyApp >> launchServerPlugin: pluginSelector [
+
+	pluginSelector launchedServer: launchedServer.
+	pluginSelector launchedServerState: serverState.
 ]
 
 { #category : #initialization }
@@ -130,6 +195,24 @@ MyApp >> modifyYearWitnessValue [
 		        yourself.
 	plugin getGlobalSettings: json.
 	plugin sendUpdateYearWitnesses: plugin WebSocket
+]
+
+{ #category : #'as yet unclassified' }
+MyApp >> percent [
+	
+	| arrayPluginContents |
+	arrayPluginContents := arrayPlugin arrayPluginContents.
+	plugin := arrayPluginContents at: 2.
+	^ plugin percent
+]
+
+{ #category : #'as yet unclassified' }
+MyApp >> percent: aPercent [
+	
+	| arrayPluginContents |
+	arrayPluginContents := arrayPlugin arrayPluginContents.
+	plugin := arrayPluginContents at: 2.
+	plugin sendValueHasChangedEvent: aPercent
 ]
 
 { #category : #initialization }
@@ -157,31 +240,20 @@ MyApp >> sendGetSettings: webSocket [
 
 { #category : #initialization }
 MyApp >> year [
-
-	^ year
+	
+	| arrayPluginContents |
+	arrayPluginContents := arrayPlugin arrayPluginContents.
+	plugin := arrayPluginContents at: 1.
+	^ plugin year
 ]
 
 { #category : #initialization }
-MyApp >> year: aNumber [
-	"verify that aNumber is equal to one of the numbers returned by the authorizedNumbers method, which are values transmitted from the Property Inspector."
-
-	"also calls other methods to change every YearWitness instance's value as well as highlight YearSelector values with the chosen (valid) year value."
-
-	| numbers |
-	year = aNumber ifTrue: [ ^ self ].
-
-	numbers := self authorizedNumbers.
-	numbers
-		detect: [ :e | e = aNumber ]
-		ifFound: [ :e | year := e ]
-		ifNone: [
-			self inform: 'Invalid number, see authorizedNumbers method'.
-			^ self ].
-
-	self modifyYearWitnessValue.
-	"since the year: method is only called with MyApp, is used to update all the yearWitness instances"
-	plugin throughKeyUp: false.
-	self highlightYearSelectorSend
+MyApp >> year: aYear [
+	
+	| arrayPluginContents |
+	arrayPluginContents := arrayPlugin arrayPluginContents.
+	plugin := arrayPluginContents at: 1.
+	plugin sendValueHasChangedEvent: aYear
 ]
 
 { #category : #initialization }
