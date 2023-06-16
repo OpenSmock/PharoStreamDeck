@@ -27,7 +27,9 @@ Class {
 		'pluginSharedActions',
 		'arrayPlugin',
 		'launchedServer',
-		'serverState'
+		'serverState',
+		'arraySetImage',
+		'arrayGetSettings'
 	],
 	#category : #MyYearSelector
 }
@@ -42,76 +44,6 @@ MyApp >> arrayPluginAdd: pluginSelector [
 			(each arrayPlugin includes: aPlugin) ifFalse: [
 				each arrayPlugin add: aPlugin ] ] ]"
 		arrayPluginContents add: pluginSelector ]
-]
-
-{ #category : #initialization }
-MyApp >> authorizedNumbers [
-
-	"these numbers are the only values permitted to be taken by a YearSelector through its Property Inspector, defined in yearSelector_pi.html"
-
-	^ #( 0 5 10 15 20 )
-]
-
-{ #category : #initialization }
-MyApp >> highlightYearSelectorReceive: jsonObj [
-
-	"highlight YearSelector values with the chosen (valid value since checked in year: ) year value"
-
-	"uses yearSelectorSet which saves every context of every YearSelector action present on the current Stream Deck profile shown to know which buttons should be highlighted when this method is called. It also resets previous keys that were highlighted."
-
-	"It also implies that multiple YearSelector actions can be selected, which is not possible while pressing keys on the Stream Deck"
-
-	"context is linked to a year value by the getSettings event which makes the plugin receive a didReceiveSettings event transmitting the year value, which is updated if keyUp: is triggered"
-
-	"receives multiple times the same event, no need for a do: loop"
-
-	| yearObj defaultImage highlightedImage context jsonDefaultImage jsonHighlightedImage jsonImage |
-	defaultImage := 'img/actionIcon.png'.
-	highlightedImage := 'img/actionIconHighlighted.png'.
-	arraySetImage := OrderedCollection new.
-	
-	context := jsonObj at: 'context'.
-	yearObj := (jsonObj at: 'payload' at: 'settings' at: 'settings') at: 'year'.
-
-	"sets the new blue background"
-	yearObj = year ifTrue: [ 
-		jsonHighlightedImage := Dictionary new
-			                        at: 'context' put: context;
-			                        at: 'image' put: highlightedImage;
-			                        yourself.
-		jsonImage := plugin setImage: jsonHighlightedImage.
-		arraySetImage add: jsonImage ].
-
-	"resets the background to its original black"
-	yearObj = year ifFalse: [ 
-		jsonDefaultImage := Dictionary new
-			                    at: 'context' put: context;
-			                    at: 'image' put: defaultImage;
-			                    yourself.
-
-		jsonImage := plugin setImage: jsonDefaultImage.
-		arraySetImage add: jsonImage ].
-
-	self sendGetImage: plugin WebSocket
-]
-
-{ #category : #initialization }
-MyApp >> highlightYearSelectorSend [
-
-	"highlight YearSelector values with the chosen (valid value since checked in year: ) year value"
-
-	"uses yearSelectorSet which saves every context of every YearSelector action present on the current Stream Deck profile shown to know which buttons should be highlighted when this method is called"
-
-	"It also implies that multiple YearSelector actions can be selected, which is not possible while pressing keys on the Stream Deck"
-
-	"context is linked to a year value by the getSettings event (multiple instances of the event are sent through arrayGetSettings) which makes the plugin receive a didReceiveSettings event transmitting the year value, which is updated if keyUp: is triggered"
-
-	| jsonSettings |
-	
-	plugin yearSelectorSet do: [ :each | 
-		jsonSettings := plugin getSettings: each.
-		arrayGetSettings add: jsonSettings.
-		self sendGetSettings: plugin WebSocket ]
 ]
 
 { #category : #initialization }
@@ -184,19 +116,6 @@ MyApp >> launchServerPlugin: pluginSelector [
 	pluginSelector launchedServerState: serverState.
 ]
 
-{ #category : #initialization }
-MyApp >> modifyYearWitnessValue [
-
-	"this method is used to change every YearWitness instance's value"
-
-	| json |
-	json := Dictionary new
-		        at: 'year' put: year;
-		        yourself.
-	plugin getGlobalSettings: json.
-	plugin sendUpdateYearWitnesses: plugin WebSocket
-]
-
 { #category : #'as yet unclassified' }
 MyApp >> percent [
 	
@@ -216,29 +135,6 @@ MyApp >> percent: aPercent [
 ]
 
 { #category : #initialization }
-MyApp >> sendGetImage: webSocket [
-
-	"sends highlightedImage for every YearSelector instance which has the same year as the current year displayed by YearWitness instances"
-
-	arraySetImage do: [ :each | webSocket sendMessage: each ].
-
-	"removes the previous elements stocked in order to not stack multiple times the same context with different values"
-	arraySetImage removeAll
-]
-
-{ #category : #initialization }
-MyApp >> sendGetSettings: webSocket [
-
-	"gets the settings for every YearSelector instance by sending a setSettings event which adds a paremeter to the settings of every instance, deleting it afterhand"
-	"done that way since the setSettings event sent in keyUp is necessary to keep track of each instance's value, also calls a didReceiveSettings event which updated every YearSelector having the same value as the one clicked"
-
-	arrayGetSettings do: [ :each | webSocket sendMessage: each ].
-
-	"removes the previous elements stocked in order to not stack multiple times the same context with different values"
-	arrayGetSettings removeAll
-]
-
-{ #category : #initialization }
 MyApp >> year [
 	
 	| arrayPluginContents |
@@ -254,11 +150,4 @@ MyApp >> year: aYear [
 	arrayPluginContents := arrayPlugin arrayPluginContents.
 	plugin := arrayPluginContents at: 1.
 	plugin sendValueHasChangedEvent: aYear
-]
-
-{ #category : #initialization }
-MyApp >> yearUpdate: anObject [
-	"since the year: method calls other functions, is only used in keyUp; "
-	
-	year := anObject
 ]
