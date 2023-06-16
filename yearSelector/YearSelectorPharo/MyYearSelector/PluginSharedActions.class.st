@@ -64,11 +64,13 @@ PluginSharedActions >> arrayPluginValue: array with: aNumber [
 ]
 
 { #category : #accessing }
-PluginSharedActions >> eventHasChangedTo: aYear [
-
-	"this method receives the year event that was sent in sendYearHasChangedEvent:  and calls the year: method"
-	"when: #year send: 'year' to: plugin"
-	"self when: #year evaluate: [ self year: aYear ]"
+PluginSharedActions >> eventHasChangedTo: aNumber [
+	
+	"doesn't need to be used"
+	
+	"this method receives the plugin event that was sent in sendEventHasChangedEvent: and calls the pluginValue: method"
+	"when: #plugin send: 'pluginValue' to: plugin"
+	"self when: #plugin evaluate: [ self pluginValue: aNumber ]"
 ]
 
 { #category : #accessing }
@@ -119,7 +121,7 @@ PluginSharedActions >> highlightPluginSelectorReceive: jsonObj [
 
 	context := jsonObj at: 'context'.
 	"values saved in the plugin field contained inside the payload field in setSettings: are obtained back with a settings field placed between them"
-	varObj := jsonObj at: 'payload' at: 'settings' at: 'plugin'.
+	varObj := (jsonObj at: 'payload' at: 'settings') at: 'plugin'.
 
 	"sets the new blue background"
 	varObj = self pluginValue ifTrue: [
@@ -468,14 +470,13 @@ PluginSharedActions >> sendUpdatePluginWitnessInstances [
 
 { #category : #accessing }
 PluginSharedActions >> sendValueHasChangedEvent: aNumber [
-	"informs YearSelector that its year value has changed"
+	"informs Year/PercentSelector that its plugin value has changed"
+	"self changed: #pluhin with: aNumber."
 
-	"self changed: #year with: aNumber."
-
-	"| yearUpdated |
-	yearUpdated := aNumber.
-	self triggerEvent: #year with: yearUpdated.
-	self when: #year evaluate: [ self year: yearUpdated ]."
+	"| pluginUpdated |
+	pluginUpdated := aNumber.
+	self triggerEvent: #pluhin with: pluginUpdated.
+	self when: #plugin evaluate: [ self pluginValue: pluginUpdated ]."
 	self pluginValueSuperclass: aNumber.
 	
 	self modifyPluginWitnessValue.
