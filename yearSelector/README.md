@@ -23,9 +23,6 @@ It also functions the same way, having a YearSelector action and a YearWitness a
 In terms of structure, the MyYearSelector folder is a Pharo package which comports a YearSelector class, being the Pharo code, and a YearSelectorTest class.
 The YearSelectorPharo JavaScript part folder is a mix between [basic WebSocket communication](https://github.com/OpenSmock/PharoStreamDeck/tree/main/webSocket) and [YearSelectorJS](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS).
 
-For now, an instance of a YearSelector needs to be created in Pharo to launch a server and the first WebSocket.
-In a Playground, execute the following line of code : `YearSelector new`
-
 How this plugin works and communicate with the differents parts involved is explained in this image :
 
 ![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/6f4ce01d-0e77-4a1a-b5ad-8457bf6763aa)
@@ -33,7 +30,8 @@ How this plugin works and communicate with the differents parts involved is expl
 ## MyApp package
 The MyApp package is a way to interact with the YearSelector package (the aggregation link being here since it's possible to only launch a YearSelector instance without launching a MyApp instance, detailed further below in the UML diagram):
 
-
+An instance of MyApp needs to be created in Pharo to launch a server and the second WebSocket.
+In a Playground, execute the following line of code : `m := MyApp new`
 
 Here's what it looks like after executing this Pharo line of code and launching the Stream Deck application, same as before: \
 <img width="368" alt="myapp new1" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/c639c200-bec8-40a3-af51-690ef730dd31"> \
@@ -42,6 +40,8 @@ Here's what it looks like after executing this Pharo line of code and launching 
 Then executing this second line of Pharo code: \
 <img width="270" alt="myapp year10 2" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/6437d3f7-a4b0-46f7-bb54-5f77eb57799a"> \
 <img width="571" alt="myapp year 10" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/121a09f6-d583-4f72-8bf7-3d3136ae98f9">
+
+The percent: method can also be used instead of the year: method to change the value of the launched PercentSelector instance.
 
 ## Complementary informations
 ### Pharo
