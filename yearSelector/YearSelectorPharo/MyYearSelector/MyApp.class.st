@@ -84,9 +84,6 @@ MyApp >> initPlugins [
 	
 	self initArrayPlugins.
 	self initServer
-
-	"Subscribe to plugin events"
-	
 ]
 
 { #category : #initialization }

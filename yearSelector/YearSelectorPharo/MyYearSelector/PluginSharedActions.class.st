@@ -54,16 +54,6 @@ PluginSharedActions >> arrayPlugin [
 ]
 
 { #category : #accessing }
-PluginSharedActions >> eventHasChangedTo: aNumber [
-	
-	"doesn't need to be used"
-	
-	"this method receives the plugin event that was sent in sendEventHasChangedEvent: and calls the pluginValue: method"
-	"when: #plugin send: 'pluginValue' to: plugin"
-	"self when: #plugin evaluate: [ self pluginValue: aNumber ]"
-]
-
-{ #category : #accessing }
 PluginSharedActions >> getGlobalSettings: jsonObj [
 	"not automatically called when setGlobalSettings is called, which is why this method is needed"
 
@@ -478,13 +468,7 @@ PluginSharedActions >> sendUpdatePluginWitnessInstances [
 
 { #category : #accessing }
 PluginSharedActions >> sendValueHasChangedEvent: aNumber [
-	"informs Year/PercentSelector that its plugin value has changed"
-	"self changed: #pluhin with: aNumber."
-
-	"| pluginUpdated |
-	pluginUpdated := aNumber.
-	self triggerEvent: #pluhin with: pluginUpdated.
-	self when: #plugin evaluate: [ self pluginValue: pluginUpdated ]."
+	"changes the plugin value, also update the value shown on relevant Witness instances and highlight the relevant Selector instances"
 	self pluginValueSuperclass: aNumber.
 	
 	self modifyPluginWitnessValue.
