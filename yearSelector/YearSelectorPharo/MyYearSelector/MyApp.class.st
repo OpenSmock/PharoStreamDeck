@@ -45,10 +45,7 @@ MyApp >> arrayPluginAdd: pluginSelector [
 
 	| arrayPluginContents |
 	arrayPluginContents := arrayPlugin arrayPluginContents.
-	(arrayPluginContents includes: pluginSelector) ifFalse: [ "each plugin is aware of the existence of the other plugins, so that the arrayPluginValue: with: method in PluginSharedActions can determine which plugin to reference to update values" "ifFalse: so that a plugin can't be referenced multiple times by every plugin" "arrayPlugin do: [ :each |
-		each arrayPlugin ifNotNil: [
-			(each arrayPlugin includes: aPlugin) ifFalse: [
-				each arrayPlugin add: aPlugin ] ] ]"
+	(arrayPluginContents includes: pluginSelector) ifFalse: [
 		arrayPluginContents add: pluginSelector ]
 ]
 

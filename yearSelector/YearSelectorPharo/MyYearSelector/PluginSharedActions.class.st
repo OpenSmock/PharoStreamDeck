@@ -48,22 +48,6 @@ PluginSharedActions >> arrayPlugin [
 ]
 
 { #category : #accessing }
-PluginSharedActions >> arrayPluginValue: array with: aNumber [
-
-	array
-		detect: [ :e | e = aNumber ]
-		ifFound: [ :e |
-			arrayPluginValueNumber := arrayPluginValueNumber + 1.
-			array = arrayYear ifTrue: [
-				plugin = (arrayPlugin at: 1) ifFalse: [
-					plugin := arrayPlugin at: 1 ] ].
-			array = arrayPercent ifTrue: [
-				plugin = (arrayPlugin at: 2) ifFalse: [
-					plugin := arrayPlugin at: 2 ] ] ]
-		ifNone: [ ]
-]
-
-{ #category : #accessing }
 PluginSharedActions >> eventHasChangedTo: aNumber [
 	
 	"doesn't need to be used"
@@ -348,9 +332,22 @@ PluginSharedActions >> numberInAuthorizedNumbers: aNumber [
 		authorizedNumbers := each authorizedNumbers.
 		(authorizedNumbers includes: aNumber) ifTrue: [
 			foundNumber := true.
-			plugin := arrayPlugin at: index ] ].
+			"changes the current plugin value for every launched plugin"
+			arrayPlugin do: [ :e | e plugin: (arrayPlugin at: index) ] ] ].
 	"a number has been found in one of the given arrays"
 	foundNumber ifTrue: [ plugin pluginValue: aNumber ]
+]
+
+{ #category : #accessing }
+PluginSharedActions >> plugin [
+
+	^ plugin
+]
+
+{ #category : #accessing }
+PluginSharedActions >> plugin: aPlugin [
+
+	plugin := aPlugin
 ]
 
 { #category : #accessing }

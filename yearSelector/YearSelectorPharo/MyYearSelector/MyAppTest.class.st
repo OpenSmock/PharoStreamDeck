@@ -53,12 +53,14 @@ MyAppTest >> testDictionaryAtString [
 { #category : #tests }
 MyAppTest >> testNumberInAuthorizedNumbers [
 
-	| m arrayPluginContents |
+	| m arrayPluginContents yearSelector percentSelector |
 	m := MyApp new.
 	
-	m numberInAuthorizedNumbers: 10.
 	arrayPluginContents := m arrayPlugin arrayPluginContents.
-	self assert: m plugin equals: (arrayPluginContents at: 1)
+	yearSelector := arrayPluginContents at: 1.
+	percentSelector := arrayPluginContents at: 2.
+	yearSelector numberInAuthorizedNumbers: 10.
+	self assert: yearSelector plugin equals: percentSelector plugin
 	
 ]
 
