@@ -51,6 +51,18 @@ MyAppTest >> testDictionaryAtString [
 ]
 
 { #category : #tests }
+MyAppTest >> testNumberInAuthorizedNumbers [
+
+	| m arrayPluginContents |
+	m := MyApp new.
+	
+	m numberInAuthorizedNumbers: 10.
+	arrayPluginContents := m arrayPlugin arrayPluginContents.
+	self assert: m plugin equals: (arrayPluginContents at: 1)
+	
+]
+
+{ #category : #tests }
 MyAppTest >> testRegex [
 
 	| string |

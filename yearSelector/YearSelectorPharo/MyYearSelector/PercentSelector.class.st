@@ -29,6 +29,12 @@ PercentSelector >> arrayJSONSetTitleAndSettingsPluginWitness [
 ]
 
 { #category : #initialization }
+PercentSelector >> authorizedNumbers [
+
+	^  #( 50 100 150 200 )
+]
+
+{ #category : #initialization }
 PercentSelector >> initialize [
 
 	super initialize.

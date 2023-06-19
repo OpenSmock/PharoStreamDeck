@@ -33,6 +33,12 @@ YearSelector >> arrayJSONSetTitleAndSettingsPluginWitness [
 ]
 
 { #category : #accessing }
+YearSelector >> authorizedNumbers [
+
+	^ #( 0 5 10 15 20 )
+]
+
+{ #category : #accessing }
 YearSelector >> initialize [
 
 	super initialize.

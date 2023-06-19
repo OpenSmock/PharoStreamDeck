@@ -34,6 +34,12 @@ Class {
 	#category : #MyYearSelector
 }
 
+{ #category : #'as yet unclassified' }
+MyApp >> arrayPlugin [
+
+	^ arrayPlugin
+]
+
 { #category : #initialization }
 MyApp >> arrayPluginAdd: pluginSelector [
 
@@ -61,7 +67,7 @@ MyApp >> initArrayPlugins [
 	"two loops here, YearSelector knows itself and the PercentSelector, PercentSelector knows itself and the YearSelector, would be the same for three and more plugins launched"
 	arrayPluginContents do: [ :each |
 		arrayPluginContents do: [ :each2 | 
-			currentPlugin := each arrayPluginGet.
+			currentPlugin := each arrayPlugin.
 			currentPlugin add: each2 ] ]
 ]
 
@@ -132,6 +138,12 @@ MyApp >> percent: aPercent [
 	arrayPluginContents := arrayPlugin arrayPluginContents.
 	plugin := arrayPluginContents at: 2.
 	plugin sendValueHasChangedEvent: aPercent
+]
+
+{ #category : #'as yet unclassified' }
+MyApp >> plugin [
+
+	^ plugin
 ]
 
 { #category : #initialization }

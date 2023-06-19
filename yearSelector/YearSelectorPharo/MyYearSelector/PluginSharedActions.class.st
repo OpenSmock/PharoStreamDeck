@@ -42,7 +42,7 @@ PluginSharedActions >> arrayJSONSetTitleAndSettingsPluginWitness [
 ]
 
 { #category : #accessing }
-PluginSharedActions >> arrayPluginGet [
+PluginSharedActions >> arrayPlugin [
 
 	^ arrayPlugin
 ]
@@ -336,6 +336,24 @@ PluginSharedActions >> modifyPluginWitnessValue [
 ]
 
 { #category : #accessing }
+PluginSharedActions >> numberInAuthorizedNumbers: aNumber [
+	"by using the authorizedNumbers:  method of each plugin, determines which plugin is the one that needs its YearWitness values modified"
+
+	| authorizedNumbers index foundNumber |
+	index := 0.
+	foundNumber := false.
+	"every plugin is aware of the existence of the other running plugins"
+	arrayPlugin do: [ :each |
+		index := index + 1.
+		authorizedNumbers := each authorizedNumbers.
+		(authorizedNumbers includes: aNumber) ifTrue: [
+			foundNumber := true.
+			plugin := arrayPlugin at: index ] ].
+	"a number has been found in one of the given arrays"
+	foundNumber ifTrue: [ plugin pluginValue: aNumber ]
+]
+
+{ #category : #accessing }
 PluginSharedActions >> pluginSelectorSet [
 
 	^ plugin pluginSelectorSet
@@ -354,19 +372,11 @@ PluginSharedActions >> pluginValueSuperclass: aNumber [
 	"also calls other methods to change every Year/PercentWitness instance's value as well as highlight Year/PercentSelector values with the chosen (valid) plugin value."
 
 	| pluginValue |
-	"resets the value for first (and the messages that follow) message sent"
-	arrayPluginValueNumber := 0.
-	
-	self arrayPluginValue: arrayPercent with: aNumber.
-	self arrayPluginValue: arrayYear with: aNumber.
-	
-	"plugin value selected after selecting a plugin with arrayPluginValue: with: "
+	"for the current plugin, will still execute numberInAuthorizedNumbers: if the same percent value is active while the previous input was related to a YearSelector plugin value"
 	pluginValue := self pluginValue.
 	pluginValue = aNumber ifTrue: [ ^ self ].
-	
-	"a number has been found in one of the given arrays"
-	arrayPluginValueNumber = 0 ifFalse: [
-		plugin pluginValue: aNumber ].
+
+	self numberInAuthorizedNumbers: aNumber
 ]
 
 { #category : #accessing }
