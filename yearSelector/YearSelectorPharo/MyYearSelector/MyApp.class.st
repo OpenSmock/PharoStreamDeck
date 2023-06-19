@@ -25,12 +25,9 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'plugin',
-		'pluginSharedActions',
 		'arrayPlugin',
 		'launchedServer',
-		'serverState',
-		'arraySetImage',
-		'arrayGetSettings'
+		'serverState'
 	],
 	#category : #MyYearSelector
 }
@@ -52,15 +49,10 @@ MyApp >> arrayPluginAdd: pluginSelector [
 
 { #category : #initialization }
 MyApp >> initArrayPlugins [
-	"each plugin is aware of the existence of the other plugins, so that the arrayPluginValue: with: method in PluginSharedActions can determine which plugin to reference to update their respective Witness instances' value"
+	"each plugin is aware of the existence of the other plugins, so that the numberInAuthorizedNumbers: method in PluginSharedActions can determine which plugin to reference to update their respective Witness instances' value"
 
 	| arrayPluginContents currentPlugin |
 	arrayPluginContents := arrayPlugin arrayPluginContents.
-	"ifFalse: so that a plugin can't be referenced multiple times by every plugin"
-	"arrayPlugin do: [ :each |
-		each arrayPlugin ifNotNil: [
-			(each arrayPlugin includes: aPlugin) ifFalse: [
-				each arrayPlugin add: aPlugin ] ] ]"
 	
 	"two loops here, YearSelector knows itself and the PercentSelector, PercentSelector knows itself and the YearSelector, would be the same for three and more plugins launched"
 	arrayPluginContents do: [ :each |

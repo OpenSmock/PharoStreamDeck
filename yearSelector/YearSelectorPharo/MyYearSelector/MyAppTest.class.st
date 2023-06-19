@@ -1,9 +1,6 @@
 Class {
 	#name : #MyAppTest,
 	#superclass : #TestCase,
-	#instVars : [
-		'year'
-	],
 	#category : #MyYearSelector
 }
 
