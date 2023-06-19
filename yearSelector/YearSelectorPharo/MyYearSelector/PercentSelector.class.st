@@ -9,6 +9,10 @@ How to create instances:
 PercentSelector new.
 
 Instance variables: 
+percentSelectorSet (memorizes every instance of a PercentSelector through their context)
+percentWitnessSet (memorizes every instance of a PercentWitness through their context)
+percent (the plugin value)
+arrayJSONSetTitleAndSettingsPercentWitness (used to send setTitle and setSettings events to keep track of the values shown and saved)
 "
 Class {
 	#name : #PercentSelector,
@@ -30,7 +34,7 @@ PercentSelector >> arrayJSONSetTitleAndSettingsPluginWitness [
 
 { #category : #initialization }
 PercentSelector >> authorizedNumbers [
-
+	"these numbers are the only values permitted to be taken by a PercentSelector through its Property Inspector, defined in percentSelector_pi.html"
 	^  #( 50 100 150 200 )
 ]
 

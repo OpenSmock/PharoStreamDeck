@@ -1,23 +1,24 @@
 "
-For the Class part:  I represent a container for the YearSelector class, which is to say that launching an instance of MyApp launches an instance of YearSelector.
+For the Class part:  I represent a container for the instances of the PluginSharedActions class, which is to say that launching an instance of MyApp launches an instance of every subclass of PluginSharedActions.
 
-For the Responsibility part: I contain the YearSelector class by using methods that can directly modify its state, such as the year selected. It's a way to influence multiple YearSelector instances selected at once, as well as the value shown on YearWitness instances.
+For the Responsibility part: I contain the subclasses of PluginSharedActions by using methods that can directly modify their state, such as their pluginValue selected.
 
-For the Collaborators Part: My main collaborator is the YearSelector class, which interacts with index.html as well as the Stream Deck.
+For the Collaborators Part: My main collaborator is PluginSharedActions and its subclasses, which interact with index.html as well as the Stream Deck.
 
 Public API and Key Messages
 How to create instances:
 m := MyApp new
 
 How to interact with this class:
-m year: 10 (checks if the value is possible to affect through the authorizedNumbers method)
+m year: 10 (checks if the value is possible to affect through numberInAuthorizedNumbers:  and authorizedNumbers methods)
+m: percent: 50
 
 Instance variables:
-plugin knows which plugin is used (namely YearSelector)
-year is used to memoriez the year value which is shown on YearWitness instances
-arrayGetSettings is used to keep track of all the getSettings events that need to be sent to know which YearSelector instances to highlight when the year: method is called
-arraySetImage is used to send to the plugin multiple times the same image (highlighted blue background) for every YearSelector instance that matches the year value sent through the year: method
-arrayPlugin is used for methods relative to plugin values in the MyApp class, to keep track of all the plugins so that a YearSelector and a PercentSelector can be launched and modified at the same time""
+plugin knows which plugin is used
+arrayGetSettings is used to keep track of all the getSettings events that need to be sent to know which Selector instances to highlight when the pluginValueSuperclass: method of PluginSharedActions is called
+arraySetImage is used to send to the plugin multiple times the same image (highlighted blue background) for every Selector instance that matches the pluginValue value sent through the pluginValueSuperclass: method of PluginSharedActions
+arrayPlugin is used for methods relative to plugin values in the MyApp class, to keep track of all the plugins so that a YearSelector and a PercentSelector can be launched and modified at the same time
+launchedServer and serverState are used to only launch one ZnManagingMultiThreadedSerevr HTTP server, no matter the number of plugins (instances of PluginSharedActions)
 "
 Class {
 	#name : #MyApp,

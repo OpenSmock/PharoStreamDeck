@@ -1,13 +1,22 @@
 "
-For the Class part:  I am an abstract class which possess the shared actions between YearSelector and PluginSelector
+For the Class part:  I am an abstract class which possess the shared actions between YearSelector and PercentSelector
 
-For the Responsibility part: I launch a server then treat the different events that are received from index.html (the JavaScript side of the plugin,which also sends some info about the Stream Deck at its launch). With the use of , each event is treated by the Pharo class that is concerned
+For the Responsibility part: I launch a server then treat the different events that are received from index.html (the JavaScript side of the plugin,which also sends some info about the Stream Deck at its launch). With the use of the initServer method, each event is treated by the Pharo class that is concerned
 
 For the Collaborators Part: my main collaborator is the Stream Deck application, which permits the use of profiles and placing actions on their grids through the PharoStreamDeck plugin
 
 How to create instances:
 Since I'm an abstract class, I'm not supposed to be launched.
-However, YearSelector and PercentSelector are concrete implementations of myself and they themselves can be launched
+However, YearSelector and PercentSelector are concrete implementations of myself and they themselves can be launched through YearSelector new and PercentSelector new.
+
+Instance variables:
+uuid is the unique value identifying the plugin (inPluginUUID in JavaScript code). It's sent via the registration procedure, recuperated from the connectElgatoStreamDeckSocket() function (https://developer.elgato.com/documentation/stream-deck/sdk/registration-procedure/#compiled-plugin-registration) and is used in the setGlobalSettings: method for its context field, since globalSettings events require more than a context value to share a setting between instances of plugins (see SDK documentation - events sent https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setglobalsettings)
+WebSocket memorizes the WebSocket that is launched in initServer to send messages in other functions, notably with the arrays' content
+plugin memorizes the current selected plugin, so that it can highlight the relevant Selector instances and update the values of the relevannt Witness instances
+arraySetImage and arrayGetSettings are used to send in bulk multiple events of the type of their names
+action memorizes the action field that is sent when the initial message is received, so that it can easily differentaite between Year and Percent instances (corresponds to the UUID field in manifest.json for every action)
+launchedServerState and launchedServer are the instance variables of the LaunchedServer class, to know whether or not one is launched
+arrayPlugin is the instance variable of the ArrayPlugin class, to know which plugins are launched
 "
 Class {
 	#name : #PluginSharedActions,
@@ -21,10 +30,7 @@ Class {
 		'action',
 		'launchedServerState',
 		'launchedServer',
-		'arrayPercent',
-		'arrayYear',
-		'arrayPlugin',
-		'arrayPluginValueNumber'
+		'arrayPlugin'
 	],
 	#category : #MyYearSelector
 }
@@ -196,11 +202,6 @@ PluginSharedActions >> initialize [
 	arraySetImage := OrderedCollection new.
 	arrayGetSettings := OrderedCollection new.
 	arrayPlugin := OrderedCollection new.
-	
-	"these numbers are the only values permitted to be taken by a PercentSelector through its Property Inspector, defined in percentSelector_pi.html"
-	arrayPercent := #( 50 100 150 200 ).
-	"these numbers are the only values permitted to be taken by a YearSelector through its Property Inspector, defined in yearSelector_pi.html"
-	arrayYear := #( 0 5 10 15 20 ).
 ]
 
 { #category : #accessing }

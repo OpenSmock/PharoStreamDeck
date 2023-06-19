@@ -9,10 +9,10 @@ How to create instances:
 YearSelector new.
 
 Instance variables: 
-year is the year value shown on the YearWitness instances
-uuid is the unique value identifying the plugin (inPluginUUID in JavaScript code). It's sent via the registration procedure, so recuperated from the connectElgatoStreamDeckSocket() function (https://developer.elgato.com/documentation/stream-deck/sdk/registration-procedure/#compiled-plugin-registration) and is used in the setGlobalSettings: method for its context field, since globalSettings events require more than a context value to share a setting between instances of the plugin (see SDK documentation - events sent https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setglobalsettings)
-yearWitnessSet memorizes the context of every YearWitness instance, so that it can update them whenever a YearSelector instance is pressed. It's refilled every time the willAppear event is triggered, so when the YearSelectorPharo profile is the profile shown on the Stream Deck, for example
-arrayJsonSetTitleAndSettingsYearWitness stocks the setTitle events that need to be sent to the plugin in order to update every YearWitness instance to showw the correct value pressed. It uses yearWitnessSet to know which Stream Deck keys are YearWitness instances
+yearSelectorSet (memorizes every instance of a YearSelector through their context)
+yearWitnessSet (memorizes every instance of a YearWitness through their context)
+year (the plugin value)
+arrayJSONSetTitleAndSettingsYeartWitness (used to send setTitle and setSettings events to keep track of the values shown and saved)
 "
 Class {
 	#name : #YearSelector,
@@ -34,7 +34,7 @@ YearSelector >> arrayJSONSetTitleAndSettingsPluginWitness [
 
 { #category : #accessing }
 YearSelector >> authorizedNumbers [
-
+	"these numbers are the only values permitted to be taken by a YearSelector through its Property Inspector, defined in yearSelector_pi.html"
 	^ #( 0 5 10 15 20 )
 ]
 
