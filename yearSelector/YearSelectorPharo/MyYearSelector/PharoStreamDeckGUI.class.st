@@ -42,26 +42,31 @@ Class {
 		'buttonPercent',
 		'emptyButton',
 		'buttonWitnessYear',
-		'buttonWitnessPercent'
+		'buttonWitnessPercent',
+		'buttonYearList',
+		'buttonPercentList'
 	],
 	#category : #MyYearSelector
 }
 
 { #category : #initialization }
-PharoStreamDeckGUI >> connectPresenters [ 
+PharoStreamDeckGUI >> connectPresenters [
 	"example inspired from the code available in the Help tab -> Spec2 demo -> Buttons -> Code tab"
+
 	"to instantiate this GUI, use PharoStreamDeckGUI new open"
+
 	"the actions are linked here to the buttons"
-	buttonZero action: [ myApp year: 0 ].
-	buttonFive action: [ myApp year: 5 ].
-	buttonTen action: [ myApp year: 10 ].
-	buttonFifteen action: [ myApp year: 15 ].
-	buttonTwenty action: [ myApp year: 20 ].
-	
-	buttonFifty action: [ myApp percent: 50 ].
-	buttonHundred action: [ myApp percent: 100 ].
-	buttonHundredFifty action: [ myApp percent: 150 ].
-	buttonTwoHundred action: [ myApp percent: 200 ]
+
+	buttonZero action: [ self selectedButton: buttonZero with: buttonZero label ].
+	buttonFive action: [ self selectedButton: buttonFive with: buttonFive label ].
+	buttonTen action: [ self selectedButton: buttonTen with: buttonTen label ].
+	buttonFifteen action: [ self selectedButton: buttonFifteen with: buttonFifteen label ].
+	buttonTwenty action: [ self selectedButton: buttonTwenty with: buttonTwenty label ].
+
+	buttonFifty action: [ self selectedButton: buttonFifty with: buttonFifty label ].
+	buttonHundred action: [ self selectedButton: buttonHundred with: buttonHundred label ].
+	buttonHundredFifty action: [ self selectedButton: buttonHundredFifty with: buttonHundredFifty label ].
+	buttonTwoHundred action: [ self selectedButton: buttonTwoHundred with: buttonTwoHundred label ].
 ]
 
 { #category : #initialization }
@@ -93,13 +98,11 @@ PharoStreamDeckGUI >> defaultLayout [
 { #category : #initialization }
 PharoStreamDeckGUI >> extent [
 	"size of the window"
-	^ 200@100
+	^ 400@100
 ]
 
 { #category : #initialization }
 PharoStreamDeckGUI >> initializePresenters [
-
-	myApp := MyApp new.
 
 	buttonZero := self newButton label: '0'.
 	buttonFive := self newButton label: '5'.
@@ -111,23 +114,37 @@ PharoStreamDeckGUI >> initializePresenters [
 	buttonHundred := self newButton label: '100'.
 	buttonHundredFifty := self newButton label: '150'.
 	buttonTwoHundred := self newButton label: '200'.
-	
+
 	buttonYear := self newButton
-		label: 'Year';
-		disable;
-		yourself.
+		              label: 'Year';
+		              disable;
+		              yourself.
 	buttonPercent := self newButton
-		label: 'Percent';
-		disable;
-		yourself.
+		                 label: 'Percent';
+		                 disable;
+		                 yourself.
 	emptyButton := self newButton
-		label: '';
-		disable;
-		yourself.
-	buttonWitnessYear := self newButton label: (myApp year) asString.
-	buttonWitnessPercent := self newButton label: (myApp percent) asString.
-			
+		               label: '';
+		               disable;
+		               yourself.
+	buttonWitnessYear := self newButton label: myApp year asString.
+	buttonWitnessPercent := self newButton label: myApp percent asString.
+
 	buttonList := OrderedCollection new.
+	buttonYearList := OrderedCollection new.
+	buttonPercentList := OrderedCollection new.
+	
+	buttonYearList
+		add: buttonZero;
+		add: buttonFive;
+		add: buttonTen;
+		add: buttonFifteen;
+		add: buttonTwenty.
+	buttonPercentList
+		add: buttonFifty;
+		add: buttonHundred;
+		add: buttonHundredFifty;
+		add: buttonTwoHundred.
 	buttonList
 		add: buttonZero;
 		add: buttonFive;
@@ -143,15 +160,28 @@ PharoStreamDeckGUI >> initializePresenters [
 ]
 
 { #category : #initialization }
-PharoStreamDeckGUI >> selectedButton: button [
+PharoStreamDeckGUI >> myApp: m [
+
+	myApp := m
+]
+
+{ #category : #initialization }
+PharoStreamDeckGUI >> selectedButton: button with: pluginValue [
+
+	"updates the value depending on the button affiliated to a plugin"
+	(buttonYearList includes: button) ifTrue: [ myApp year: pluginValue.
+		self inform: myApp year asString ].
+	(buttonPercentList includes: button) ifTrue: [ myApp percent: pluginValue.
+		self inform: myApp percent asString ].
 
 	"resets the background of every button"
-	buttonList do: [ :each | each selected: false ].
-	
-	buttonWitnessYear label: 
-	
-	"highlights the button pressed"
-	button selected: true
+	buttonList do: [ :each | each color: Color black ].
+	"highlights the pressed button"
+	button color: Color blue.
+
+	"updates the relevant Witness instance through MyApp's plugin value"
+	buttonWitnessYear label: myApp year asString.
+	buttonWitnessPercent label: myApp percent asString.
 ]
 
 { #category : #initialization }
