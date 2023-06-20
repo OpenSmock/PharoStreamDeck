@@ -24,10 +24,10 @@ Class {
 	#name : #MyApp,
 	#superclass : #Object,
 	#instVars : [
-		'plugin',
 		'arrayPlugin',
 		'launchedServer',
-		'serverState'
+		'serverState',
+		'pharostreamdeck'
 	],
 	#category : #MyYearSelector
 }
@@ -53,12 +53,21 @@ MyApp >> initArrayPlugins [
 
 	| arrayPluginContents currentPlugin |
 	arrayPluginContents := arrayPlugin arrayPluginContents.
+	arrayPluginContents do: [ :each | each arrayPlugin: arrayPlugin ]
 	
 	"two loops here, YearSelector knows itself and the PercentSelector, PercentSelector knows itself and the YearSelector, would be the same for three and more plugins launched"
-	arrayPluginContents do: [ :each |
+	"arrayPluginContents do: [ :each |
 		arrayPluginContents do: [ :each2 | 
 			currentPlugin := each arrayPlugin.
-			currentPlugin add: each2 ] ]
+			currentPlugin add: each2 ] ]"
+]
+
+{ #category : #initialization }
+MyApp >> initGUI [
+
+	pharostreamdeck := PharoStreamDeckGUI new.
+	pharostreamdeck initMyApp: self.
+	pharostreamdeck open.
 ]
 
 { #category : #initialization }
@@ -83,7 +92,9 @@ MyApp >> initPlugins [
 	self initPlugin: PercentSelector.
 	
 	self initArrayPlugins.
-	self initServer
+	self initServer.
+	
+	self initGUI.
 ]
 
 { #category : #initialization }
@@ -112,31 +123,27 @@ MyApp >> launchServerPlugin: pluginSelector [
 { #category : #'as yet unclassified' }
 MyApp >> percent [
 	
-	| arrayPluginContents |
+	| arrayPluginContents plugin |
 	arrayPluginContents := arrayPlugin arrayPluginContents.
 	plugin := arrayPluginContents at: 2.
+	arrayPlugin plugin: plugin.
 	^ plugin percent
 ]
 
 { #category : #'as yet unclassified' }
 MyApp >> percent: aPercent [
 	
-	| arrayPluginContents |
+	| arrayPluginContents plugin |
 	arrayPluginContents := arrayPlugin arrayPluginContents.
 	plugin := arrayPluginContents at: 2.
+	arrayPlugin plugin: plugin.
 	plugin sendValueHasChangedEvent: aPercent
-]
-
-{ #category : #'as yet unclassified' }
-MyApp >> plugin [
-
-	^ plugin
 ]
 
 { #category : #initialization }
 MyApp >> year [
 	
-	| arrayPluginContents |
+	| arrayPluginContents plugin |
 	arrayPluginContents := arrayPlugin arrayPluginContents.
 	plugin := arrayPluginContents at: 1.
 	^ plugin year
@@ -145,8 +152,9 @@ MyApp >> year [
 { #category : #initialization }
 MyApp >> year: aYear [
 	
-	| arrayPluginContents |
+	| arrayPluginContents plugin |
 	arrayPluginContents := arrayPlugin arrayPluginContents.
 	plugin := arrayPluginContents at: 1.
-	plugin sendValueHasChangedEvent: aYear
+	arrayPlugin plugin: plugin.
+	plugin sendValueHasChangedEvent: aYear.
 ]

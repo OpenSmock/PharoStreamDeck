@@ -24,7 +24,6 @@ Class {
 	#instVars : [
 		'uuid',
 		'WebSocket',
-		'plugin',
 		'arraySetImage',
 		'arrayGetSettings',
 		'action',
@@ -42,15 +41,15 @@ PluginSharedActions >> WebSocket: aWebSocket [
 ]
 
 { #category : #accessing }
-PluginSharedActions >> arrayJSONSetTitleAndSettingsPluginWitness [
-
-	^ plugin arrayJSONSetTitleAndSettingsPluginWitness
-]
-
-{ #category : #accessing }
 PluginSharedActions >> arrayPlugin [
 
 	^ arrayPlugin
+]
+
+{ #category : #accessing }
+PluginSharedActions >> arrayPlugin: anArrayPlugin [
+
+	arrayPlugin := anArrayPlugin
 ]
 
 { #category : #accessing }
@@ -191,7 +190,7 @@ PluginSharedActions >> initialize [
 
 	arraySetImage := OrderedCollection new.
 	arrayGetSettings := OrderedCollection new.
-	arrayPlugin := OrderedCollection new.
+	arrayPlugin := ArrayPlugin new.
 ]
 
 { #category : #accessing }
@@ -311,49 +310,6 @@ PluginSharedActions >> modifyPluginWitnessValue [
 ]
 
 { #category : #accessing }
-PluginSharedActions >> numberInAuthorizedNumbers: aNumber [
-	"by using the authorizedNumbers:  method of each plugin, determines which plugin is the one that needs its YearWitness values modified"
-
-	| authorizedNumbers index foundNumber |
-	index := 0.
-	foundNumber := false.
-	"every plugin is aware of the existence of the other running plugins"
-	arrayPlugin do: [ :each |
-		index := index + 1.
-		authorizedNumbers := each authorizedNumbers.
-		(authorizedNumbers includes: aNumber) ifTrue: [
-			foundNumber := true.
-			"changes the current plugin value for every launched plugin"
-			arrayPlugin do: [ :e | e plugin: (arrayPlugin at: index) ] ] ].
-	"a number has been found in one of the given arrays"
-	foundNumber ifTrue: [ plugin pluginValue: aNumber ]
-]
-
-{ #category : #accessing }
-PluginSharedActions >> plugin [
-
-	^ plugin
-]
-
-{ #category : #accessing }
-PluginSharedActions >> plugin: aPlugin [
-
-	plugin := aPlugin
-]
-
-{ #category : #accessing }
-PluginSharedActions >> pluginSelectorSet [
-
-	^ plugin pluginSelectorSet
-]
-
-{ #category : #accessing }
-PluginSharedActions >> pluginValue [
-
-	^ plugin pluginValue
-]
-
-{ #category : #accessing }
 PluginSharedActions >> pluginValueSuperclass: aNumber [
 	"verify that aNumber is equal to one of the numbers returned by the authorizedNumbers method, which are values transmitted from the Property Inspector."
 
@@ -361,16 +317,10 @@ PluginSharedActions >> pluginValueSuperclass: aNumber [
 
 	| pluginValue |
 	"for the current plugin, will still execute numberInAuthorizedNumbers: if the same percent value is active while the previous input was related to a YearSelector plugin value"
-	pluginValue := self pluginValue.
+	pluginValue := arrayPlugin pluginValue.
 	pluginValue = aNumber ifTrue: [ ^ self ].
 
-	self numberInAuthorizedNumbers: aNumber
-]
-
-{ #category : #accessing }
-PluginSharedActions >> pluginWitnessSet [
-
-	^ plugin pluginWitnessSet
+	arrayPlugin numberInAuthorizedNumbers: aNumber
 ]
 
 { #category : #accessing }
@@ -393,12 +343,6 @@ PluginSharedActions >> registerPluginEvent: jsonObject [
 	| json |
 	json := self registerPlugin: jsonObject.
 	WebSocket sendMessage: json
-]
-
-{ #category : #accessing }
-PluginSharedActions >> selectorAction [
-
-	^ plugin selectorAction
 ]
 
 { #category : #accessing }
@@ -731,10 +675,4 @@ PluginSharedActions >> willDisappear [
 	self pluginWitnessSet removeAll.
 	self pluginSelectorSet removeAll.
 	self arrayJSONSetTitleAndSettingsPluginWitness removeAll
-]
-
-{ #category : #accessing }
-PluginSharedActions >> witnessAction [
-
-	^ plugin witnessAction
 ]

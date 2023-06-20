@@ -102,6 +102,17 @@ PharoStreamDeckGUI >> extent [
 ]
 
 { #category : #initialization }
+PharoStreamDeckGUI >> initMyApp: myAppVar [
+	"since new and open can't treat myApp when an instance of PharoStreamDeckGUI is opened, operations relative to the MyApp class are done after"
+	myApp := myAppVar.
+	
+	buttonWitnessYear := self newButton label: myApp year asString.
+	buttonWitnessPercent := self newButton label: myApp percent asString.
+
+
+]
+
+{ #category : #initialization }
 PharoStreamDeckGUI >> initializePresenters [
 
 	buttonZero := self newButton label: '0'.
@@ -127,8 +138,6 @@ PharoStreamDeckGUI >> initializePresenters [
 		               label: '';
 		               disable;
 		               yourself.
-	buttonWitnessYear := self newButton label: myApp year asString.
-	buttonWitnessPercent := self newButton label: myApp percent asString.
 
 	buttonList := OrderedCollection new.
 	buttonYearList := OrderedCollection new.
@@ -160,18 +169,15 @@ PharoStreamDeckGUI >> initializePresenters [
 ]
 
 { #category : #initialization }
-PharoStreamDeckGUI >> myApp: m [
-
-	myApp := m
-]
-
-{ #category : #initialization }
 PharoStreamDeckGUI >> selectedButton: button with: pluginValue [
 
 	"updates the value depending on the button affiliated to a plugin"
-	(buttonYearList includes: button) ifTrue: [ myApp year: pluginValue.
+	(buttonYearList includes: button) ifTrue: [ 
+		myApp year: pluginValue.
+		"self inform: 'myApp:' , myApp."
 		self inform: myApp year asString ].
-	(buttonPercentList includes: button) ifTrue: [ myApp percent: pluginValue.
+	(buttonPercentList includes: button) ifTrue: [ 
+		myApp percent: pluginValue.
 		self inform: myApp percent asString ].
 
 	"resets the background of every button"
