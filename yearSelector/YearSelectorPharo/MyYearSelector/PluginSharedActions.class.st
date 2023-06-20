@@ -22,14 +22,14 @@ Class {
 	#name : #PluginSharedActions,
 	#superclass : #Object,
 	#instVars : [
-		'uuid',
 		'WebSocket',
-		'arraySetImage',
-		'arrayGetSettings',
 		'action',
-		'launchedServerState',
+		'arrayGetSettings',
+		'arrayPlugin',
+		'arraySetImage',
 		'launchedServer',
-		'arrayPlugin'
+		'launchedServerState',
+		'uuid'
 	],
 	#category : #MyYearSelector
 }
@@ -62,7 +62,7 @@ PluginSharedActions >> getGlobalSettings: jsonObj [
 	varObj := jsonObj at: 'plugin'.
 
 	"creates a link between yearWitnessSet and arrayJsonSetTitleAndSettingsYearWitness"
-	pluginWitnessInstances := self pluginWitnessSet.
+	pluginWitnessInstances := arrayPlugin pluginWitnessSet.
 	pluginWitnessInstances do: [ :each |
 		json := Dictionary new
 			        at: 'context' put: each;
@@ -103,11 +103,11 @@ PluginSharedActions >> highlightPluginSelectorReceive: jsonObj [
 	varObj := (jsonObj at: 'payload' at: 'settings') at: 'plugin'.
 
 	"sets the new blue background"
-	varObj = self pluginValue ifTrue: [
+	varObj = arrayPlugin pluginValue ifTrue: [
 		self setCurrentImages: context with: highlightedImage ].
 
 	"resets the background to its original black"
-	varObj = self pluginValue ifFalse: [
+	varObj = arrayPlugin pluginValue ifFalse: [
 		self setCurrentImages: context with: defaultImage ].
 
 	self sendImages
@@ -207,9 +207,9 @@ PluginSharedActions >> keyUp: jsonObj [
 	highlightedImage := 'img/actionIconHighlighted.png'.
 
 	"resets value to 0 if a Year/PercentWitness is pressed (for setTitle and setSettings)"
-	action = self witnessAction ifTrue: [ varObj := 0 ].
+	action = arrayPlugin witnessAction ifTrue: [ varObj := 0 ].
 
-	action = self selectorAction ifTrue: [ "equivalent to at: 'year' or at: 'percent' depending on the class"
+	action = arrayPlugin selectorAction ifTrue: [ "equivalent to at: 'year' or at: 'percent' depending on the class"
 		varObj := jsonObj at: 'payload' at: 'plugin' ].
 
 	jsonSettings := Dictionary new
@@ -300,7 +300,7 @@ PluginSharedActions >> modifyPluginWitnessValue [
 
 	| json varObj |
 
-	varObj := self pluginValue.
+	varObj := arrayPlugin pluginValue.
 	json := Dictionary new
 		        at: 'plugin' put: varObj;
 		        yourself.
@@ -403,11 +403,11 @@ PluginSharedActions >> sendToPluginEvent: jsonObject [
 PluginSharedActions >> sendUpdatePluginWitnessInstances [
 	"updates every Year/PercentWitness instance"
 
-	self arrayJSONSetTitleAndSettingsPluginWitness do: [ :each |
+	arrayPlugin arrayJSONSetTitleAndSettingsPluginWitness do: [ :each |
 		WebSocket sendMessage: each ].
 
 	"removes the previous elements stocked in order to not stack multiple times the same context with different values"
-	self arrayJSONSetTitleAndSettingsPluginWitness removeAll
+	arrayPlugin arrayJSONSetTitleAndSettingsPluginWitness removeAll
 ]
 
 { #category : #accessing }
@@ -581,9 +581,9 @@ PluginSharedActions >> setTitleAndSettingsYearWitness: jsonObj [
 	"is used to send all the setTitle and setSettings events that are necessary when more than one Year/PercentWitness instance is present on the current displayed Stream Deck profile"
 	"arrayJSONSetTitleAndSettingsPluginWitness := self
 		                                             arrayJSONSetTitleAndSettingsPluginWitness."
-	self arrayJSONSetTitleAndSettingsPluginWitness add:
+	arrayPlugin arrayJSONSetTitleAndSettingsPluginWitness add:
 		jsonFormattedTitle.
-	self arrayJSONSetTitleAndSettingsPluginWitness add:
+	arrayPlugin arrayJSONSetTitleAndSettingsPluginWitness add:
 		jsonFormattedSettings
 ]
 
@@ -638,11 +638,11 @@ PluginSharedActions >> willAppear: jsonObj [
 	settings = 0 ifFalse: [ varObj := settings at: 'plugin' ].
 
 	"no punctuation apart from the dots that act as separators for the unique identifier"
-	action = self witnessAction ifTrue: [ "context is globally unique across all actions, identifies an instance of an action on the Stream Deck but changes when the Stream Deck application is relaunched, also changes when actions are duplicated or moved"
-		self pluginWitnessSet add: context ].
+	action = arrayPlugin witnessAction ifTrue: [ "context is globally unique across all actions, identifies an instance of an action on the Stream Deck but changes when the Stream Deck application is relaunched, also changes when actions are duplicated or moved"
+		arrayPlugin pluginWitnessSet add: context ].
 
-	action = self selectorAction ifTrue: [
-		self pluginSelectorSet add: context ].
+	action = arrayPlugin selectorAction ifTrue: [
+		arrayPlugin pluginSelectorSet add: context ].
 
 	subdictionary := Dictionary new
 		                 at: 'context' put: context;
@@ -672,7 +672,7 @@ PluginSharedActions >> willAppearEvent: jsonObject [
 PluginSharedActions >> willDisappear [
 	"removes all yearWitness instances through their context as well as all setTitle events for yearWitness for the relevant Pharo class when the user changes to a profile that doesn't contain an instance of an action from the YearSelectorPharo plugin"
 
-	self pluginWitnessSet removeAll.
-	self pluginSelectorSet removeAll.
-	self arrayJSONSetTitleAndSettingsPluginWitness removeAll
+	arrayPlugin pluginWitnessSet removeAll.
+	arrayPlugin pluginSelectorSet removeAll.
+	arrayPlugin arrayJSONSetTitleAndSettingsPluginWitness removeAll
 ]

@@ -44,6 +44,7 @@ MyApp >> chooseCurrentPlugin: index [
 	| arrayPluginContents plugin |
 	arrayPluginContents := arrayPlugin arrayPluginContents.
 	plugin := arrayPluginContents at: index.
+	"also updates the currently selected plugin for arrayPlugin"
 	arrayPlugin plugin: plugin.
 	^ plugin
 
@@ -54,15 +55,9 @@ MyApp >> chooseCurrentPlugin: index [
 MyApp >> initArrayPlugins [
 	"each plugin is aware of the existence of the other plugins, so that the numberInAuthorizedNumbers: method in PluginSharedActions can determine which plugin to reference to update their respective Witness instances' value"
 
-	| arrayPluginContents currentPlugin |
+	| arrayPluginContents |
 	arrayPluginContents := arrayPlugin arrayPluginContents.
 	arrayPluginContents do: [ :each | each arrayPlugin: arrayPlugin ]
-	
-	"two loops here, YearSelector knows itself and the PercentSelector, PercentSelector knows itself and the YearSelector, would be the same for three and more plugins launched"
-	"arrayPluginContents do: [ :each |
-		arrayPluginContents do: [ :each2 | 
-			currentPlugin := each arrayPlugin.
-			currentPlugin add: each2 ] ]"
 ]
 
 { #category : #initialization }
