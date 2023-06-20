@@ -56,8 +56,8 @@ MyAppTest >> testNumberInAuthorizedNumbers [
 	arrayPluginContents := m arrayPlugin arrayPluginContents.
 	yearSelector := arrayPluginContents at: 1.
 	percentSelector := arrayPluginContents at: 2.
-	yearSelector numberInAuthorizedNumbers: 10.
-	self assert: yearSelector plugin equals: percentSelector plugin
+	yearSelector arrayPlugin numberInAuthorizedNumbers: 10.
+	self assert: yearSelector arrayPlugin plugin equals: percentSelector arrayPlugin plugin
 	
 ]
 

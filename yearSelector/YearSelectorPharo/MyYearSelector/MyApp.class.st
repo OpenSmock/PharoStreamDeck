@@ -38,17 +38,8 @@ MyApp >> arrayPlugin [
 	^ arrayPlugin
 ]
 
-{ #category : #initialization }
-MyApp >> arrayPluginAdd: pluginSelector [
-
-	| arrayPluginContents |
-	arrayPluginContents := arrayPlugin arrayPluginContents.
-	(arrayPluginContents includes: pluginSelector) ifFalse: [
-		arrayPluginContents add: pluginSelector ]
-]
-
 { #category : #'as yet unclassified' }
-MyApp >> choosingCurrentPlugin: index [
+MyApp >> chooseCurrentPlugin: index [
 
 	| arrayPluginContents plugin |
 	arrayPluginContents := arrayPlugin arrayPluginContents.
@@ -136,7 +127,7 @@ MyApp >> launchServerPlugin: pluginSelector [
 MyApp >> percent [
 	
 	| plugin |
-	plugin := self choosingCurrentPlugin: 2.
+	plugin := self chooseCurrentPlugin: 2.
 	^ plugin percent
 ]
 
@@ -144,7 +135,7 @@ MyApp >> percent [
 MyApp >> percent: aPercent [
 	
 	| plugin |
-	plugin := self choosingCurrentPlugin: 2.
+	plugin := self chooseCurrentPlugin: 2.
 	plugin sendValueHasChangedEvent: aPercent
 ]
 
@@ -152,7 +143,7 @@ MyApp >> percent: aPercent [
 MyApp >> year [
 	
 	| plugin |
-	plugin := self choosingCurrentPlugin: 1.
+	plugin := self chooseCurrentPlugin: 1.
 	^ plugin year
 ]
 
@@ -160,6 +151,6 @@ MyApp >> year [
 MyApp >> year: aYear [
 	
 	| plugin |
-	plugin := self choosingCurrentPlugin: 1.
+	plugin := self chooseCurrentPlugin: 1.
 	plugin sendValueHasChangedEvent: aYear.
 ]
