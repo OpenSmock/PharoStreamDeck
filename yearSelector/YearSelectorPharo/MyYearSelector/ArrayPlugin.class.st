@@ -1,7 +1,7 @@
 "
 For the Class part:  I represent an array of plugins, so that every plugin is aware of the existence of the other plugins launched.
 
-For the Responsibility part: I stock in my unique instance variable the different plugins, so that it's possible to change which one is referenced, which Witness instances' value need to be changed
+For the Responsibility part: I stock in arrayPluginContents  the different plugins and in plugin the currently selected plugin so that it's possible to change which one is referenced, which Witness instances' plugin value need to be changed
 
 For the Collaborators Part: PluginSharedActions and its subclasses
 
@@ -10,6 +10,7 @@ ArrayPlugin new
 
     Instance Variables
 	arrayPluginContents:		<OrderedCollection>
+	plugin:			<Object>
 "
 Class {
 	#name : #ArrayPlugin,
