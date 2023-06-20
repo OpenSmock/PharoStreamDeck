@@ -47,6 +47,18 @@ MyApp >> arrayPluginAdd: pluginSelector [
 		arrayPluginContents add: pluginSelector ]
 ]
 
+{ #category : #'as yet unclassified' }
+MyApp >> choosingCurrentPlugin: index [
+
+	| arrayPluginContents plugin |
+	arrayPluginContents := arrayPlugin arrayPluginContents.
+	plugin := arrayPluginContents at: index.
+	arrayPlugin plugin: plugin.
+	^ plugin
+
+
+]
+
 { #category : #initialization }
 MyApp >> initArrayPlugins [
 	"each plugin is aware of the existence of the other plugins, so that the numberInAuthorizedNumbers: method in PluginSharedActions can determine which plugin to reference to update their respective Witness instances' value"
@@ -123,38 +135,31 @@ MyApp >> launchServerPlugin: pluginSelector [
 { #category : #'as yet unclassified' }
 MyApp >> percent [
 	
-	| arrayPluginContents plugin |
-	arrayPluginContents := arrayPlugin arrayPluginContents.
-	plugin := arrayPluginContents at: 2.
-	arrayPlugin plugin: plugin.
+	| plugin |
+	plugin := self choosingCurrentPlugin: 2.
 	^ plugin percent
 ]
 
 { #category : #'as yet unclassified' }
 MyApp >> percent: aPercent [
 	
-	| arrayPluginContents plugin |
-	arrayPluginContents := arrayPlugin arrayPluginContents.
-	plugin := arrayPluginContents at: 2.
-	arrayPlugin plugin: plugin.
+	| plugin |
+	plugin := self choosingCurrentPlugin: 2.
 	plugin sendValueHasChangedEvent: aPercent
 ]
 
 { #category : #initialization }
 MyApp >> year [
 	
-	| arrayPluginContents plugin |
-	arrayPluginContents := arrayPlugin arrayPluginContents.
-	plugin := arrayPluginContents at: 1.
+	| plugin |
+	plugin := self choosingCurrentPlugin: 1.
 	^ plugin year
 ]
 
 { #category : #initialization }
 MyApp >> year: aYear [
 	
-	| arrayPluginContents plugin |
-	arrayPluginContents := arrayPlugin arrayPluginContents.
-	plugin := arrayPluginContents at: 1.
-	arrayPlugin plugin: plugin.
+	| plugin |
+	plugin := self choosingCurrentPlugin: 1.
 	plugin sendValueHasChangedEvent: aYear.
 ]
