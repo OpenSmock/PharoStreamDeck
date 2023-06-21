@@ -41,4 +41,4 @@ The YearWitness action shows which value is currently taken by the plugin global
 Every YearWitness has the same value, since it's a global variable available to every instance of the plugin, which is different from how a YearSelector instance handles its internal value, being chosen from the Property Inspector list. \
 Pressing a YearWitness value will put the value back to 0 and will also make its background blue.
 
-PercentSelector and PercentWitness work in the same way.
+PercentSelector and PercentWitness work in the same way, where PercentSelector can take the following values : 50, 100, 150 and 200.
