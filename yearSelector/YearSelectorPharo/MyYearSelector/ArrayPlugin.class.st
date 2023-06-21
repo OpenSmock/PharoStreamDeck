@@ -32,9 +32,7 @@ ArrayPlugin >> actionSelectorWitness: index [
 
 	arrayPluginSelectorWitness := OrderedCollection new.
 	arrayPluginSelectorWitness add: selector.
-	self inform: selector.
 	arrayPluginSelectorWitness add: witness.
-	self inform: witness.
 	^ arrayPluginSelectorWitness
 ]
 
@@ -73,7 +71,7 @@ ArrayPlugin >> numberInAuthorizedNumbers: aNumber [
 			"changes the current plugin value for every launched plugin"
 			"arrayPlugin do: [ :e | e plugin: (arrayPlugin at: index) ] ] ]."
 	"a number has been found in one of the given arrays"
-	foundNumber ifTrue: [ self plugin pluginValue: aNumber ]
+	foundNumber ifTrue: [ plugin pluginValue: aNumber ]
 ]
 
 { #category : #accessing }

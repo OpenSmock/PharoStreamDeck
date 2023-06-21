@@ -54,8 +54,9 @@ PluginSharedActions >> arrayPlugin: anArrayPlugin [
 
 { #category : #accessing }
 PluginSharedActions >> determineTypeObj [
-
-	((arrayPlugin actionSelectorWitness: 1) includes: action) ifTrue: [
+	
+	"actionSelectorWitness: changes the current plugin selected"
+	((arrayPlugin actionSelectorWitness: 1) includes: action) ifTrue: [ 
 		typeObj := 'year' ].
 	((arrayPlugin actionSelectorWitness: 1) includes: action) ifFalse: [
 		((arrayPlugin actionSelectorWitness: 2) includes: action) ifTrue: [
@@ -217,13 +218,14 @@ PluginSharedActions >> keyUp: jsonObj [
 
 	defaultImage := 'img/actionIcon.png'.
 	highlightedImage := 'img/actionIconHighlighted.png'.
+	
+	self determineTypeObj.
 
 	"resets value to 0 if a Year/PercentWitness is pressed (for setTitle and setSettings)"
 	"checks for every plugin if its type is Witness"
 	(arrayPlugin witnessAction includes: action) ifTrue: [ varObj := 0 ].
 	
 	"values need to be saved for each plugin"
-	self determineTypeObj.
 	(arrayPlugin selectorAction includes: action) ifTrue: [ 
 		varObj := jsonObj at: 'payload' at: typeObj ].
 
