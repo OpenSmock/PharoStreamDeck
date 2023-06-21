@@ -23,6 +23,22 @@ Class {
 }
 
 { #category : #accessing }
+ArrayPlugin >> actionSelectorWitness: index [
+
+	| selector witness arrayPluginSelectorWitness |
+	plugin := arrayPluginContents at: index.
+	selector := plugin selectorAction.
+	witness := plugin witnessAction.
+
+	arrayPluginSelectorWitness := OrderedCollection new.
+	arrayPluginSelectorWitness add: selector.
+	self inform: selector.
+	arrayPluginSelectorWitness add: witness.
+	self inform: witness.
+	^ arrayPluginSelectorWitness
+]
+
+{ #category : #accessing }
 ArrayPlugin >> arrayJSONSetTitleAndSettingsPluginWitness [
 
 	^ plugin arrayJSONSetTitleAndSettingsPluginWitness
@@ -58,6 +74,20 @@ ArrayPlugin >> numberInAuthorizedNumbers: aNumber [
 			"arrayPlugin do: [ :e | e plugin: (arrayPlugin at: index) ] ] ]."
 	"a number has been found in one of the given arrays"
 	foundNumber ifTrue: [ self plugin pluginValue: aNumber ]
+]
+
+{ #category : #accessing }
+ArrayPlugin >> percentAction [
+
+	| percentPlugin pluginSelector pluginWitness arrayPluginPercentSelectorWitness |
+	percentPlugin := arrayPluginContents at: 2.
+	pluginSelector := percentPlugin selectorAction.
+	pluginWitness := percentPlugin witnessAction.
+
+	arrayPluginPercentSelectorWitness := OrderedCollection new.
+	arrayPluginPercentSelectorWitness add: pluginSelector.
+	arrayPluginPercentSelectorWitness add: pluginWitness.
+	^ arrayPluginPercentSelectorWitness
 ]
 
 { #category : #accessing }
@@ -98,6 +128,22 @@ ArrayPlugin >> selectorAction [
 	arrayPluginContents do: [ :each |
 		arrayPluginSelector add: each witnessAction ].
 	^ arrayPluginSelector
+]
+
+{ #category : #accessing }
+ArrayPlugin >> selectorPercentAction [
+
+	| percentPlugin |
+	percentPlugin := arrayPluginContents at: 2.
+	^ percentPlugin selectorAction
+]
+
+{ #category : #accessing }
+ArrayPlugin >> selectorYearAction [
+
+	| yearPlugin |
+	yearPlugin := arrayPluginContents at: 1.
+	^ yearPlugin selectorAction
 ]
 
 { #category : #accessing }

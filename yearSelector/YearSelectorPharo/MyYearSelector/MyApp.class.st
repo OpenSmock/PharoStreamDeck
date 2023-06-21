@@ -112,9 +112,7 @@ MyApp >> initialize [
 { #category : #initialization }
 MyApp >> launchServerPlugin: pluginSelector [
 
-	| serverState |
 	pluginSelector launchedServer: launchedServer.
-	serverState := launchedServer launchedServerState.
 ]
 
 { #category : #'as yet unclassified' }

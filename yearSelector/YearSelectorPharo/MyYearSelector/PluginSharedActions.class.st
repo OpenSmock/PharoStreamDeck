@@ -28,7 +28,8 @@ Class {
 		'arrayPlugin',
 		'arraySetImage',
 		'launchedServer',
-		'uuid'
+		'uuid',
+		'typeObj'
 	],
 	#category : #MyYearSelector
 }
@@ -52,20 +53,30 @@ PluginSharedActions >> arrayPlugin: anArrayPlugin [
 ]
 
 { #category : #accessing }
+PluginSharedActions >> determineTypeObj [
+
+	((arrayPlugin actionSelectorWitness: 1) includes: action) ifTrue: [
+		typeObj := 'year' ].
+	((arrayPlugin actionSelectorWitness: 1) includes: action) ifFalse: [
+		((arrayPlugin actionSelectorWitness: 2) includes: action) ifTrue: [
+			typeObj := 'percent' ] ]
+]
+
+{ #category : #accessing }
 PluginSharedActions >> getGlobalSettings: jsonObj [
 	"not automatically called when setGlobalSettings is called, which is why this method is needed"
 
 	"here, the getGlobalSettings event has no need to be sent to the plugin since the actions directly take place in Pharo"
 
 	| varObj json pluginWitnessInstances |
-	varObj := jsonObj at: 'plugin'.
+	varObj := jsonObj at: typeObj.
 
 	"creates a link between yearWitnessSet and arrayJsonSetTitleAndSettingsYearWitness"
 	pluginWitnessInstances := arrayPlugin pluginWitnessSet.
 	pluginWitnessInstances do: [ :each |
 		json := Dictionary new
 			        at: 'context' put: each;
-			        at: 'plugin' put: varObj;
+			        at: typeObj put: varObj;
 			        yourself.
 		self setTitleAndSettingsYearWitness: json ]
 ]
@@ -99,7 +110,7 @@ PluginSharedActions >> highlightPluginSelectorReceive: jsonObj [
 
 	context := jsonObj at: 'context'.
 	"values saved in the plugin field contained inside the payload field in setSettings: are obtained back with a settings field placed between them"
-	varObj := (jsonObj at: 'payload' at: 'settings') at: 'plugin'.
+	varObj := (jsonObj at: 'payload' at: 'settings') at: typeObj.
 
 	"sets the new blue background"
 	varObj = arrayPlugin pluginValue ifTrue: [
@@ -211,14 +222,15 @@ PluginSharedActions >> keyUp: jsonObj [
 	"checks for every plugin if its type is Witness"
 	(arrayPlugin witnessAction includes: action) ifTrue: [ varObj := 0 ].
 	
-	"checks for every plugin if its type is Selector"
-	(arrayPlugin selectorAction includes: action) ifTrue: [ "equivalent to at: 'year' or at: 'percent' depending on the class"
-		varObj := jsonObj at: 'payload' at: 'plugin' ].
+	"values need to be saved for each plugin"
+	self determineTypeObj.
+	(arrayPlugin selectorAction includes: action) ifTrue: [ 
+		varObj := jsonObj at: 'payload' at: typeObj ].
 
 	jsonSettings := Dictionary new
 		                at: 'event' put: 'setSettings';
 		                at: 'context' put: context;
-		                at: 'plugin' put: varObj;
+		                at: typeObj put: varObj;
 		                yourself.
 	"STONJSON toString conversion is performed in setSettings, setGlobalSettings and getGlobalSettings"
 	jsonFormattedSettings := self setSettings: jsonSettings.
@@ -226,7 +238,7 @@ PluginSharedActions >> keyUp: jsonObj [
 	"setGlobalSettings and getGlobalSettings (called in setGlobalSettings) have no object given to them since their event is always the same, they just need a uuid and a year (the second one is only needed for setGlobalSettings) which are instance variables of the YearSelector class"
 	jsonContext := Dictionary new
 		               at: 'context' put: context;
-		               at: 'plugin' put: varObj;
+		               at: typeObj put: varObj;
 		               yourself.
 	self setGlobalSettings: jsonContext.
 
@@ -234,12 +246,7 @@ PluginSharedActions >> keyUp: jsonObj [
 		                  at: 'action' put: action;
 		                  at: 'context' put: context;
 		                  yourself.
-	jsonWillAppear at: 'payload' at: 'plugin' put: varObj.
-	"jsonWillAppear
-		putIfAbsentInDictionary: 'payload'
-		at: 'settings'
-		at: 'plugin'
-		put: varObj."
+	jsonWillAppear at: 'payload' at: typeObj put: varObj.
 	jsonFormattedWillAppear := (self willAppear: jsonWillAppear) at: 1.
 
 	"used to reset keys highlighted by a command sent in the Pharo IDE using the MyApp class, these messages are sent before jsonFormattedSetHighlightedImage"
@@ -298,7 +305,7 @@ PluginSharedActions >> modifyPluginWitnessValue [
 
 	varObj := arrayPlugin pluginValue.
 	json := Dictionary new
-		        at: 'plugin' put: varObj;
+		        at: typeObj put: varObj;
 		        yourself.
 	self getGlobalSettings: json.
 	"separated methods for sending all the events at the same time"
@@ -372,7 +379,7 @@ PluginSharedActions >> sendToPlugin: jsonObj [
 
 	dictionaryNewValue := Dictionary new
 		                      at: 'context' put: context;
-		                      at: 'plugin' put: newValue;
+		                      at: typeObj put: newValue;
 		                      yourself.
 
 	arrayEvents := Array new: 2.
@@ -438,20 +445,18 @@ PluginSharedActions >> setGlobalSettings: jsonObj [
 
 	"globalSettings events use a uuid for the context field, the name doesn't change"
 
-	| jsonSetGlobalSettings jsonFormattedSetGlobalSettings settings varObj |
-	varObj := jsonObj at: 'plugin'.
-
-	"these two fields are not put inside a settings field since the SDK takes care of this operation"
-	settings := Dictionary new
-		            at: 'plugin' put: varObj;
-		            yourself.
+	| jsonSetGlobalSettings jsonFormattedSetGlobalSettings varObj |
+	varObj := jsonObj at: typeObj.
 
 	jsonSetGlobalSettings := Dictionary new
 		                         at: 'event' put: 'setGlobalSettings';
 		                         at: 'context' put: uuid;
-		                         at: 'payload' put: settings;
+		                         "not put inside a settings field since the SDK takes care of this operation"
+		                         at: 'payload'
+		                         at: typeObj
+		                         put: varObj;
 		                         yourself.
-		
+
 	jsonFormattedSetGlobalSettings := STONJSON toString:
 		                                  jsonSetGlobalSettings
 ]
@@ -498,12 +503,12 @@ PluginSharedActions >> setSettings: jsonObj [
 
 	| jsonFormattedObject context jsonSettings varObj |
 	context := jsonObj at: 'context'.
-	varObj := jsonObj at: 'plugin'.
+	varObj := jsonObj at: typeObj.
 
 	jsonFormattedObject := Dictionary new
 		                       at: 'event' put: 'setSettings';
 		                       at: 'context' put: context;
-		                       at: 'payload' at: 'plugin' put: varObj;
+		                       at: 'payload' at: typeObj put: varObj;
 		                       yourself.
 	jsonSettings := STONJSON toString: jsonFormattedObject.
 
@@ -515,7 +520,7 @@ PluginSharedActions >> setTitle: jsonObj [
 
 	| jsonFormattedTitle context jsonTitle jsonSettings jsonFormattedSettings arrayEvents varObj |
 	context := jsonObj at: 'context'.
-	varObj := jsonObj at: 'plugin'.
+	varObj := jsonObj at: typeObj.
 
 	"can also receive it from the setTitle event sent when the Property Inspector value of a YearSelector is changed"
 	jsonTitle := Dictionary new
@@ -534,7 +539,7 @@ PluginSharedActions >> setTitle: jsonObj [
 	"needs to update internal data so that there exists no disconnect between the display (through setTitle) and the data pertaining to each instance (through setSettings)"
 	jsonSettings := Dictionary new
 		                at: 'context' put: context;
-		                at: 'plugin' put: varObj;
+		                at: typeObj put: varObj;
 		                yourself.
 	jsonFormattedSettings := self setSettings: jsonSettings.
 
@@ -551,7 +556,7 @@ PluginSharedActions >> setTitleAndSettingsYearWitness: jsonObj [
 	| context jsonTitle jsonFormattedTitle jsonSettings jsonFormattedSettings varObj |
 	"this method is used to update every Year/PercentWitness instance through their context, which is the unique value that represents an instance""it updates their title as well as their settings, so that willAppear: can load their new values when changing profiles""used by getGlobalSettings: ""with context being each element sent to this method""the plugin value is saved in the plugin field, located in the payload field"
 	context := jsonObj at: 'context'.
-	varObj := jsonObj at: 'plugin'.
+	varObj := jsonObj at: typeObj.
 
 	"loop so that every Year/PercentWitness instance is updated"
 	jsonTitle := Dictionary new
@@ -570,7 +575,7 @@ PluginSharedActions >> setTitleAndSettingsYearWitness: jsonObj [
 	jsonSettings := Dictionary new
 		                at: 'event' put: 'setSettings';
 		                at: 'context' put: context;
-		                at: 'payload' at: 'plugin' put: varObj;
+		                at: 'payload' at: typeObj put: varObj;
 		                yourself.
 	jsonFormattedSettings := STONJSON toString: jsonSettings.
 
@@ -595,7 +600,7 @@ PluginSharedActions >> setTitlePI: jsonObj [
 
 	| jsonFormattedObject context jsonTitle varObj |
 	context := jsonObj at: 'context'.
-	varObj := jsonObj at: 'plugin'.
+	varObj := jsonObj at: typeObj.
 
 	jsonFormattedObject := Dictionary new
 		                       at: 'event' put: 'setTitle';
@@ -627,24 +632,28 @@ PluginSharedActions >> willAppear: jsonObj [
 	| context varObj subdictionary settings arrayEvents |
 	context := jsonObj at: 'context'.
 	action := jsonObj at: 'action'.
-	settings := jsonObj at: 'payload' ifAbsent: [ settings := 0 ].
+	self determineTypeObj.
+	settings := jsonObj
+		            at: 'payload'
+		            at: typeObj
+		            ifAbsent: [ settings := 0 ].
 
 	"initialize every value to be 0 so that nil isn't shown"
 	settings = 0 ifTrue: [ varObj := 0 ].
-	settings = 0 ifFalse: [ varObj := settings at: 'plugin' ].
+	settings = 0 ifFalse: [ varObj := settings ].
 
 	"no punctuation apart from the dots that act as separators for the unique identifier"
 	"checks for every plugin if its type is Witness"
 	(arrayPlugin witnessAction includes: action) ifTrue: [ "context is globally unique across all actions, identifies an instance of an action on the Stream Deck but changes when the Stream Deck application is relaunched, also changes when actions are duplicated or moved"
 		arrayPlugin pluginWitnessSet add: context ].
-	
+
 	"checks for every plugin if its type is Selector"
 	(arrayPlugin selectorAction includes: action) ifTrue: [
 		arrayPlugin pluginSelectorSet add: context ].
 
 	subdictionary := Dictionary new
 		                 at: 'context' put: context;
-		                 at: 'plugin' put: varObj;
+		                 at: typeObj put: varObj;
 		                 yourself.
 
 	arrayEvents := self setTitle: subdictionary.
