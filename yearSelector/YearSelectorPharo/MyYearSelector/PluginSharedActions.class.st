@@ -1,5 +1,5 @@
 "
-For the Class part:  I am an abstract class which possess the shared actions between YearSelector and PercentSelector
+For the Class part: I am an abstract class which possess the shared actions between YearSelector and PercentSelector
 
 For the Responsibility part: I launch a server then treat the different events that are received from index.html (the JavaScript side of the plugin,which also sends some info about the Stream Deck at its launch). With the use of the initServer method, each event is treated by the Pharo class that is concerned
 
@@ -72,14 +72,14 @@ PluginSharedActions >> getGlobalSettings: jsonObj [
 	| varObj json pluginWitnessInstances |
 	varObj := jsonObj at: typeObj.
 
-	"creates a link between yearWitnessSet and arrayJsonSetTitleAndSettingsYearWitness"
+	"creates a link between pluginWitnessSet and arrayJSONSetTitleAndSettingsWitness"
 	pluginWitnessInstances := arrayPlugin pluginWitnessSet.
 	pluginWitnessInstances do: [ :each |
 		json := Dictionary new
 			        at: 'context' put: each;
 			        at: typeObj put: varObj;
 			        yourself.
-		self setTitleAndSettingsYearWitness: json ]
+		self setTitleAndSettingsWitness: json ]
 ]
 
 { #category : #accessing }
@@ -229,7 +229,9 @@ PluginSharedActions >> keyUp: jsonObj [
 
 	"values need to be saved for each plugin"
 	(arrayPlugin selectorAction includes: action) ifTrue: [
-		varObj := jsonObj at: 'payload' at: typeObj ].
+		"at: 'settings')"
+		varObj := (jsonObj at: 'payload' at: 'settings') at: typeObj.
+		self inform: 'varObj:' , varObj asString ].
 
 	jsonSettings := Dictionary new
 		                at: 'event' put: 'setSettings';
@@ -555,7 +557,7 @@ PluginSharedActions >> setTitle: jsonObj [
 ]
 
 { #category : #accessing }
-PluginSharedActions >> setTitleAndSettingsYearWitness: jsonObj [
+PluginSharedActions >> setTitleAndSettingsWitness: jsonObj [
 
 	| context jsonTitle jsonFormattedTitle jsonSettings jsonFormattedSettings varObj |
 	"this method is used to update every Year/PercentWitness instance through their context, which is the unique value that represents an instance""it updates their title as well as their settings, so that willAppear: can load their new values when changing profiles""used by getGlobalSettings: ""with context being each element sent to this method""the plugin value is saved in the plugin field, located in the payload field"
