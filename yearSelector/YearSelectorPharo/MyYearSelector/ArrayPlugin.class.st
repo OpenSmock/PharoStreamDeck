@@ -93,11 +93,19 @@ ArrayPlugin >> pluginWitnessSet [
 { #category : #accessing }
 ArrayPlugin >> selectorAction [
 
-	^ plugin selectorAction
+	| arrayPluginSelector |
+	arrayPluginSelector := OrderedCollection new.
+	arrayPluginContents do: [ :each |
+		arrayPluginSelector add: each witnessAction ].
+	^ arrayPluginSelector
 ]
 
 { #category : #accessing }
 ArrayPlugin >> witnessAction [
 
-	^ plugin witnessAction
+	| arrayPluginWitness |
+	arrayPluginWitness := OrderedCollection new.
+	arrayPluginContents do: [ :each |
+		arrayPluginWitness add: each witnessAction ].
+	^ arrayPluginWitness
 ]

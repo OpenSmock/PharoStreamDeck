@@ -16,7 +16,6 @@ Class {
 	#name : #LaunchedServer,
 	#superclass : #Object,
 	#instVars : [
-		'launchedServer',
 		'launchedServerState'
 	],
 	#category : #MyYearSelector

@@ -26,7 +26,6 @@ Class {
 	#instVars : [
 		'arrayPlugin',
 		'launchedServer',
-		'serverState',
 		'pharostreamdeck'
 	],
 	#category : #MyYearSelector
@@ -84,7 +83,6 @@ MyApp >> initPlugins [
 	arrayPlugin := ArrayPlugin new.
 	
 	launchedServer := LaunchedServer new.
-	serverState := launchedServer launchedServerState.
 	
 	self initPlugin: YearSelector.
 	self initPlugin: PercentSelector.
@@ -114,8 +112,9 @@ MyApp >> initialize [
 { #category : #initialization }
 MyApp >> launchServerPlugin: pluginSelector [
 
+	| serverState |
 	pluginSelector launchedServer: launchedServer.
-	pluginSelector launchedServerState: serverState.
+	serverState := launchedServer launchedServerState.
 ]
 
 { #category : #'as yet unclassified' }
@@ -131,7 +130,8 @@ MyApp >> percent: aPercent [
 	
 	| plugin |
 	plugin := self chooseCurrentPlugin: 2.
-	plugin sendValueHasChangedEvent: aPercent
+	plugin sendValueHasChangedEvent: aPercent.
+	pharostreamdeck updateWitnessButtons: aPercent.
 ]
 
 { #category : #initialization }
@@ -148,4 +148,5 @@ MyApp >> year: aYear [
 	| plugin |
 	plugin := self chooseCurrentPlugin: 1.
 	plugin sendValueHasChangedEvent: aYear.
+	pharostreamdeck updateWitnessButtons: aYear.
 ]

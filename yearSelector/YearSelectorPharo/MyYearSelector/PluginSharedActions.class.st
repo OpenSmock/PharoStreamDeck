@@ -28,7 +28,6 @@ Class {
 		'arrayPlugin',
 		'arraySetImage',
 		'launchedServer',
-		'launchedServerState',
 		'uuid'
 	],
 	#category : #MyYearSelector
@@ -122,7 +121,7 @@ PluginSharedActions >> highlightPluginSelectorSend [
 	"receives multiple times the same event, no need for a do: loop"
 
 	| jsonSettings |
-	self pluginSelectorSet do: [ :each |
+	arrayPlugin pluginSelectorSet do: [ :each |
 		jsonSettings := self getSettings: each.
 		arrayGetSettings add: jsonSettings.
 		self sendGetSettings ]
@@ -132,7 +131,7 @@ PluginSharedActions >> highlightPluginSelectorSend [
 PluginSharedActions >> initServer [
 	"Creates a ZnManagingMultiThreadedServer HTTP port 8080 process, which needs to be terminated 	through the Process Browser if another server is to be launched"
 
-	| jsonObject server |
+	| jsonObject server arrayPluginContents |
 	"launchedServerState ifNil: [ launchedServerState := false ]."
 	server := ZnWebSocket
 		          startServerOn: 8080
@@ -143,7 +142,10 @@ PluginSharedActions >> initServer [
 				          | event |
 				          self launchedServerStateChange: true.
 
-				          WebSocket ifNil: [ WebSocket := webSocket ].
+				          "gives the WebSocket to every plugin"
+				          arrayPluginContents := arrayPlugin arrayPluginContents.
+				          arrayPluginContents do: [ :each |
+					          each WebSocket: webSocket ].
 				          "self inform: 'Received message: ' , message printString."
 				          "treats the data received accordingly, redirecting events to their respective method"
 				          jsonObject := STONJSON fromString: message.
@@ -176,7 +178,6 @@ PluginSharedActions >> initServer [
 				          "event received when a value is changed from the Property Inspector of a Year/PercentSelector instance"
 				          event = 'sendToPlugin' ifTrue: [
 					          self sendToPluginEvent: jsonObject ] ] ]
-		
 				          on: ConnectionClosed , PrimitiveFailed
 				          do: [ "ignore close"
 				          self launchedServerStateChange: false ].
@@ -207,9 +208,11 @@ PluginSharedActions >> keyUp: jsonObj [
 	highlightedImage := 'img/actionIconHighlighted.png'.
 
 	"resets value to 0 if a Year/PercentWitness is pressed (for setTitle and setSettings)"
-	action = arrayPlugin witnessAction ifTrue: [ varObj := 0 ].
-
-	action = arrayPlugin selectorAction ifTrue: [ "equivalent to at: 'year' or at: 'percent' depending on the class"
+	"checks for every plugin if its type is Witness"
+	(arrayPlugin witnessAction includes: action) ifTrue: [ varObj := 0 ].
+	
+	"checks for every plugin if its type is Selector"
+	(arrayPlugin selectorAction includes: action) ifTrue: [ "equivalent to at: 'year' or at: 'percent' depending on the class"
 		varObj := jsonObj at: 'payload' at: 'plugin' ].
 
 	jsonSettings := Dictionary new
@@ -242,10 +245,10 @@ PluginSharedActions >> keyUp: jsonObj [
 	"used to reset keys highlighted by a command sent in the Pharo IDE using the MyApp class, these messages are sent before jsonFormattedSetHighlightedImage"
 	arraySetImage := OrderedCollection new.
 
-	self pluginWitnessSet do: [ :each |
+	arrayPlugin pluginWitnessSet do: [ :each |
 		self setCurrentImages: each with: defaultImage ].
 
-	self pluginSelectorSet do: [ :each |
+	arrayPlugin pluginSelectorSet do: [ :each |
 		self setCurrentImages: each with: defaultImage ].
 	
 	self sendImages.
@@ -282,15 +285,8 @@ PluginSharedActions >> launchedServer: server [
 ]
 
 { #category : #accessing }
-PluginSharedActions >> launchedServerState: aBoolean [
+PluginSharedActions >> launchedServerStateChange: launchedServerState [
 
-	launchedServerState := aBoolean
-]
-
-{ #category : #accessing }
-PluginSharedActions >> launchedServerStateChange: aBoolean [
-
-	launchedServerState := aBoolean.
 	launchedServer launchedServerState: launchedServerState
 ]
 
@@ -638,10 +634,12 @@ PluginSharedActions >> willAppear: jsonObj [
 	settings = 0 ifFalse: [ varObj := settings at: 'plugin' ].
 
 	"no punctuation apart from the dots that act as separators for the unique identifier"
-	action = arrayPlugin witnessAction ifTrue: [ "context is globally unique across all actions, identifies an instance of an action on the Stream Deck but changes when the Stream Deck application is relaunched, also changes when actions are duplicated or moved"
+	"checks for every plugin if its type is Witness"
+	(arrayPlugin witnessAction includes: action) ifTrue: [ "context is globally unique across all actions, identifies an instance of an action on the Stream Deck but changes when the Stream Deck application is relaunched, also changes when actions are duplicated or moved"
 		arrayPlugin pluginWitnessSet add: context ].
-
-	action = arrayPlugin selectorAction ifTrue: [
+	
+	"checks for every plugin if its type is Selector"
+	(arrayPlugin selectorAction includes: action) ifTrue: [
 		arrayPlugin pluginSelectorSet add: context ].
 
 	subdictionary := Dictionary new
