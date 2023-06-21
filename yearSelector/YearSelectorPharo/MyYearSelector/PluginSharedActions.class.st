@@ -108,6 +108,9 @@ PluginSharedActions >> highlightPluginSelectorReceive: jsonObj [
 	defaultImage := 'img/actionIcon.png'.
 	highlightedImage := 'img/actionIconHighlighted.png'.
 	arraySetImage := OrderedCollection new.
+	
+	action := jsonObj at: 'action'.
+	self determineTypeObj.
 
 	context := jsonObj at: 'context'.
 	"values saved in the plugin field contained inside the payload field in setSettings: are obtained back with a settings field placed between them"
@@ -115,11 +118,11 @@ PluginSharedActions >> highlightPluginSelectorReceive: jsonObj [
 
 	"sets the new blue background"
 	varObj = arrayPlugin pluginValue ifTrue: [
-		self setCurrentImages: context with: highlightedImage ].
+		self setCurrentImage: context with: highlightedImage ].
 
 	"resets the background to its original black"
 	varObj = arrayPlugin pluginValue ifFalse: [
-		self setCurrentImages: context with: defaultImage ].
+		self setCurrentImage: context with: defaultImage ].
 
 	self sendImages
 ]
@@ -211,22 +214,21 @@ PluginSharedActions >> keyUp: jsonObj [
 	"sends multiple events (setSettings, setGlobalSettings which sends getGlobalSettings so that the plugin receives a didReceiveGlobalSettings event)"
 
 	| jsonSettings context arrayEvents jsonFormattedSettings highlightedImage jsonContext jsonWillAppear jsonFormattedWillAppear defaultImage varObj |
-	"varObj being a year or a percent depending on the class it comes from"
-	"action being only affected to a value in willAppear: and keyUp"
+	"varObj being a year or a percent depending on the class it comes from""action being only affected to a value in willAppear: and keyUp"
 	action := jsonObj at: 'action'.
 	context := jsonObj at: 'context'.
 
 	defaultImage := 'img/actionIcon.png'.
 	highlightedImage := 'img/actionIconHighlighted.png'.
-	
+
 	self determineTypeObj.
 
 	"resets value to 0 if a Year/PercentWitness is pressed (for setTitle and setSettings)"
 	"checks for every plugin if its type is Witness"
 	(arrayPlugin witnessAction includes: action) ifTrue: [ varObj := 0 ].
-	
+
 	"values need to be saved for each plugin"
-	(arrayPlugin selectorAction includes: action) ifTrue: [ 
+	(arrayPlugin selectorAction includes: action) ifTrue: [
 		varObj := jsonObj at: 'payload' at: typeObj ].
 
 	jsonSettings := Dictionary new
@@ -247,19 +249,19 @@ PluginSharedActions >> keyUp: jsonObj [
 	jsonWillAppear := Dictionary new
 		                  at: 'action' put: action;
 		                  at: 'context' put: context;
+		                  at: 'payload' at: typeObj put: varObj;
 		                  yourself.
-	jsonWillAppear at: 'payload' at: typeObj put: varObj.
 	jsonFormattedWillAppear := (self willAppear: jsonWillAppear) at: 1.
 
 	"used to reset keys highlighted by a command sent in the Pharo IDE using the MyApp class, these messages are sent before jsonFormattedSetHighlightedImage"
 	arraySetImage := OrderedCollection new.
 
 	arrayPlugin pluginWitnessSet do: [ :each |
-		self setCurrentImages: each with: defaultImage ].
+		self setCurrentImage: each with: defaultImage ].
 
 	arrayPlugin pluginSelectorSet do: [ :each |
-		self setCurrentImages: each with: defaultImage ].
-	
+		self setCurrentImage: each with: defaultImage ].
+
 	self sendImages.
 
 	"updates the instance variable year of the YearSelector class, which is needed to update the yearWitness instances through commands sent in the Pharo IDE"
@@ -425,7 +427,7 @@ PluginSharedActions >> sendValueHasChangedEvent: aNumber [
 ]
 
 { #category : #accessing }
-PluginSharedActions >> setCurrentImages: context with: img [
+PluginSharedActions >> setCurrentImage: context with: img [
 
 	| jsonDefaultImage jsonFormattedImage |
 	jsonDefaultImage := Dictionary new
@@ -618,6 +620,12 @@ PluginSharedActions >> setTitlePI: jsonObj [
 	jsonTitle := STONJSON toString: jsonFormattedObject.
 
 	^ jsonTitle
+]
+
+{ #category : #accessing }
+PluginSharedActions >> typeObj: newTypeObj [
+
+	typeObj := newTypeObj 
 ]
 
 { #category : #accessing }

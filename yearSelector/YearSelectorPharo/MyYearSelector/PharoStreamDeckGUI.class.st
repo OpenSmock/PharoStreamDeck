@@ -181,7 +181,7 @@ PharoStreamDeckGUI >> selectedButton: button with: pluginValue [
 		self inform: myApp percent asString ].
 	
 	"updates the relevant Witness instance through MyApp's plugin value"
-	self updateWitnessButtons: pluginValue.
+	self updateWitnessButtons.
 
 	"resets the background of every button"
 	buttonList do: [ :each | each color: Color black ].
@@ -196,7 +196,7 @@ PharoStreamDeckGUI >> title [
 ]
 
 { #category : #initialization }
-PharoStreamDeckGUI >> updateWitnessButtons: pluginValue [
+PharoStreamDeckGUI >> updateWitnessButtons [
 	
 	"updates the relevant Witness instance through MyApp's plugin value"
 	buttonWitnessYear label: myApp year asString.

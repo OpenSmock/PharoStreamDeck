@@ -128,8 +128,9 @@ MyApp >> percent: aPercent [
 	
 	| plugin |
 	plugin := self chooseCurrentPlugin: 2.
+	plugin typeObj: 'percent'.
 	plugin sendValueHasChangedEvent: aPercent.
-	pharostreamdeck updateWitnessButtons: aPercent.
+	pharostreamdeck updateWitnessButtons.
 ]
 
 { #category : #initialization }
@@ -145,6 +146,7 @@ MyApp >> year: aYear [
 	
 	| plugin |
 	plugin := self chooseCurrentPlugin: 1.
+	plugin typeObj: 'year'.
 	plugin sendValueHasChangedEvent: aYear.
-	pharostreamdeck updateWitnessButtons: aYear.
+	pharostreamdeck updateWitnessButtons.
 ]
