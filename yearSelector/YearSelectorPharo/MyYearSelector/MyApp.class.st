@@ -45,6 +45,8 @@ MyApp >> chooseCurrentPlugin: index [
 	plugin := arrayPluginContents at: index.
 	"also updates the currently selected plugin for arrayPlugin"
 	arrayPlugin plugin: plugin.
+	"DO NOT delete this plugin return, trying to access arrayPlugin plugin in year; and percent: makes everything crashes"
+	^ plugin
 
 ]
 
@@ -124,8 +126,9 @@ MyApp >> percent [
 { #category : #'as yet unclassified' }
 MyApp >> percent: aPercent [
 	
-	self chooseCurrentPlugin: 2.
-	arrayPlugin plugin sendValueHasChangedEvent: aPercent.
+	| plugin |
+	plugin := self chooseCurrentPlugin: 2.
+	plugin sendValueHasChangedEvent: aPercent.
 	pharostreamdeck updateWitnessButtons: aPercent.
 ]
 
@@ -140,7 +143,8 @@ MyApp >> year [
 { #category : #initialization }
 MyApp >> year: aYear [
 	
-	self chooseCurrentPlugin: 1.
-	arrayPlugin plugin sendValueHasChangedEvent: aYear.
+	| plugin |
+	plugin := self chooseCurrentPlugin: 1.
+	plugin sendValueHasChangedEvent: aYear.
 	pharostreamdeck updateWitnessButtons: aYear.
 ]
