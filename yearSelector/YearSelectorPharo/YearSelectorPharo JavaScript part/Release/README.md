@@ -3,8 +3,8 @@ Prerequisite :
 - the Elgato Stream Deck application is installed on your device
 
 Download the plugin and the profile, then double-click on them both. \
-The profile will be available from the profile list without overriding other Stream Deck profiles, titled **PharoStreamDeck**. \
-The profile will have no effect without the plugin, since the actions cannot have any effect.
+The profile will be available from the profile list without overriding other Stream Deck profiles and is titled **PharoStreamDeck**. \
+The profile will have no effect without the plugin, since the actions cannot have any effect by themselves.
 
 In a Pharo VM, execute the following import command in a Playground:
 ```
@@ -41,4 +41,4 @@ The YearWitness action shows which value is currently taken by the plugin global
 Every YearWitness has the same value, since it's a global variable available to every instance of the plugin, which is different from how a YearSelector instance handles its internal value, being chosen from the Property Inspector list. \
 Pressing a YearWitness value will put the value back to 0 and will also make its background blue.
 
-PercentSelector and PercentWitness work in the same way.
+PercentSelector and PercentWitness work in the same way, where PercentSelector can take the following values : 50, 100, 150 and 200.
