@@ -45,8 +45,6 @@ MyApp >> chooseCurrentPlugin: index [
 	plugin := arrayPluginContents at: index.
 	"also updates the currently selected plugin for arrayPlugin"
 	arrayPlugin plugin: plugin.
-	^ plugin
-
 
 ]
 
@@ -126,9 +124,8 @@ MyApp >> percent [
 { #category : #'as yet unclassified' }
 MyApp >> percent: aPercent [
 	
-	| plugin |
-	plugin := self chooseCurrentPlugin: 2.
-	plugin sendValueHasChangedEvent: aPercent.
+	self chooseCurrentPlugin: 2.
+	arrayPlugin plugin sendValueHasChangedEvent: aPercent.
 	pharostreamdeck updateWitnessButtons: aPercent.
 ]
 
@@ -143,8 +140,7 @@ MyApp >> year [
 { #category : #initialization }
 MyApp >> year: aYear [
 	
-	| plugin |
-	plugin := self chooseCurrentPlugin: 1.
-	plugin sendValueHasChangedEvent: aYear.
+	self chooseCurrentPlugin: 1.
+	arrayPlugin plugin sendValueHasChangedEvent: aYear.
 	pharostreamdeck updateWitnessButtons: aYear.
 ]
