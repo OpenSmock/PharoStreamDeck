@@ -20,7 +20,7 @@ How this plugin works and communicate with the differents parts involved is expl
 
 ![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/6f4ce01d-0e77-4a1a-b5ad-8457bf6763aa)
 
-## MyApp package
+### MyApp package
 The MyApp package is a way to interact with the YearSelector package (the aggregation link being here since it's possible to only launch a YearSelector instance without launching a MyApp instance, detailed further below in the UML diagram):
 
 An instance of MyApp needs to be created in Pharo to launch a server and the second WebSocket.
@@ -39,6 +39,9 @@ Then executing this second line of Pharo code: \
 <img width="573" alt="pharostreamdeck clicked" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/9de53d9f-78d2-4161-b3f9-2eba6eeefcf5">
 
 The percent: method can also be used instead of the year: method to change the value shown on a PercentWitness instance, which can take the following values : 50, 100, 150 and 200.
+
+### Pharo structure
+![pharo structure drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/b3ec9dfc-d1cc-4ea3-8ed5-0690a98d86b5)
 
 ## Complementary informations
 ### Pharo
