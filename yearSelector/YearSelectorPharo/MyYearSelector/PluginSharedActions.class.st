@@ -57,9 +57,11 @@ PluginSharedActions >> determineTypeObj [
 	
 	"actionSelectorWitness: changes the current plugin selected"
 	((arrayPlugin actionSelectorWitness: 1) includes: action) ifTrue: [ 
+		self inform: 'year'.
 		typeObj := 'year' ].
 	((arrayPlugin actionSelectorWitness: 1) includes: action) ifFalse: [
 		((arrayPlugin actionSelectorWitness: 2) includes: action) ifTrue: [
+			self inform: 'percent'.
 			typeObj := 'percent' ] ]
 ]
 
@@ -230,7 +232,7 @@ PluginSharedActions >> keyUp: jsonObj [
 	"values need to be saved for each plugin"
 	(arrayPlugin selectorAction includes: action) ifTrue: [
 		"at: 'settings')"
-		varObj := (jsonObj at: 'payload' at: 'settings') at: typeObj.
+		varObj := jsonObj at: 'payload' at: typeObj.
 		self inform: 'varObj:' , varObj asString ].
 
 	jsonSettings := Dictionary new
@@ -380,8 +382,11 @@ PluginSharedActions >> sendImages [
 PluginSharedActions >> sendToPlugin: jsonObj [
 
 	| newValue dictionaryNewValue context arrayEvents |
+	action := jsonObj at: 'action'.
 	newValue := jsonObj at: 'payload' at: 'setValue'.
 	context := jsonObj at: 'context'.
+	
+	self determineTypeObj.
 
 	dictionaryNewValue := Dictionary new
 		                      at: 'context' put: context;
@@ -641,18 +646,18 @@ PluginSharedActions >> uuid: anObject [
 { #category : #accessing }
 PluginSharedActions >> willAppear: jsonObj [
 
-	| context varObj subdictionary settings arrayEvents |
+	| context varObj subdictionary settings arrayEvents payload |
 	context := jsonObj at: 'context'.
 	action := jsonObj at: 'action'.
+	
 	self determineTypeObj.
-	settings := jsonObj
-		            at: 'payload'
-		            at: typeObj
-		            ifAbsent: [ settings := 0 ].
+
+	payload := jsonObj at: 'payload' ifAbsent: [ payload := 0 ].
+	"settings := payload at: 'settings' ifAbsent: [ settings := 0 ]."
 
 	"initialize every value to be 0 so that nil isn't shown"
-	settings = 0 ifTrue: [ varObj := 0 ].
-	settings = 0 ifFalse: [ varObj := settings ].
+	payload = 0 ifTrue: [ varObj := 0 ].
+	payload = 0 ifFalse: [ varObj := payload at: typeObj ].
 
 	"no punctuation apart from the dots that act as separators for the unique identifier"
 	"checks for every plugin if its type is Witness"

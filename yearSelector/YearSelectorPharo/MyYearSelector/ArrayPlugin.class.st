@@ -24,6 +24,7 @@ Class {
 
 { #category : #accessing }
 ArrayPlugin >> actionSelectorWitness: index [
+	"puts in an array the names of the Selector and Witness actions for a plugin"
 
 	| selector witness arrayPluginSelectorWitness |
 	plugin := arrayPluginContents at: index.
@@ -124,7 +125,7 @@ ArrayPlugin >> selectorAction [
 	| arrayPluginSelector |
 	arrayPluginSelector := OrderedCollection new.
 	arrayPluginContents do: [ :each |
-		arrayPluginSelector add: each witnessAction ].
+		arrayPluginSelector add: each selectorAction ].
 	^ arrayPluginSelector
 ]
 
