@@ -1,7 +1,7 @@
 # The JavaScript side of things
 Uses a second WebSocket in order to communicate with Pharo
 
-![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/c97aea1b-3078-4d26-b8a3-5038b6193322)
+![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/63625b18-d2ca-43a2-9cd3-da3e5d60a313)
 
 ## Complementary informations
 ### Pharo
