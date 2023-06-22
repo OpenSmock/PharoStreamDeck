@@ -40,14 +40,12 @@ Then executing this second line of Pharo code: \
 
 The percent: method can also be used instead of the year: method to change the value shown on a PercentWitness instance, which can take the following values : 50, 100, 150 and 200.
 
-### Pharo structure
-![pharo structure drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/b3ec9dfc-d1cc-4ea3-8ed5-0690a98d86b5)
-
 ### GUI
 <img width="1280" alt="gui" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/f55fe157-b297-4245-819a-9621e77d35ca">
 
 Pressing on the graphical interface's buttons has the same effect as pressing a key of the PharoStreamDeck plugin on the Stream Deck. \
 Sending a command through the Playground and the MyApp class (such as using the year: or percent: methods) will highlight the pressed Selector instance and modify the correct Witness instance.
+Conversely, pressing one of the plugin keys on the Stream Deck will impact what is shown on the graphical interface.
 
 ## Complementary informations
 ### Pharo
