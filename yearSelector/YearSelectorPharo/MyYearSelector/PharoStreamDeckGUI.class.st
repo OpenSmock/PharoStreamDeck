@@ -97,12 +97,6 @@ PharoStreamDeckGUI >> defaultLayout [
 ]
 
 { #category : #initialization }
-PharoStreamDeckGUI >> extent [
-	"size of the window"
-	^ 400@100
-]
-
-{ #category : #initialization }
 PharoStreamDeckGUI >> highlightPressedButton [
 	"resets the background of every button"
 

@@ -65,6 +65,7 @@ MyApp >> initGUI [
 	| arrayPluginContents |
 	pharostreamdeck := PharoStreamDeckGUI new.
 	pharostreamdeck open.
+	pharostreamdeck window maximize.
 
 	"every plugin is made aware of the existence of the GUI"
 	arrayPluginContents := arrayPlugin arrayPluginContents.
