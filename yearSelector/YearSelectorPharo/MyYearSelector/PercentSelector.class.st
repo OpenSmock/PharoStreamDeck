@@ -49,12 +49,6 @@ PercentSelector >> initialize [
 ]
 
 { #category : #initialization }
-PercentSelector >> percent [
-
-	^ percent
-]
-
-{ #category : #initialization }
 PercentSelector >> pluginSelectorSet [
 
 	^ percentSelectorSet
@@ -69,7 +63,9 @@ PercentSelector >> pluginValue [
 { #category : #initialization }
 PercentSelector >> pluginValue: aPercent [
 
-	percent := aPercent
+	percent := aPercent.
+	"also updates the GUI value" 
+	pharostreamdeck percent: aPercent.
 ]
 
 { #category : #initialization }

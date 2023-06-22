@@ -64,7 +64,9 @@ YearSelector >> pluginValue [
 { #category : #initialization }
 YearSelector >> pluginValue: aYear [
 
-	year := aYear
+	year := aYear.
+	"also updates the GUI value" 
+	pharostreamdeck year: aYear.
 ]
 
 { #category : #accessing }
@@ -83,10 +85,4 @@ YearSelector >> selectorAction [
 YearSelector >> witnessAction [ 
 
 	^ 'com.thales.pharostreamdeck.yearwitness'
-]
-
-{ #category : #initialization }
-YearSelector >> year [
-
-	^ year
 ]

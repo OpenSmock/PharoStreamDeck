@@ -29,7 +29,8 @@ Class {
 		'arraySetImage',
 		'launchedServer',
 		'uuid',
-		'typeObj'
+		'typeObj',
+		'pharostreamdeck'
 	],
 	#category : #MyYearSelector
 }
@@ -315,6 +316,12 @@ PluginSharedActions >> modifyPluginWitnessValue [
 	self getGlobalSettings: json.
 	"separated methods for sending all the events at the same time"
 	self sendUpdatePluginWitnessInstances
+]
+
+{ #category : #'as yet unclassified' }
+PluginSharedActions >> pharoStreamDeckGUI: pharostreamdeckGUI [
+
+	pharostreamdeck := pharostreamdeckGUI
 ]
 
 { #category : #accessing }

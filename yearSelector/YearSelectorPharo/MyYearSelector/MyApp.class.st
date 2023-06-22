@@ -62,9 +62,14 @@ MyApp >> initArrayPlugins [
 { #category : #initialization }
 MyApp >> initGUI [
 
+	| arrayPluginContents |
 	pharostreamdeck := PharoStreamDeckGUI new.
-	pharostreamdeck initMyApp: self.
 	pharostreamdeck open.
+
+	"every plugin is made aware of the existence of the GUI"
+	arrayPluginContents := arrayPlugin arrayPluginContents.
+	arrayPluginContents do: [ :each |
+		each pharoStreamDeckGUI: pharostreamdeck ]
 ]
 
 { #category : #initialization }
@@ -120,7 +125,7 @@ MyApp >> percent [
 	
 	| plugin |
 	plugin := self chooseCurrentPlugin: 2.
-	^ plugin percent
+	^ plugin pluginValue
 ]
 
 { #category : #'as yet unclassified' }
@@ -138,7 +143,7 @@ MyApp >> year [
 	
 	| plugin |
 	plugin := self chooseCurrentPlugin: 1.
-	^ plugin year
+	^ plugin pluginValue
 ]
 
 { #category : #initialization }

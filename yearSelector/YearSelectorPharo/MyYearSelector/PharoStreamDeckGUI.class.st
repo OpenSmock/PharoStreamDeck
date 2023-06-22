@@ -36,7 +36,6 @@ Class {
 		'buttonHundred',
 		'buttonHundredFifty',
 		'buttonTwoHundred',
-		'myApp',
 		'buttonList',
 		'buttonYear',
 		'buttonPercent',
@@ -44,7 +43,9 @@ Class {
 		'buttonWitnessYear',
 		'buttonWitnessPercent',
 		'buttonYearList',
-		'buttonPercentList'
+		'buttonPercentList',
+		'year',
+		'percent'
 	],
 	#category : #MyYearSelector
 }
@@ -99,17 +100,6 @@ PharoStreamDeckGUI >> defaultLayout [
 PharoStreamDeckGUI >> extent [
 	"size of the window"
 	^ 400@100
-]
-
-{ #category : #initialization }
-PharoStreamDeckGUI >> initMyApp: myAppVar [
-	"since new and open can't treat myApp when an instance of PharoStreamDeckGUI is opened, operations relative to the MyApp class are done after"
-	myApp := myAppVar.
-	
-	buttonWitnessYear := self newButton label: myApp year asString.
-	buttonWitnessPercent := self newButton label: myApp percent asString.
-
-
 ]
 
 { #category : #initialization }
@@ -169,16 +159,19 @@ PharoStreamDeckGUI >> initializePresenters [
 ]
 
 { #category : #initialization }
+PharoStreamDeckGUI >> percent: aPercent [
+
+	percent := aPercent
+]
+
+{ #category : #initialization }
 PharoStreamDeckGUI >> selectedButton: button with: pluginValue [
 
 	"updates the value depending on the button affiliated to a plugin"
 	(buttonYearList includes: button) ifTrue: [ 
-		myApp year: pluginValue.
-		"self inform: 'myApp:' , myApp."
-		self inform: myApp year asString ].
+		self year: pluginValue ].
 	(buttonPercentList includes: button) ifTrue: [ 
-		myApp percent: pluginValue.
-		self inform: myApp percent asString ].
+		self percent: pluginValue].
 	
 	"updates the relevant Witness instance through MyApp's plugin value"
 	self updateWitnessButtons.
@@ -199,6 +192,12 @@ PharoStreamDeckGUI >> title [
 PharoStreamDeckGUI >> updateWitnessButtons [
 	
 	"updates the relevant Witness instance through MyApp's plugin value"
-	buttonWitnessYear label: myApp year asString.
-	buttonWitnessPercent label: myApp percent asString.
+	buttonWitnessYear label: year asString.
+	buttonWitnessPercent label: percent asString.
+]
+
+{ #category : #initialization }
+PharoStreamDeckGUI >> year: aYear [
+	
+	year := aYear
 ]
