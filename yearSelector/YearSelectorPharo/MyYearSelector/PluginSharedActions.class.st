@@ -57,11 +57,9 @@ PluginSharedActions >> determineTypeObj [
 	
 	"actionSelectorWitness: changes the current plugin selected"
 	((arrayPlugin actionSelectorWitness: 1) includes: action) ifTrue: [ 
-		self inform: 'year'.
 		typeObj := 'year' ].
 	((arrayPlugin actionSelectorWitness: 1) includes: action) ifFalse: [
 		((arrayPlugin actionSelectorWitness: 2) includes: action) ifTrue: [
-			self inform: 'percent'.
 			typeObj := 'percent' ] ]
 ]
 
@@ -232,8 +230,7 @@ PluginSharedActions >> keyUp: jsonObj [
 	"values need to be saved for each plugin"
 	(arrayPlugin selectorAction includes: action) ifTrue: [
 		"at: 'settings')"
-		varObj := jsonObj at: 'payload' at: typeObj.
-		self inform: 'varObj:' , varObj asString ].
+		varObj := jsonObj at: 'payload' at: typeObj ].
 
 	jsonSettings := Dictionary new
 		                at: 'event' put: 'setSettings';
@@ -646,14 +643,13 @@ PluginSharedActions >> uuid: anObject [
 { #category : #accessing }
 PluginSharedActions >> willAppear: jsonObj [
 
-	| context varObj subdictionary settings arrayEvents payload |
+	| context varObj subdictionary arrayEvents payload |
 	context := jsonObj at: 'context'.
 	action := jsonObj at: 'action'.
 	
 	self determineTypeObj.
 
 	payload := jsonObj at: 'payload' ifAbsent: [ payload := 0 ].
-	"settings := payload at: 'settings' ifAbsent: [ settings := 0 ]."
 
 	"initialize every value to be 0 so that nil isn't shown"
 	payload = 0 ifTrue: [ varObj := 0 ].
