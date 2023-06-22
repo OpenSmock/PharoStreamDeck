@@ -128,6 +128,11 @@ PharoStreamDeckGUI >> initializePresenters [
 		               label: '';
 		               disable;
 		               yourself.
+	
+	year := 0.
+	percent := 50.
+	buttonWitnessYear := self newButton label: year asString.
+	buttonWitnessPercent := self newButton label: percent asString.
 
 	buttonList := OrderedCollection new.
 	buttonYearList := OrderedCollection new.
@@ -161,7 +166,8 @@ PharoStreamDeckGUI >> initializePresenters [
 { #category : #initialization }
 PharoStreamDeckGUI >> percent: aPercent [
 
-	percent := aPercent
+	percent := aPercent.
+	self updateWitnessButtons.
 ]
 
 { #category : #initialization }
@@ -199,5 +205,6 @@ PharoStreamDeckGUI >> updateWitnessButtons [
 { #category : #initialization }
 PharoStreamDeckGUI >> year: aYear [
 	
-	year := aYear
+	year := aYear.
+	self updateWitnessButtons.
 ]

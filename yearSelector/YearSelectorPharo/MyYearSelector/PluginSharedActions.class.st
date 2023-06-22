@@ -29,7 +29,9 @@ Class {
 		'arraySetImage',
 		'launchedServer',
 		'uuid',
-		'typeObj',
+		'typeObj'
+	],
+	#classVars : [
 		'pharostreamdeck'
 	],
 	#category : #MyYearSelector
