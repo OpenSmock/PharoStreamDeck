@@ -103,6 +103,21 @@ PharoStreamDeckGUI >> extent [
 ]
 
 { #category : #initialization }
+PharoStreamDeckGUI >> highlightPressedButton [
+	"resets the background of every button"
+
+	buttonList do: [ :each | each state: false ].
+
+	"highlights the pressed button with the value corresponding to the one sent"
+	buttonList do: [ :each |
+		year asString = each label ifTrue: [ each state: true ] ].
+
+	"done separately in order to not highlight the 50 percent value when the first click is done on the GUI"
+	buttonList do: [ :each |
+		percent asString = each label ifTrue: [ each state: true ] ]
+]
+
+{ #category : #initialization }
 PharoStreamDeckGUI >> initializePresenters [
 
 	buttonZero := self newButton label: '0'.
@@ -168,6 +183,7 @@ PharoStreamDeckGUI >> percent: aPercent [
 
 	percent := aPercent.
 	self updateWitnessButtons.
+	self highlightPressedButton.
 ]
 
 { #category : #initialization }
@@ -181,11 +197,6 @@ PharoStreamDeckGUI >> selectedButton: button with: pluginValue [
 	
 	"updates the relevant Witness instance through MyApp's plugin value"
 	self updateWitnessButtons.
-
-	"resets the background of every button"
-	buttonList do: [ :each | each state: false ].
-	"highlights the pressed button"
-	button state: true.
 ]
 
 { #category : #initialization }
@@ -207,4 +218,5 @@ PharoStreamDeckGUI >> year: aYear [
 	
 	year := aYear.
 	self updateWitnessButtons.
+	self highlightPressedButton.
 ]
