@@ -30,7 +30,7 @@ Here's what it looks like after executing this Pharo line of code and launching 
 <img width="368" alt="myapp new1" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/c639c200-bec8-40a3-af51-690ef730dd31"> \
 <img width="575" alt="pharostreamdeck not clicked" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/5efd1ce7-f18c-44ec-8319-ef7e4501fc8b">
 
-Year actions are on the first row, Percent actions on the second.
+Year actions are on the first row, Percent actions on the second. \
 Left side of the profile : YearWitness and PercentWitness actions (which does not include the text accompanying them) \
 Right side of the profile : YearSelector and PercentSelector actions
 
