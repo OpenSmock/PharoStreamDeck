@@ -46,3 +46,13 @@ Then executing this second line of Pharo code: \
 <img width="573" alt="pharostreamdeck clicked" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/9de53d9f-78d2-4161-b3f9-2eba6eeefcf5">
 
 The percent: method can also be used instead of the year: method to change the value shown on a PercentWitness instance, which can take the following values : 50, 100, 150 and 200.
+
+## Complementary informations
+### Pharo
+[WebSocket (using Zinc)](https://github.com/svenvc/docs/blob/master/zinc/zinc-websockets-paper.md) \
+[JSON support](https://github.com/pharo-open-documentation/pharo-wiki/blob/master/ExternalProjects/Export/JSON.md) \
+[MOOC](https://www.youtube.com/watch?v=JUKIjdjGjBU&list=PL2okA_2qDJ-kCHVcNXdO5wsUZJCY31zwf)
+
+### Elgato Stream Deck
+[Stream Deck SDK](https://developer.elgato.com/documentation) \
+[NumberDisplay plugin](https://developer.elgato.com/documentation/stream-deck/samples/numberdisplay)
