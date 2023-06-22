@@ -18,7 +18,7 @@ The YearSelectorPharo JavaScript part folder is a mix between [basic WebSocket c
 
 How this plugin works and communicate with the differents parts involved is explained in this image :
 
-![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/63625b18-d2ca-43a2-9cd3-da3e5d60a313)
+![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/0cff7dfb-4a01-4a50-8b02-3ae1a9db9d9a)
 
 ### MyApp package
 The MyApp package is a way to interact with the YearSelector package (the aggregation link being here since it's possible to only launch a YearSelector instance without launching a MyApp instance, detailed further below in the UML diagram):
