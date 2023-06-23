@@ -19,14 +19,13 @@ The YearSelectorPharo JavaScript part folder is a mix between [basic WebSocket c
 How this plugin works and communicate with the differents parts involved is explained in this image :
 ![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/0cff7dfb-4a01-4a50-8b02-3ae1a9db9d9a)
 
-### MyApp package
-The MyApp package is a way to interact with the YearSelector package (the aggregation link being here since it's possible to only launch a YearSelector instance without launching a MyApp instance, detailed further below in the UML diagram):
+### AppLaunch package
+The AppLaunch package is a way to interact with the YearSelector and PercentSelector classes.
 
-An instance of MyApp needs to be created in Pharo to launch a server and the second WebSocket.
-In a Playground, execute the following line of code : `m := MyApp new`
+An instance of AppLaunch needs to be created in Pharo to launch a server and the second WebSocket.
+In a Playground, execute the following line of code : `a := AppLaunch new`
 
-Here's what it looks like after executing this Pharo line of code and launching the Stream Deck application, same as before: \
-<img width="368" alt="myapp new1" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/c639c200-bec8-40a3-af51-690ef730dd31"> \
+Here's what it looks like after executing this previous Pharo line of code and launching the Stream Deck application, same as before: \
 <img width="575" alt="pharostreamdeck not clicked" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/5efd1ce7-f18c-44ec-8319-ef7e4501fc8b">
 
 Year actions are on the first row, Percent actions on the second. \
@@ -34,7 +33,6 @@ Left side of the profile : YearWitness and PercentWitness actions (which does no
 Right side of the profile : YearSelector and PercentSelector actions
 
 Then executing this second line of Pharo code: \
-<img width="270" alt="myapp year10 2" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/6437d3f7-a4b0-46f7-bb54-5f77eb57799a"> \
 <img width="573" alt="pharostreamdeck clicked" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/9de53d9f-78d2-4161-b3f9-2eba6eeefcf5">
 
 The percent: method can also be used instead of the year: method to change the value shown on a PercentWitness instance, which can take the following values : 50, 100, 150 and 200.
