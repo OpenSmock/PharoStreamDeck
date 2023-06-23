@@ -1,9 +1,9 @@
 "
-For the Class part: I represent a container for the instances of the PluginSharedActions class, which is to say that launching an instance of MyApp launches an instance of every subclass of PluginSharedActions.
+For the Class part: I represent a container for the instances of the PluginSharedActions class, which is to say that launching an instance of MyApp launches an instance of every subclass of PluginSharedActions, but I also contain a LaunchedServer and a PharoStreamDeckGUI.
 
-For the Responsibility part: I contain the subclasses of PluginSharedActions by using methods that can directly modify their state, such as their pluginValue selected.
+For the Responsibility part: I contain the subclasses of PluginSharedActions by using methods that can directly modify their state, such as their pluginValue selected. I also use a LaunchedServer to only launch one ZnManaging process and a PharoStreamDeckGUI to modify its state.
 
-For the Collaborators Part: My main collaborator is PluginSharedActions and its subclasses, which interact with index.html as well as the Stream Deck.
+For the Collaborators Part: My main collaborator are PluginSharedActions and its subclasses, which interact with index.html as well as the Stream Deck, LaunchedServer and PharoStreamDeckGUI.
 
 Public API and Key Messages
 How to create instances:
@@ -14,7 +14,7 @@ m year: 10 (checks if the value is possible to affect through numberInAuthorized
 m: percent: 50
 
 Instance variables:
-plugin knows which plugin is used
+plugin knows which current plugin is used
 arrayGetSettings is used to keep track of all the getSettings events that need to be sent to know which Selector instances to highlight when the pluginValueSuperclass: method of PluginSharedActions is called
 arraySetImage is used to send to the plugin multiple times the same image (highlighted blue background) for every Selector instance that matches the pluginValue value sent through the pluginValueSuperclass: method of PluginSharedActions
 arrayPlugin is used for methods relative to plugin values in the MyApp class, to keep track of all the plugins so that a YearSelector and a PercentSelector can be launched and modified at the same time
@@ -96,7 +96,6 @@ MyApp >> initPlugins [
 	
 	self initArrayPlugins.
 	self initServer.
-	"self initGUI."
 ]
 
 { #category : #initialization }
@@ -110,7 +109,6 @@ MyApp >> initServer [
 
 { #category : #initialization }
 MyApp >> initialize [
-	"MyApp is a simple interface for YearSelector and PercentSelector which explains its lack of methods"
 
 	self initPlugins
 ]

@@ -59,16 +59,29 @@ PharoStreamDeckGUI >> connectPresenters [
 
 	"the actions are linked here to the buttons"
 
-	buttonZero action: [ self selectedButton: buttonZero with: buttonZero label ].
-	buttonFive action: [ self selectedButton: buttonFive with: buttonFive label ].
-	buttonTen action: [ self selectedButton: buttonTen with: buttonTen label ].
-	buttonFifteen action: [ self selectedButton: buttonFifteen with: buttonFifteen label ].
-	buttonTwenty action: [ self selectedButton: buttonTwenty with: buttonTwenty label ].
+	buttonZero action: [
+		self selectedButton: buttonZero with: buttonZero label ].
+	buttonFive action: [
+		self selectedButton: buttonFive with: buttonFive label ].
+	buttonTen action: [
+		self selectedButton: buttonTen with: buttonTen label ].
+	buttonFifteen action: [
+		self selectedButton: buttonFifteen with: buttonFifteen label ].
+	buttonTwenty action: [
+		self selectedButton: buttonTwenty with: buttonTwenty label ].
 
-	buttonFifty action: [ self selectedButton: buttonFifty with: buttonFifty label ].
-	buttonHundred action: [ self selectedButton: buttonHundred with: buttonHundred label ].
-	buttonHundredFifty action: [ self selectedButton: buttonHundredFifty with: buttonHundredFifty label ].
-	buttonTwoHundred action: [ self selectedButton: buttonTwoHundred with: buttonTwoHundred label ].
+	buttonFifty action: [
+		self selectedButton: buttonFifty with: buttonFifty label ].
+	buttonHundred action: [
+		self selectedButton: buttonHundred with: buttonHundred label ].
+	buttonHundredFifty action: [
+		self
+			selectedButton: buttonHundredFifty
+			with: buttonHundredFifty label ].
+	buttonTwoHundred action: [ self selectedButton: buttonTwoHundred with: buttonTwoHundred label ]
+	
+	"this syntax doesn't work" 
+	"buttonList do: [ :each | self selectedButton: each with: each label ]"
 ]
 
 { #category : #initialization }

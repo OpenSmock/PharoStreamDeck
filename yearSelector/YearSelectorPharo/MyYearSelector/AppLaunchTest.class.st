@@ -1,44 +1,44 @@
 Class {
-	#name : #MyAppTest,
+	#name : #AppLaunchTest,
 	#superclass : #TestCase,
 	#category : #MyYearSelector
 }
 
 { #category : #tests }
-MyAppTest >> testAppInitialize [
-"can't include a test which would test the communication between JavaScript and Pharo. The only way is to follow in order the data exchanges, starting with the Stream Deck to the plugin by launching the Stream Deck application after creating an instance of MyApp."
+AppLaunchTest >> testAppInitialize [
+	"can't include a test which would test the communication between JavaScript and Pharo. The only way is to follow in order the data exchanges, starting with the Stream Deck to the plugin by launching the Stream Deck application after creating an instance of AppLaunch"
 
-	| m |
-	m := AppLaunch new.
-	self assert: m year equals: 0.
-	self assert: m percent equals: 50
+	| a |
+	a := AppLaunch new.
+	self assert: a year equals: 0.
+	self assert: a percent equals: 50
 ]
 
 { #category : #tests }
-MyAppTest >> testAppOtherValues [
+AppLaunchTest >> testAppOtherValues [
 
-	| m |
-	m := MyApp new.
-	m year: 10.
-	self assert: m year equals: 10.
-	m percent: 100.
-	self assert: m percent equals: 100
+	| a |
+	a := AppLaunch new.
+	a year: 10.
+	self assert: a year equals: 10.
+	a percent: 100.
+	self assert: a percent equals: 100
 ]
 
 { #category : #tests }
-MyAppTest >> testAppOtherValuesFailed [
+AppLaunchTest >> testAppOtherValuesFailed [
 
-	| m |
-	m := MyApp new.
-	m year: 32.
+	| a |
+	a := MyApp new.
+	a year: 32.
 	"0 and 50 being the respective default values of YearSelector and PercentSelector"
-	self assert: m year equals: 0.
-	m percent: 32.
-	self assert: m percent equals: 50
+	self assert: a year equals: 0.
+	a percent: 32.
+	self assert: a percent equals: 50
 ]
 
 { #category : #tests }
-MyAppTest >> testDictionaryAtString [
+AppLaunchTest >> testDictionaryAtString [
 
 	| d typeObj |
 	d := Dictionary new.
@@ -48,21 +48,22 @@ MyAppTest >> testDictionaryAtString [
 ]
 
 { #category : #tests }
-MyAppTest >> testNumberInAuthorizedNumbers [
+AppLaunchTest >> testNumberInAuthorizedNumbers [
 
-	| m arrayPluginContents yearSelector percentSelector |
-	m := MyApp new.
-	
-	arrayPluginContents := m arrayPlugin arrayPluginContents.
+	| a arrayPluginContents yearSelector percentSelector |
+	a := AppLaunch new.
+
+	arrayPluginContents := a myApp arrayPlugin arrayPluginContents.
 	yearSelector := arrayPluginContents at: 1.
 	percentSelector := arrayPluginContents at: 2.
 	yearSelector arrayPlugin numberInAuthorizedNumbers: 10.
-	self assert: yearSelector arrayPlugin plugin equals: percentSelector arrayPlugin plugin
-	
+	self
+		assert: yearSelector arrayPlugin plugin
+		equals: percentSelector arrayPlugin plugin
 ]
 
 { #category : #tests }
-MyAppTest >> testRegex [
+AppLaunchTest >> testRegex [
 
 	| string |
 	string := 'heeo'.
@@ -76,7 +77,7 @@ MyAppTest >> testRegex [
 ]
 
 { #category : #tests }
-MyAppTest >> testSameSubstring [
+AppLaunchTest >> testSameSubstring [
 
 	| string |
 	string := 'percent'.
@@ -85,7 +86,7 @@ MyAppTest >> testSameSubstring [
 ]
 
 { #category : #tests }
-MyAppTest >> testSubstringPharoStreamDeck [
+AppLaunchTest >> testSubstringPharoStreamDeck [
 
 	| string string2 string3 string4 |
 	string := 'com.thales.pharostreamdeck.yearselector'.
