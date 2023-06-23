@@ -46,7 +46,7 @@ a percent: 100
 <img width="1280" alt="gui" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/f55fe157-b297-4245-819a-9621e77d35ca">
 
 Pressing on the graphical interface's buttons has the same effect as pressing a key of the PharoStreamDeck plugin on the Stream Deck. \
-Sending a command through the Playground and the MyApp class (such as using the year: or percent: methods) will highlight the pressed Selector instance and modify the correct Witness instance. \
+Sending a command through the Playground with the help of the AppLaunch class (such as using the year: or percent: methods) will highlight the pressed Selector instance and modify the correct Witness instance. \
 Conversely, pressing one of the plugin keys on the Stream Deck will impact what is shown on the graphical interface.
 
 ## Complementary informations
