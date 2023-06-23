@@ -37,6 +37,12 @@ Class {
 	#category : #MyYearSelector
 }
 
+{ #category : #testing }
+PluginSharedActions class >> isAbstract [
+
+	^ self == PluginSharedActions
+]
+
 { #category : #accessing }
 PluginSharedActions >> WebSocket: aWebSocket [
 
