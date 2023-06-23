@@ -32,7 +32,11 @@ Year actions are on the first row, Percent actions on the second. \
 Left side of the profile : YearWitness and PercentWitness actions (which does not include the text accompanying them) \
 Right side of the profile : YearSelector and PercentSelector actions
 
-Then executing this second line of Pharo code: \
+Then executing these lines of Pharo code: \
+```
+a year: 10.
+a percent: 100
+```
 <img width="573" alt="pharostreamdeck clicked" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/9de53d9f-78d2-4161-b3f9-2eba6eeefcf5">
 
 The percent: method can also be used instead of the year: method to change the value shown on a PercentWitness instance, which can take the following values : 50, 100, 150 and 200.
