@@ -198,7 +198,8 @@ PluginSharedActions >> initServer [
 					          self sendToPluginEvent: jsonObject ] ] ]
 				          on: ConnectionClosed , PrimitiveFailed
 				          do: [ "ignore close"
-				          self launchedServerStateChange: false ].
+					          self launchedServerStateChange: false
+					          "pharostreamdeck close" ].
 			          self inform: 'The server is closed' ]
 ]
 
@@ -432,7 +433,7 @@ PluginSharedActions >> sendUpdatePluginWitnessInstances [
 
 { #category : #accessing }
 PluginSharedActions >> sendValueHasChangedEvent: aNumber [
-	"changes the plugin value, also update the value shown on relevant Witness instances and highlight the relevant Selector instances"
+	"changes the plugin value, also updatew the value shown on relevant Witness instances and highlight the relevant Selector instances"
 	self pluginValueSuperclass: aNumber.
 	
 	self modifyPluginWitnessValue.

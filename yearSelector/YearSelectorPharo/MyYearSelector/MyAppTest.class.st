@@ -9,7 +9,7 @@ MyAppTest >> testAppInitialize [
 "can't include a test which would test the communication between JavaScript and Pharo. The only way is to follow in order the data exchanges, starting with the Stream Deck to the plugin by launching the Stream Deck application after creating an instance of MyApp."
 
 	| m |
-	m := MyApp new.
+	m := AppLaunch new.
 	self assert: m year equals: 0.
 	self assert: m percent equals: 50
 ]

@@ -59,20 +59,21 @@ ArrayPlugin >> initialize [
 ArrayPlugin >> numberInAuthorizedNumbers: aNumber [
 	"by using the authorizedNumbers:  method of each plugin, determines which plugin is the one that needs its Witness values modified"
 
-	| authorizedNumbers index foundNumber |
+	| authorizedNumbers index foundNumber number |
 	index := 0.
 	foundNumber := false.
-	
+	number := aNumber asInteger.
+
 	arrayPluginContents do: [ :each |
 		index := index + 1.
 		authorizedNumbers := each authorizedNumbers.
-		(authorizedNumbers includes: aNumber) ifTrue: [
+		(authorizedNumbers includes: number) ifTrue: [
 			foundNumber := true.
 			self plugin: (arrayPluginContents at: index) ] ].
-			"changes the current plugin value for every launched plugin"
-			"arrayPlugin do: [ :e | e plugin: (arrayPlugin at: index) ] ] ]."
+	"changes the current plugin value for every launched plugin"
+	"arrayPlugin do: [ :e | e plugin: (arrayPlugin at: index) ] ] ]."
 	"a number has been found in one of the given arrays"
-	foundNumber ifTrue: [ plugin pluginValue: aNumber ]
+	foundNumber ifTrue: [ plugin pluginValue: number ]
 ]
 
 { #category : #accessing }

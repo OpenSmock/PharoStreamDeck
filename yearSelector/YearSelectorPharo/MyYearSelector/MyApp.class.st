@@ -60,12 +60,14 @@ MyApp >> initArrayPlugins [
 ]
 
 { #category : #initialization }
-MyApp >> initGUI [
+MyApp >> initGUI: aPharoStreamDeckGUI [
 
 	| arrayPluginContents |
-	pharostreamdeck := PharoStreamDeckGUI new.
+	"pharostreamdeck := PharoStreamDeckGUI new."
+	pharostreamdeck := aPharoStreamDeckGUI.
 	pharostreamdeck open.
 	pharostreamdeck window maximize.
+	"pharostreamdeck myApp: self."
 
 	"every plugin is made aware of the existence of the GUI"
 	arrayPluginContents := arrayPlugin arrayPluginContents.
@@ -87,7 +89,6 @@ MyApp >> initPlugins [
 	"aggregation link between MyApp and YearSelector and MyApp and PercentSelector, YearSelector and PercentSelector can still be launched alone, see GitHub diagram)"
 
 	arrayPlugin := ArrayPlugin new.
-	
 	launchedServer := LaunchedServer new.
 	
 	self initPlugin: YearSelector.
@@ -95,8 +96,7 @@ MyApp >> initPlugins [
 	
 	self initArrayPlugins.
 	self initServer.
-	
-	self initGUI.
+	"self initGUI."
 ]
 
 { #category : #initialization }
@@ -136,7 +136,6 @@ MyApp >> percent: aPercent [
 	plugin := self chooseCurrentPlugin: 2.
 	plugin typeObj: 'percent'.
 	plugin sendValueHasChangedEvent: aPercent.
-	pharostreamdeck updateWitnessButtons.
 ]
 
 { #category : #initialization }
@@ -149,10 +148,9 @@ MyApp >> year [
 
 { #category : #initialization }
 MyApp >> year: aYear [
-	
+
 	| plugin |
 	plugin := self chooseCurrentPlugin: 1.
 	plugin typeObj: 'year'.
 	plugin sendValueHasChangedEvent: aYear.
-	pharostreamdeck updateWitnessButtons.
 ]

@@ -45,7 +45,8 @@ Class {
 		'buttonYearList',
 		'buttonPercentList',
 		'year',
-		'percent'
+		'percent',
+		'myApp'
 	],
 	#category : #MyYearSelector
 }
@@ -73,27 +74,31 @@ PharoStreamDeckGUI >> connectPresenters [
 { #category : #initialization }
 PharoStreamDeckGUI >> defaultLayout [
 
-	^ SpGridLayout build: [ :builder |
-		builder 
-			beColumnHomogeneous;
-			beRowHomogeneous;
-			borderWidth: 0;
-			add: buttonYear;
-			add: buttonWitnessYear;
-			add: emptyButton;
-			add: buttonZero;
-			add: buttonFive;
-			add: buttonTen;
-			add: buttonFifteen;
-			add: buttonTwenty;
-			nextRow; 
-			add: buttonPercent;
-			add: buttonWitnessPercent;
-			add: emptyButton;
-			add: buttonFifty;
-			add: buttonHundred;
-			add: buttonHundredFifty;
-			add: buttonTwoHundred ]
+	^ SpBoxLayout newVertical
+		  spacing: 4;
+		  add: (SpBoxLayout newHorizontal
+				   spacing: 4;
+				   add: buttonYear width: 100;
+				   add: buttonWitnessYear;
+				   add: emptyButton;
+				   add: buttonZero;
+				   add: buttonFive ;
+				   add: buttonTen;
+				   add: buttonFifteen ;
+				   add: buttonTwenty;
+				   yourself);
+		  add: (SpBoxLayout newHorizontal
+				   spacing: 4;
+				   add: buttonPercent width: 100;
+				   add: buttonWitnessPercent;
+				   add: emptyButton ;
+				add: SpNullPresenter new;
+				   add: buttonFifty ;
+				   add: buttonHundred ;
+				   add: buttonHundredFifty ;
+				   add: buttonTwoHundred;
+				   yourself);
+		  yourself
 ]
 
 { #category : #initialization }
@@ -173,24 +178,29 @@ PharoStreamDeckGUI >> initializePresenters [
 ]
 
 { #category : #initialization }
+PharoStreamDeckGUI >> myApp: aMyApp [
+
+	myApp := aMyApp
+]
+
+{ #category : #initialization }
 PharoStreamDeckGUI >> percent: aPercent [
 
 	percent := aPercent.
+	myApp percent: aPercent.
+	
+	"can't put these methods in selectedButton: with: , doesn't work"
 	self updateWitnessButtons.
 	self highlightPressedButton.
 ]
 
 { #category : #initialization }
 PharoStreamDeckGUI >> selectedButton: button with: pluginValue [
-
 	"updates the value depending on the button affiliated to a plugin"
-	(buttonYearList includes: button) ifTrue: [ 
-		self year: pluginValue ].
-	(buttonPercentList includes: button) ifTrue: [ 
-		self percent: pluginValue].
-	
-	"updates the relevant Witness instance through MyApp's plugin value"
-	self updateWitnessButtons.
+
+	(buttonYearList includes: button) ifTrue: [ self year: pluginValue ].
+	(buttonPercentList includes: button) ifTrue: [
+		self percent: pluginValue ]
 ]
 
 { #category : #initialization }
@@ -209,8 +219,11 @@ PharoStreamDeckGUI >> updateWitnessButtons [
 
 { #category : #initialization }
 PharoStreamDeckGUI >> year: aYear [
-	
+
 	year := aYear.
+	myApp year: aYear.
+
+	"can't put these methods in selectedButton: with: , doesn't work"
 	self updateWitnessButtons.
-	self highlightPressedButton.
+	self highlightPressedButton
 ]
