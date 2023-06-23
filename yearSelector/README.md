@@ -13,8 +13,7 @@ This version shows how Pharo, JavaScript and the Stream Deck SDK as well as JSON
 The Pharo profile is organized in the same way that the JavaScipt version is. \
 It also functions the same way, having a YearSelector action and a YearWitness action.
 
-In terms of structure, the MyYearSelector folder is a Pharo package which comports a YearSelector class, being the Pharo code, and a YearSelectorTest class.
-The YearSelectorPharo JavaScript part folder is a mix between [basic WebSocket communication](https://github.com/OpenSmock/PharoStreamDeck/tree/main/webSocket) and [YearSelectorJS](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS).
+In terms of structure, the YearSelectorPharo JavaScript part folder is a mix between [basic WebSocket communication](https://github.com/OpenSmock/PharoStreamDeck/tree/main/webSocket) and [YearSelectorJS](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS).
 
 How this plugin works and communicate with the differents parts involved is explained in this image :
 ![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/0cff7dfb-4a01-4a50-8b02-3ae1a9db9d9a)
