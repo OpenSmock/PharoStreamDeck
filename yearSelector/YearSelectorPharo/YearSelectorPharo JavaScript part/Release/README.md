@@ -7,7 +7,7 @@ The profile will be available from the profile list without overriding other Str
 The profile will have no effect without the plugin, since the actions cannot have any effect by themselves.
 
 In a Pharo VM, execute the following import command in a Playground:
-```
+```smalltalk
 Metacello new
                baseline: 'MyYearSelector';
                repository: 'github://OpenSmock/PharoStreamDeck:Dev/yearSelector/YearSelectorPharo';
