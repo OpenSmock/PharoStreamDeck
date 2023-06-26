@@ -10,11 +10,10 @@ The profile keeps track of the values, for Selector actions as well as Witness o
 ## Pharo version
 This version shows how Pharo, JavaScript and the Stream Deck SDK as well as JSON data sent through WebSockets can interact.
 
-The Pharo profile is organized in the same way that the JavaScipt version is. \
+The Pharo profile is organized in the same way as the JavaScript version. \
 It also functions the same way, having a YearSelector action and a YearWitness action.
 
-In terms of structure, the MyYearSelector folder is a Pharo package which comports a YearSelector class, being the Pharo code, and a YearSelectorTest class.
-The YearSelectorPharo JavaScript part folder is a mix between [basic WebSocket communication](https://github.com/OpenSmock/PharoStreamDeck/tree/main/webSocket) and [YearSelectorJS](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS).
+In terms of structure, the YearSelectorPharo JavaScript part folder is a mix between [basic WebSocket communication](https://github.com/OpenSmock/PharoStreamDeck/tree/main/webSocket) and [YearSelectorJS](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS).
 
 How this plugin works and communicate with the differents parts involved is explained in this image :
 ![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/0cff7dfb-4a01-4a50-8b02-3ae1a9db9d9a)
@@ -29,7 +28,7 @@ Here's what it looks like after executing this previous Pharo line of code and l
 <img width="575" alt="pharostreamdeck not clicked" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/5efd1ce7-f18c-44ec-8319-ef7e4501fc8b">
 
 Year actions are on the first row, Percent actions on the second. \
-Left side of the profile : YearWitness and PercentWitness actions (which does not include the text accompanying them) \
+Left side of the profile : YearWitness and PercentWitness actions (text not being part of the plugin) \
 Right side of the profile : YearSelector and PercentSelector actions
 
 The year value can be between 0, 5, 10, 15 and 20.
@@ -44,10 +43,7 @@ a percent: 100
 
 ### GUI
 <img width="1280" alt="gui" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/f55fe157-b297-4245-819a-9621e77d35ca">
-
-Pressing on the graphical interface's buttons has the same effect as pressing a key of the PharoStreamDeck plugin on the Stream Deck. \
-Sending a command through the Playground with the help of the AppLaunch class (such as using the year: or percent: methods) will highlight the pressed Selector instance and modify the correct Witness instance. \
-Conversely, pressing one of the plugin keys on the Stream Deck will impact what is shown on the graphical interface.
+Pressing one of the plugin keys on the Stream Deck, as well as pressing one of the graphical interface's buttons or using the year: and percent: methods in conjunction with the AppLaunch class, will highlight the pressed Selector instance on the Stream Deck as well as on the graphical interface, but also update the relevant Witness instance (relevant in terms of which plugin is selected).
 
 ## Complementary informations
 ### Pharo
