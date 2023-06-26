@@ -1,7 +1,7 @@
 "
 For the Class part: I represent a container for the instances of the PluginSharedActions class, which is to say that launching an instance of MyApp launches an instance of every subclass of PluginSharedActions, but I also contain a LaunchedServer and a PharoStreamDeckGUI.
 
-For the Responsibility part: I contain the subclasses of PluginSharedActions by using methods that can directly modify their state, such as their pluginValue selected. I also use a LaunchedServer to only launch one ZnManaging process and a PharoStreamDeckGUI to modify its state.
+For the Responsibility part: I contain the subclasses of PluginSharedActions by using methods that can directly modify their state, such as their pluginValue selected. I also use a LaunchedServer to  launch only one ZnManaging process and a PharoStreamDeckGUI to modify its state.
 
 For the Collaborators Part: My main collaborator are PluginSharedActions and its subclasses, which interact with index.html as well as the Stream Deck, LaunchedServer and PharoStreamDeckGUI.
 
@@ -18,7 +18,7 @@ plugin knows which current plugin is used
 arrayGetSettings is used to keep track of all the getSettings events that need to be sent to know which Selector instances to highlight when the pluginValueSuperclass: method of PluginSharedActions is called
 arraySetImage is used to send to the plugin multiple times the same image (highlighted blue background) for every Selector instance that matches the pluginValue value sent through the pluginValueSuperclass: method of PluginSharedActions
 arrayPlugin is used for methods relative to plugin values in the MyApp class, to keep track of all the plugins so that a YearSelector and a PercentSelector can be launched and modified at the same time
-launchedServer and serverState are used to only launch one ZnManagingMultiThreadedSerevr HTTP server, no matter the number of plugins (instances of PluginSharedActions)
+launchedServer and serverState are used to launch only one ZnManagingMultiThreadedSerevr HTTP server, no matter the number of plugins (instances of PluginSharedActions)
 "
 Class {
 	#name : #MyApp,
@@ -45,9 +45,8 @@ MyApp >> chooseCurrentPlugin: index [
 	plugin := arrayPluginContents at: index.
 	"also updates the currently selected plugin for arrayPlugin"
 	arrayPlugin plugin: plugin.
-	"DO NOT delete this plugin return, trying to access arrayPlugin plugin in year; and percent: makes everything crashes"
+	"DO NOT delete this plugin return, trying to access arrayPlugin plugin in year: and percent: makes everything crash"
 	^ plugin
-
 ]
 
 { #category : #initialization }
@@ -63,11 +62,10 @@ MyApp >> initArrayPlugins [
 MyApp >> initGUI: aPharoStreamDeckGUI [
 
 	| arrayPluginContents |
-	"pharostreamdeck := PharoStreamDeckGUI new."
+
 	pharostreamdeck := aPharoStreamDeckGUI.
 	pharostreamdeck open.
 	pharostreamdeck window maximize.
-	"pharostreamdeck myApp: self."
 
 	"every plugin is made aware of the existence of the GUI"
 	arrayPluginContents := arrayPlugin arrayPluginContents.
@@ -86,16 +84,16 @@ MyApp >> initPlugin: aPlugin [
 
 { #category : #initialization }
 MyApp >> initPlugins [
-	"aggregation link between MyApp and YearSelector and MyApp and PercentSelector, YearSelector and PercentSelector can still be launched alone, see GitHub diagram)"
+	"launches an instance of every subclass of PluginSharedActions, which are YearSelector and PercentSelector"
 
 	arrayPlugin := ArrayPlugin new.
 	launchedServer := LaunchedServer new.
-	
+
 	self initPlugin: YearSelector.
 	self initPlugin: PercentSelector.
-	
+
 	self initArrayPlugins.
-	self initServer.
+	self initServer
 ]
 
 { #category : #initialization }

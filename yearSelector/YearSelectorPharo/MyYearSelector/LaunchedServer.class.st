@@ -29,14 +29,14 @@ LaunchedServer >> initialize [
 
 { #category : #initialization }
 LaunchedServer >> launchedServerState [
-	"used in the initialize method of PluginSharedActions"
+	"used in the initServer method of PluginSharedActions"
 
 	^ launchedServerState
 ]
 
 { #category : #initialization }
 LaunchedServer >> launchedServerState: aBoolean [
-	"used in the initialize method of PluginSharedActions"
+	"used in the initServer method of PluginSharedActions"
 
 	launchedServerState := aBoolean
 ]

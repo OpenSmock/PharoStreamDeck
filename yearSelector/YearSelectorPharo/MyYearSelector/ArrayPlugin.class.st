@@ -1,7 +1,7 @@
 "
-For the Class part:  I represent an array of plugins, so that every plugin is aware of the existence of the other plugins launched.
+For the Class part: I represent an array of plugins, so that every plugin is aware of the existence of the other plugins launched.
 
-For the Responsibility part: I stock in arrayPluginContents  the different plugins and in plugin the currently selected plugin so that it's possible to change which one is referenced, which Witness instances' plugin value need to be changed
+For the Responsibility part: I stock in arrayPluginContents the different plugins and in plugin the currently selected plugin. This is done in order to change which one is referenced, which Witness instances' plugin value need to be changed
 
 For the Collaborators Part: PluginSharedActions and its subclasses
 
@@ -57,7 +57,7 @@ ArrayPlugin >> initialize [
 
 { #category : #accessing }
 ArrayPlugin >> numberInAuthorizedNumbers: aNumber [
-	"by using the authorizedNumbers:  method of each plugin, determines which plugin is the one that needs its Witness values modified"
+	"by using the authorizedNumbers: method of each plugin, determines which plugin is the one that needs its Witness values modified"
 
 	| authorizedNumbers index foundNumber number |
 	index := 0.
@@ -70,24 +70,8 @@ ArrayPlugin >> numberInAuthorizedNumbers: aNumber [
 		(authorizedNumbers includes: number) ifTrue: [
 			foundNumber := true.
 			self plugin: (arrayPluginContents at: index) ] ].
-	"changes the current plugin value for every launched plugin"
-	"arrayPlugin do: [ :e | e plugin: (arrayPlugin at: index) ] ] ]."
 	"a number has been found in one of the given arrays"
 	foundNumber ifTrue: [ plugin pluginValue: number ]
-]
-
-{ #category : #accessing }
-ArrayPlugin >> percentAction [
-
-	| percentPlugin pluginSelector pluginWitness arrayPluginPercentSelectorWitness |
-	percentPlugin := arrayPluginContents at: 2.
-	pluginSelector := percentPlugin selectorAction.
-	pluginWitness := percentPlugin witnessAction.
-
-	arrayPluginPercentSelectorWitness := OrderedCollection new.
-	arrayPluginPercentSelectorWitness add: pluginSelector.
-	arrayPluginPercentSelectorWitness add: pluginWitness.
-	^ arrayPluginPercentSelectorWitness
 ]
 
 { #category : #accessing }

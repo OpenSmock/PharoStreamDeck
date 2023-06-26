@@ -1,7 +1,7 @@
 "
-For the Class part:  I'm a Graphical User Interface for the MyApp class, replicating what is possible on the Stream Deck.
+For the Class part:  I'm a Graphical User Interface for the MyApp class, replicating what is shown on the Stream Deck.
 
-For the Responsibility part: I can select a year and a percent value, highlight the pressed button and show what is currently the value taken by MyApp. I can communicate with the Stream Deck if it's launched, but my UI doesn't need it in order to communicated with the Pharo classes.
+For the Responsibility part: I can select a year and a percent value, highlight the pressed button and show what arethe current values taken by the MyApp class for year and percent. I can communicate with the Stream Deck if it's launched, but my UI doesn't need it in order to communicate with the Pharo classes.
 
 For the Collaborators Part: My main collaborator is the MyApp class, since it launches an instance of every plugin.
 
@@ -55,9 +55,7 @@ Class {
 PharoStreamDeckGUI >> connectPresenters [
 	"example inspired from the code available in the Help tab -> Spec2 demo -> Buttons -> Code tab"
 
-	"to instantiate this GUI, use PharoStreamDeckGUI new open"
-
-	"the actions are linked here to the buttons"
+	"this method links buttons to their actions"
 
 	buttonZero action: [
 		self selectedButton: buttonZero with: buttonZero label ].
@@ -78,9 +76,10 @@ PharoStreamDeckGUI >> connectPresenters [
 		self
 			selectedButton: buttonHundredFifty
 			with: buttonHundredFifty label ].
-	buttonTwoHundred action: [ self selectedButton: buttonTwoHundred with: buttonTwoHundred label ]
+	buttonTwoHundred action: [ 
+		self selectedButton: buttonTwoHundred with: buttonTwoHundred label ]
 	
-	"this syntax doesn't work" 
+	"this syntax doesn't work"
 	"buttonList do: [ :each | self selectedButton: each with: each label ]"
 ]
 
@@ -122,10 +121,7 @@ PharoStreamDeckGUI >> highlightPressedButton [
 
 	"highlights the pressed button with the value corresponding to the one sent"
 	buttonList do: [ :each |
-		year asString = each label ifTrue: [ each state: true ] ].
-
-	"done separately in order to not highlight the 50 percent value when the first click is done on the GUI"
-	buttonList do: [ :each |
+		year asString = each label ifTrue: [ each state: true ].
 		percent asString = each label ifTrue: [ each state: true ] ]
 ]
 
@@ -155,7 +151,7 @@ PharoStreamDeckGUI >> initializePresenters [
 		               label: '';
 		               disable;
 		               yourself.
-	
+
 	year := 0.
 	percent := 50.
 	buttonWitnessYear := self newButton label: year asString.
@@ -164,7 +160,7 @@ PharoStreamDeckGUI >> initializePresenters [
 	buttonList := OrderedCollection new.
 	buttonYearList := OrderedCollection new.
 	buttonPercentList := OrderedCollection new.
-	
+
 	buttonYearList
 		add: buttonZero;
 		add: buttonFive;
@@ -176,16 +172,9 @@ PharoStreamDeckGUI >> initializePresenters [
 		add: buttonHundred;
 		add: buttonHundredFifty;
 		add: buttonTwoHundred.
-	buttonList
-		add: buttonZero;
-		add: buttonFive;
-		add: buttonTen;
-		add: buttonFifteen;
-		add: buttonTwenty;
-		add: buttonFifty;
-		add: buttonHundred;
-		add: buttonHundredFifty;
-		add: buttonTwoHundred.
+		
+	buttonYearList do: [ :each | buttonList add: each ].
+	buttonPercentList do: [ :each | buttonList add: each ].
 
 	buttonList do: [ :each | self focusOrder add: each ]
 ]

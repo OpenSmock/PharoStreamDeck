@@ -1,18 +1,18 @@
 "
 For the Class part: I am an abstract class which possess the shared actions between YearSelector and PercentSelector
 
-For the Responsibility part: I launch a server then treat the different events that are received from index.html (the JavaScript side of the plugin,which also sends some info about the Stream Deck at its launch). With the use of the initServer method, each event is treated by the Pharo class that is concerned
+For the Responsibility part: I launch a server then treat the different events that are received from index.html (the JavaScript side of the plugin,which also sends some info about the Stream Deck at its launch). With the use of the initServer method, each event is treated by the relevant Pharo class
 
-For the Collaborators Part: my main collaborator is the Stream Deck application, which permits the use of profiles and placing actions on their grids through the PharoStreamDeck plugin
+For the Collaborators Part: My main collaborator is the Stream Deck application, which permits the use of profiles and placing actions on its grid through the PharoStreamDeck plugin
 
 How to create instances:
 Since I'm an abstract class, I'm not supposed to be launched.
 However, YearSelector and PercentSelector are concrete implementations of myself and they themselves can be launched through YearSelector new and PercentSelector new.
 
 Instance variables:
-uuid is the unique value identifying the plugin (inPluginUUID in JavaScript code). It's sent via the registration procedure, recuperated from the connectElgatoStreamDeckSocket() function (https://developer.elgato.com/documentation/stream-deck/sdk/registration-procedure/#compiled-plugin-registration) and is used in the setGlobalSettings: method for its context field, since globalSettings events require more than a context value to share a setting between instances of plugins (see SDK documentation - events sent https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setglobalsettings)
+uuid is the unique value identifying the plugin (inPluginUUID in JavaScript code). It's sent via the registration procedure, recuperated from the connectElgatoStreamDeckSocket() function (see SDK documentation - https://developer.elgato.com/documentation/stream-deck/sdk/registration-procedure/#compiled-plugin-registration) and is used in the setGlobalSettings: method for its context field, since globalSettings events require more than a context value to share a setting between instances of plugins (see SDK documentation - events sent https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setglobalsettings)
 WebSocket memorizes the WebSocket that is launched in initServer to send messages in other functions, notably with the arrays' content
-plugin memorizes the current selected plugin, so that it can highlight the relevant Selector instances and update the values of the relevannt Witness instances
+plugin memorizes the current selected plugin, so that it can highlight the relevant Selector instances and update the values of the relevant Witness instances
 arraySetImage and arrayGetSettings are used to send in bulk multiple events of the type of their names
 action memorizes the action field that is sent when the initial message is received, so that it can easily differentaite between Year and Percent instances (corresponds to the UUID field in manifest.json for every action)
 launchedServerState and launchedServer are the instance variables of the LaunchedServer class, to know whether or not one is launched
@@ -122,7 +122,7 @@ PluginSharedActions >> highlightPluginSelectorReceive: jsonObj [
 	self determineTypeObj.
 
 	context := jsonObj at: 'context'.
-	"values saved in the plugin field contained inside the payload field in setSettings: are obtained back with a settings field placed between them"
+	"values saved in the plugin field contained inside the payload field in setSettings: are obtained back with a settings field placed between them (see SDK documentation - https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setsettings"
 	varObj := (jsonObj at: 'payload' at: 'settings') at: typeObj.
 
 	"sets the new blue background"
@@ -138,7 +138,7 @@ PluginSharedActions >> highlightPluginSelectorReceive: jsonObj [
 
 { #category : #accessing }
 PluginSharedActions >> highlightPluginSelectorSend [
-		"highlight Year/PercentSelector values with the chosen (valid value since checked in [variable of the class]: ) plugin value"
+	"highlight Year/PercentSelector values with the chosen (valid value since checked in [variable of the class]: ) plugin value"
 
 	"context is linked to an action value by the getSettings event which makes the plugin receive a didReceiveSettings event transmitting the action value, which is updated if keyUp: is triggered"
 
@@ -156,7 +156,7 @@ PluginSharedActions >> initServer [
 	"Creates a ZnManagingMultiThreadedServer HTTP port 8080 process, which needs to be terminated 	through the Process Browser if another server is to be launched"
 
 	| jsonObject server arrayPluginContents |
-	"launchedServerState ifNil: [ launchedServerState := false ]."
+
 	server := ZnWebSocket
 		          startServerOn: 8080
 		          prefix: 'pharoBridge'
@@ -189,7 +189,7 @@ PluginSharedActions >> initServer [
 
 				          event = 'willDisappear' ifTrue: [ self willDisappear ].
 				          "setGlobalSettings getGlobalSettings, setTitle and setSettings are only invoked, they're not received as is"
-				          "setTitle and setSettings are called when selecting a value from the Property Inspector list"
+				          "setTitle and setSettings are called when selecting a value from the Property Inspector of a Selector instance"
 
 				          "setImage is directly received when the plugin receives the didReceiveGlobalSettings event in order to reset the backgrounds of the keys"
 				          event = 'setImage' ifTrue: [
@@ -204,8 +204,7 @@ PluginSharedActions >> initServer [
 					          self sendToPluginEvent: jsonObject ] ] ]
 				          on: ConnectionClosed , PrimitiveFailed
 				          do: [ "ignore close"
-					          self launchedServerStateChange: false
-					          "pharostreamdeck close" ].
+					          self launchedServerStateChange: false ].
 			          self inform: 'The server is closed' ]
 ]
 
@@ -224,7 +223,8 @@ PluginSharedActions >> keyUp: jsonObj [
 	"sends multiple events (setSettings, setGlobalSettings which sends getGlobalSettings so that the plugin receives a didReceiveGlobalSettings event)"
 
 	| jsonSettings context arrayEvents jsonFormattedSettings highlightedImage jsonContext jsonWillAppear jsonFormattedWillAppear defaultImage varObj |
-	"varObj being a year or a percent depending on the class it comes from""action being only affected to a value in willAppear: and keyUp"
+	"varObj being a year or a percent depending on the class it comes from"
+	"action being only affected to a value in willAppear: and keyUp: "
 	action := jsonObj at: 'action'.
 	context := jsonObj at: 'context'.
 
@@ -250,7 +250,7 @@ PluginSharedActions >> keyUp: jsonObj [
 	"STONJSON toString conversion is performed in setSettings, setGlobalSettings and getGlobalSettings"
 	jsonFormattedSettings := self setSettings: jsonSettings.
 
-	"setGlobalSettings and getGlobalSettings (called in setGlobalSettings) have no object given to them since their event is always the same, they just need a uuid and a year (the second one is only needed for setGlobalSettings) which are instance variables of the YearSelector class"
+	"setGlobalSettings and getGlobalSettings (called in setGlobalSettings) have no object given to them since their event is always the same, they just need a uuid and a plugin value (the second one is only needed for setGlobalSettings), an instance variable of one of the subclasses of PluginSharedActions (year or percent)"
 	jsonContext := Dictionary new
 		               at: 'context' put: context;
 		               at: typeObj put: varObj;
@@ -275,7 +275,7 @@ PluginSharedActions >> keyUp: jsonObj [
 
 	self sendImages.
 
-	"updates the instance variable year of the YearSelector class, which is needed to update the yearWitness instances through commands sent in the Pharo IDE"
+	"updates the plugin value of the relevant subclass of the PluginSharedActions class, which is needed to update the Witness instances"
 	self sendValueHasChangedEvent: varObj.
 
 	"returns the different events"
@@ -371,9 +371,9 @@ PluginSharedActions >> registerPluginEvent: jsonObject [
 
 { #category : #accessing }
 PluginSharedActions >> sendGetSettings [
-	"gets the settings for every Year/PercentSelector instance by sending a setSettings event which adds a parameter to the settings of every instance, deleting it afterhand"
+	"gets the settings for every Year/PercentSelector instance by sending a setSettings event which adds a parameter to the settings of every instance"
 
-	"done that way since the setSettings event sent in keyUp is necessary to keep track of each instance's value, also calls a didReceiveSettings event which updated every Year/PercentSelector having the same value as the one clicked"
+	"done that way since the setSettings event sent in keyUp is necessary to keep track of each instance's value, also calls a didReceiveSettings event which updates every Year/PercentSelector having the same value as the one clicked"
 
 	arrayGetSettings do: [ :each | WebSocket sendMessage: each ].
 
@@ -383,7 +383,7 @@ PluginSharedActions >> sendGetSettings [
 
 { #category : #accessing }
 PluginSharedActions >> sendImages [
-	"sends defaultImage or highlighting image depending on the sender for every Year/PercentSelector instance"
+	"sends defaultImage or highlightedImage depending on the sender for every Year/PercentSelector instance"
 
 	arraySetImage do: [ :each | WebSocket sendMessage: each ].
 
@@ -461,13 +461,13 @@ PluginSharedActions >> setCurrentImage: context with: img [
 
 { #category : #accessing }
 PluginSharedActions >> setGlobalSettings: jsonObj [
-	"didReceiveGlobalSettings event is received after calling the getGlobalSettings API for the plugin, it is NOT called automatically when setGlobalSettings is called (the didReceiveGlobalSettings event isn't necessary for this plugin, since all major operations are done in the Pharo side of things"
+	"didReceiveGlobalSettings event is received after calling the getGlobalSettings API for the plugin, it is NOT called automatically when setGlobalSettings is called"
 
 	"this function serves to share the year/percent value between Year/PercentSelector actions and Year/PercentWitness actions, so that the instances of the second are informed when a change is made"
 
 	"this function sets a new year/percent value to be shared between instances"
 
-	"globalSettings events use a uuid for the context field, the name doesn't change"
+	"globalSettings events use a uuid for the context field, even though the name of the field is context"
 
 	| jsonSetGlobalSettings jsonFormattedSetGlobalSettings varObj |
 	varObj := jsonObj at: typeObj.
@@ -475,7 +475,7 @@ PluginSharedActions >> setGlobalSettings: jsonObj [
 	jsonSetGlobalSettings := Dictionary new
 		                         at: 'event' put: 'setGlobalSettings';
 		                         at: 'context' put: uuid;
-		                         "not put inside a settings field since the SDK takes care of this operation"
+		                         "not put inside a settings field since the SDK takes care of this operation (see SDK documentation - https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setsettings)"
 		                         at: 'payload'
 		                         at: typeObj
 		                         put: varObj;

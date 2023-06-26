@@ -49,14 +49,17 @@ AppLaunchTest >> testDictionaryAtString [
 
 { #category : #tests }
 AppLaunchTest >> testNumberInAuthorizedNumbers [
+	"modifying the selected plugin changes the selected plugin for every plugin"
 
-	| a arrayPluginContents yearSelector percentSelector |
+	| a arrayPluginContents yearSelector percentSelector plugin |
 	a := AppLaunch new.
 
 	arrayPluginContents := a myApp arrayPlugin arrayPluginContents.
 	yearSelector := arrayPluginContents at: 1.
 	percentSelector := arrayPluginContents at: 2.
-	yearSelector arrayPlugin numberInAuthorizedNumbers: 10.
+	plugin := a myApp arrayPlugin.
+	plugin numberInAuthorizedNumbers: 10.
+
 	self
 		assert: yearSelector arrayPlugin plugin
 		equals: percentSelector arrayPlugin plugin
