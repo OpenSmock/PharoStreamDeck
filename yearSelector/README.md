@@ -10,7 +10,7 @@ The profile keeps track of the values, for Selector actions as well as Witness o
 ## Pharo version
 This version shows how Pharo, JavaScript and the Stream Deck SDK as well as JSON data sent through WebSockets can interact.
 
-The Pharo profile is organized in the same way that the JavaScipt version is. \
+The Pharo profile is organized in the same way as the JavaScript version. \
 It also functions the same way, having a YearSelector action and a YearWitness action.
 
 In terms of structure, the YearSelectorPharo JavaScript part folder is a mix between [basic WebSocket communication](https://github.com/OpenSmock/PharoStreamDeck/tree/main/webSocket) and [YearSelectorJS](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS).
