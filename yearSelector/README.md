@@ -3,15 +3,16 @@ This project shows how a plugin for the Elgato Stream Deck can interact with it.
 As such, a Stream Deck profile is provided alongside the plugin in order to see its functionality in action.
 
 ## How it functions
-A user can tap one of the Stream Deck keys contained in the aforementioned Stream Deck profile, or place on one of the Stream Deck keys one of the actions of this plugin, titled **YearSelector**, **PercentSelector**, **YearWitness** and **PercentWitness**, available from the action list. On the Stream Deck, the pressed key will change color and appear blue, while the previous highlighted key will revert back to its original color. \
-A JavaScript version exists as well as a Pharo version, each one having the same objective (the JavaScript version does not include the PercentSelector and PercentWitness actions). \
-The profile keeps track of the values, for Selector actions as well as Witness ones.
+A user can tap one of the Stream Deck keys contained in the aforementioned Stream Deck profile, or place on one of the Stream Deck keys one of the actions of the plugin, titled **YearSelector** and **YearWitness** which are available from the action list. \ 
+When a Selector action is clicked, the pressed key will change color and appear blue, while the previous highlighted key will revert back to its original color. The relevant Witness instance will also change its value. \
+The profile keeps track of the values, for Selector actions as well as Witness ones, whcih mean that when the Stream Deck software is opened again the same values will be shown on the profile.
 
 ## Pharo version
 This version shows how Pharo, JavaScript and the Stream Deck SDK as well as JSON data sent through WebSockets can interact.
 
 The Pharo profile is organized in the same way as the JavaScript version. \
-It also functions the same way, having a YearSelector action and a YearWitness action.
+It also functions the same way, having a YearSelector action and a YearWitness action. \
+The Pharo version also includes the **PercentSelector** and **PercentWitness** actions.
 
 In terms of structure, the YearSelectorPharo JavaScript part folder is a mix between [basic WebSocket communication](https://github.com/OpenSmock/PharoStreamDeck/tree/main/webSocket) and [YearSelectorJS](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS).
 
