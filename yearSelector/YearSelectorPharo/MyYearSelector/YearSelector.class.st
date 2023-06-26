@@ -12,7 +12,7 @@ Instance variables:
 yearSelectorSet (memorizes every instance of a YearSelector through their context)
 yearWitnessSet (memorizes every instance of a YearWitness through their context)
 year (the plugin value)
-arrayJSONSetTitleAndSettingsYeartWitness (used to send setTitle and setSettings events to keep track of the values shown and saved)
+arrayJSONSetTitleAndSettingsYearWitness (used to send setTitle and setSettings events to keep track of the values shown and saved)
 "
 Class {
 	#name : #YearSelector,

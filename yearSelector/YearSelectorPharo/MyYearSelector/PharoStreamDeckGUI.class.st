@@ -191,7 +191,7 @@ PharoStreamDeckGUI >> percent: aPercent [
 	percent := aPercent.
 	myApp percent: aPercent.
 	
-	"can't put these methods in selectedButton: with: , doesn't work"
+	"can't put these methods in selectedButton: with:, doesn't work"
 	self updateWitnessButtons.
 	self highlightPressedButton.
 ]
