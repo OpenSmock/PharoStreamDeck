@@ -239,7 +239,6 @@ PluginSharedActions >> keyUp: jsonObj [
 
 	"values need to be saved for each plugin"
 	(arrayPlugin selectorAction includes: action) ifTrue: [
-		"at: 'settings')"
 		varObj := jsonObj at: 'payload' at: typeObj ].
 
 	jsonSettings := Dictionary new
@@ -546,7 +545,7 @@ PluginSharedActions >> setTitle: jsonObj [
 	context := jsonObj at: 'context'.
 	varObj := jsonObj at: typeObj.
 
-	"can also receive it from the setTitle event sent when the Property Inspector value of a YearSelector is changed"
+	"can also receive it from the setTitle event sent when the Property Inspector value of a Year/PercentSelector is changed"
 	jsonTitle := Dictionary new
 		             at: 'event' put: 'setTitle';
 		             at: 'context' put: context;
@@ -578,7 +577,11 @@ PluginSharedActions >> setTitle: jsonObj [
 PluginSharedActions >> setTitleAndSettingsWitness: jsonObj [
 
 	| context jsonTitle jsonFormattedTitle jsonSettings jsonFormattedSettings varObj |
-	"this method is used to update every Year/PercentWitness instance through their context, which is the unique value that represents an instance""it updates their title as well as their settings, so that willAppear: can load their new values when changing profiles""used by getGlobalSettings: ""with context being each element sent to this method""the plugin value is saved in the plugin field, located in the payload field"
+	"this method is used to update every Year/PercentWitness instance through their context, which is the unique value that represents an instance"
+	"it updates their title as well as their settings, so that willAppear: can load their new values when changing profiles"
+	"used by getGlobalSettings: "
+	"with context being each element sent to this method"
+	"the plugin value is saved in the plugin field, located in the payload field"
 	context := jsonObj at: 'context'.
 	varObj := jsonObj at: typeObj.
 
@@ -604,8 +607,6 @@ PluginSharedActions >> setTitleAndSettingsWitness: jsonObj [
 	jsonFormattedSettings := STONJSON toString: jsonSettings.
 
 	"is used to send all the setTitle and setSettings events that are necessary when more than one Year/PercentWitness instance is present on the current displayed Stream Deck profile"
-	"arrayJSONSetTitleAndSettingsPluginWitness := self
-		                                             arrayJSONSetTitleAndSettingsPluginWitness."
 	arrayPlugin arrayJSONSetTitleAndSettingsPluginWitness add:
 		jsonFormattedTitle.
 	arrayPlugin arrayJSONSetTitleAndSettingsPluginWitness add:
@@ -618,7 +619,7 @@ PluginSharedActions >> setTitlePI: jsonObj [
 
 	"data persistence is limited to the launched server, as opposed to the JavaScript version of this plugn which has no constraint whatsoever"
 
-	"this version operates without coordinates and instead uses the context value, since coordinates are not received by using the sendToPlugin event"
+	"No coordinates are used, favoring the use of the context field since coordinates are not received by using the sendToPlugin event"
 
 	"receives it from the setTitle event sent when the Property Inspector value of a Year/PercentSelector is changed"
 
@@ -651,7 +652,7 @@ PluginSharedActions >> typeObj: newTypeObj [
 { #category : #accessing }
 PluginSharedActions >> uuid: anObject [
 
-	"used for the globalSettings event (get and set) for their context field. These settings are preserved between instances, notably for the year variable"
+	"used for the globalSettings event (get and set) for their context field. These settings are preserved between instances, notably for the plugin value for the subclasses of PluginSharedActions"
 
 	uuid := anObject
 ]
@@ -696,7 +697,7 @@ PluginSharedActions >> willAppearEvent: jsonObject [
 	| arrayEvents jsonTitle jsonSettings |
 	arrayEvents := self willAppear: jsonObject.
 
-	"settitle:  calls setSettings: "
+	"setTitle: calls setSettings: "
 	jsonTitle := arrayEvents at: 1.
 	jsonSettings := arrayEvents at: 2.
 	"updates every Year/PercentWitness value if the current Stream Deck profile is changed (default value being 0)"
@@ -706,7 +707,7 @@ PluginSharedActions >> willAppearEvent: jsonObject [
 
 { #category : #'as yet unclassified' }
 PluginSharedActions >> willDisappear [
-	"removes all yearWitness instances through their context as well as all setTitle events for yearWitness for the relevant Pharo class when the user changes to a profile that doesn't contain an instance of an action from the YearSelectorPharo plugin"
+	"removes all Witness instances through their context as well as all setTitle events for Witness instances for the relevant Pharo class when the user changes to a profile that doesn't contain an instance of an action from the PharoStreamDeck plugin"
 
 	arrayPlugin pluginWitnessSet removeAll.
 	arrayPlugin pluginSelectorSet removeAll.
