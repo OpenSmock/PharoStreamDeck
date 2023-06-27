@@ -34,7 +34,6 @@ Class {
 		'buttonTwenty',
 		'buttonFifty',
 		'buttonHundred',
-		'buttonHundredFifty',
 		'buttonTwoHundred',
 		'buttonList',
 		'buttonYear',
@@ -46,7 +45,8 @@ Class {
 		'buttonPercentList',
 		'year',
 		'percent',
-		'myApp'
+		'myApp',
+		'buttonHundredTwenty'
 	],
 	#category : #MyYearSelector
 }
@@ -72,10 +72,10 @@ PharoStreamDeckGUI >> connectPresenters [
 		self selectedButton: buttonFifty with: buttonFifty label ].
 	buttonHundred action: [
 		self selectedButton: buttonHundred with: buttonHundred label ].
-	buttonHundredFifty action: [
+	buttonHundredTwenty action: [
 		self
-			selectedButton: buttonHundredFifty
-			with: buttonHundredFifty label ].
+			selectedButton: buttonHundredTwenty
+			with: buttonHundredTwenty label ].
 	buttonTwoHundred action: [ 
 		self selectedButton: buttonTwoHundred with: buttonTwoHundred label ]
 	
@@ -107,7 +107,7 @@ PharoStreamDeckGUI >> defaultLayout [
 				add: SpNullPresenter new;
 				   add: buttonFifty ;
 				   add: buttonHundred ;
-				   add: buttonHundredFifty ;
+				   add: buttonHundredTwenty ;
 				   add: buttonTwoHundred;
 				   yourself);
 		  yourself
@@ -136,7 +136,7 @@ PharoStreamDeckGUI >> initializePresenters [
 
 	buttonFifty := self newButton label: '50'.
 	buttonHundred := self newButton label: '100'.
-	buttonHundredFifty := self newButton label: '150'.
+	buttonHundredTwenty := self newButton label: '120'.
 	buttonTwoHundred := self newButton label: '200'.
 
 	buttonYear := self newButton
@@ -170,7 +170,7 @@ PharoStreamDeckGUI >> initializePresenters [
 	buttonPercentList
 		add: buttonFifty;
 		add: buttonHundred;
-		add: buttonHundredFifty;
+		add: buttonHundredTwenty;
 		add: buttonTwoHundred.
 		
 	buttonYearList do: [ :each | buttonList add: each ].

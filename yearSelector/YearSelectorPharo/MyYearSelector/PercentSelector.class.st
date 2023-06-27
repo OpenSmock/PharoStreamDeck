@@ -35,7 +35,7 @@ PercentSelector >> arrayJSONSetTitleAndSettingsPluginWitness [
 { #category : #initialization }
 PercentSelector >> authorizedNumbers [
 	"these numbers are the only values permitted to be taken by a PercentSelector through its Property Inspector, defined in percentSelector_pi.html"
-	^  #( 50 100 150 200 )
+	^  #( 50 100 120 200 )
 ]
 
 { #category : #initialization }
