@@ -43,7 +43,7 @@ The year value can be between 0, 5, 10, 15 and 20.
 The percent value can be between 50, 100, 150 and 200.
 
 Then executing these lines of Pharo code:
-```
+```smalltalk
 a year: 10.
 a percent: 100
 ```
