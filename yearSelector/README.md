@@ -36,7 +36,7 @@ The year value can be between chosen 0, 5, 10, 15 and 20. \
 The percent value can be chosen between 50, 100, 120 and 200.
 
 Then executing these lines of Pharo code:
-```
+```smalltalk
 a year: 10.
 a percent: 100
 ```
