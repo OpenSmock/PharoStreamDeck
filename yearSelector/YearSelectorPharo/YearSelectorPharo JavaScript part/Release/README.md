@@ -39,8 +39,8 @@ Year actions are on the first row, Percent actions on the second. \
 Left side of the profile : YearWitness and PercentWitness actions (text not being part of the plugin) \
 Right side of the profile : YearSelector and PercentSelector actions
 
-The year value can be between 0, 5, 10, 15 and 20. \
-The percent value can be between 50, 100, 150 and 200.
+The year value can be chosen between 0, 5, 10, 15 and 20. \
+The percent value can be chosen between 50, 100, 150 and 200.
 
 Then executing these lines of Pharo code:
 ```smalltalk
