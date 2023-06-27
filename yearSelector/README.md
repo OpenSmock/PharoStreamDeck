@@ -1,5 +1,5 @@
 # YearSelectorJS
-This project shows how a plugin for the Elgato Stream Deck can interact with it. \
+This project shows how a plugin for the Elgato Stream Deck can interact with it, with the memorization of a value between several instances of the plugin's actions being its major focus. \
 As such, a Stream Deck profile is provided alongside the plugin in order to see its functionality in action.
 
 ## How it functions
