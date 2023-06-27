@@ -59,4 +59,4 @@ To change the associated Pharo image to this Stream Deck profile, simply open th
 Contrary to what could be thought at first glance, this Stream Deck profile doesn't point to a file with the extension .image, but to the virtual machine associated to said image, since the current implementation of Stream Deck profiles can only lead them to be associated to .exe files. These virtual machines are located by default in C:\Users\user\Documents\Pharo\vms\imageName\Pharo.exe
 
 `user` being replaced by the user of the computer that uses this profile \
-`imageName` having a name like 100-x64, or in regular expression terms (Regex): (0-9){3}-x64
+`imageName` having a name like 100-x64, numbers increasing in increments of ten
