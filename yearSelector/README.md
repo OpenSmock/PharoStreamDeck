@@ -3,7 +3,7 @@ This project shows how a plugin for the Elgato Stream Deck can interact with it.
 As such, a Stream Deck profile is provided alongside the plugin in order to see its functionality in action.
 
 ## How it functions
-A user can tap one of the Stream Deck keys contained in the aforementioned Stream Deck profile, or place on one of the Stream Deck keys one of the actions of the plugin, titled **YearSelector** and **YearWitness** which are available from the action list. \ 
+A user can tap one of the Stream Deck keys contained in the aforementioned Stream Deck profile, or place on one of the Stream Deck keys one of the actions of the plugin, titled **YearSelector** and **YearWitness** which are available from the action list.\ 
 When a Selector action is clicked, the pressed key will change color and appear blue, while the previous highlighted key will revert back to its original color. The relevant Witness instance will also change its value. \
 The profile keeps track of the values, for Selector actions as well as Witness ones, whcih mean that when the Stream Deck software is opened again the same values will be shown on the profile.
 
