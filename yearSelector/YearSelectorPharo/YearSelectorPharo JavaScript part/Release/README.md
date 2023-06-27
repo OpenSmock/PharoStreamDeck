@@ -51,7 +51,7 @@ a percent: 100
 
 ### GUI
 <img width="1280" alt="updated gui" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/b16c2019-22b3-47c4-8558-4e1e461dabd7">
-Pressing one of the plugin keys on the Stream Deck, as well as pressing one of the graphical interface's buttons or using the year: and percent: methods in conjunction with the AppLaunch class, will highlight the pressed Selector instance on the Stream Deck as well as on the graphical interface, but also update the relevant Witness instance (relevant in terms of which plugin is selected).\
+Pressing one of the plugin keys on the Stream Deck, as well as pressing one of the graphical interface's buttons or using the year: and percent: methods in conjunction with the AppLaunch class, will highlight the pressed Selector instance on the Stream Deck as well as on the graphical interface, but also update the relevant Witness instance (relevant in terms of which plugin is selected).
 
 After executing the previous lines of Pharo code:
 <img width="1280" alt="100 10 clicked gui" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/d608622e-04d2-4d62-8cbb-633bba5021df">
