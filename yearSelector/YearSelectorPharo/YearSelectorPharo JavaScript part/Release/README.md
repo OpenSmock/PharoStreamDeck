@@ -1,13 +1,12 @@
 # How to install
 Prerequisite :
-- the Elgato Stream Deck application is installed on your device
+- the Elgato Stream Deck application is installed on your device (which you can download from [here](https://www.elgato.com/us/en/s/downloads), by selecting the Stream Deck category)
 
-Download the plugin and the profile, then double-click on them both. \
-The profile will be available from the profile list without overriding other Stream Deck profiles and is titled **PharoStreamDeck**. \
-The profile will have no effect without the plugin, since the actions cannot have any effect by themselves.
+Download the plugin and the profile, then double-click on them both. They're both named **PharoStreamDeck**. \
+The profile will be available from the profile list without overriding other Stream Deck profiles. It will have no effect without the plugin since the actions cannot have any effect by themselves.
 
 In a Pharo VM, execute the following import command in a Playground:
-```
+```smalltalk
 Metacello new
                baseline: 'MyYearSelector';
                repository: 'github://OpenSmock/PharoStreamDeck:Dev/yearSelector/YearSelectorPharo';
@@ -44,7 +43,7 @@ The year value can be between 0, 5, 10, 15 and 20.
 The percent value can be between 50, 100, 150 and 200.
 
 Then executing these lines of Pharo code:
-```
+```smalltalk
 a year: 10.
 a percent: 100
 ```
