@@ -49,7 +49,7 @@ Pressing one of the plugin keys on the Stream Deck, as well as pressing one of t
 After executing the previous lines of Pharo code:
 <img width="1280" alt="100 10 clicked gui" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/d608622e-04d2-4d62-8cbb-633bba5021df">
 
-One of the other uses of this GUI is that it can interact with the Stream Deck application even if a Stream Deck is not plugged in.
+One of the other uses of this GUI is that it can interact with the Stream Deck application (with the plugin and its profile) even if a Stream Deck is not plugged in.
 
 ## Complementary informations
 ### Pharo
