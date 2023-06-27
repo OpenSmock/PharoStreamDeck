@@ -1,6 +1,6 @@
 # How to install
 Prerequisite:
-- the Elgato Stream Deck application is installed on your device
+- the Elgato Stream Deck application is installed on your device (which you can download from [here](https://www.elgato.com/us/en/s/downloads), bu=y selecting the Stream Deck category)
 
 Download the plugin and the profile, then double-click on them both. \
 The profile will be available from the profile list without overriding other Stream Deck profiles, titled **YearSelectorJS**. \
