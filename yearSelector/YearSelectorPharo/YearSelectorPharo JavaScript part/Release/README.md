@@ -30,7 +30,7 @@ PercentSelector and PercentWitness work in the same way where PercentSelector ca
 <img width="104" alt="percentselector action list" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/5fa62531-4ea3-41bc-9634-e3d9d365b965">
 <img width="107" alt="percentwitness action list" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/34efcc55-7a53-448c-95d5-c3c2c7bef0ef">
 
-The following image shows the plugin category in the action list
+The following image shows the plugin category in the action list \
 <img width="131" alt="plugin action list" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/c567b5a5-d75b-478f-8772-cdb4207d85a2">
 
 ### AppLaunch package
