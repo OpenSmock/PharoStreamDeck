@@ -17,7 +17,7 @@ The Pharo version also includes the **PercentSelector** and **PercentWitness** a
 In terms of structure, the YearSelectorPharo JavaScript part folder is a mix between [basic WebSocket communication](https://github.com/OpenSmock/PharoStreamDeck/tree/main/webSocket) and [YearSelectorJS](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS).
 
 How this plugin works and communicates with the differents parts involved is explained in this image :
-![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/0cff7dfb-4a01-4a50-8b02-3ae1a9db9d9a)
+![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/e57389f7-9eb3-42a5-a642-e1fbeefea8e6)
 
 ### AppLaunch package
 The AppLaunch package is a way to interact with the YearSelector and PercentSelector classes.
