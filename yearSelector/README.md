@@ -16,7 +16,7 @@ The Pharo profile is organized in the same way as the JavaScript version. \
 It also functions the same way, having a YearSelector action and a YearWitness action. \
 The Pharo version also includes the **PercentSelector** and **PercentWitness** actions.
 
-The detailed documentation of this plugin is available in its [Release](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorPharo/YearSelectorPharo%20JavaScript%20part/Release) folder, which is also where you can download it.
+The detailed documentation of this plugin is available in its [Release](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorPharo/YearSelectorPharo%20JavaScript%20part/Release) folder which is also where you can download it.
 
 ## Complementary informations
 ### Pharo
