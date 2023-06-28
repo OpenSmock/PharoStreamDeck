@@ -1,7 +1,7 @@
-# JavaScript version (YearSelectorJS plugin)
 This project shows how a plugin for the Elgato Stream Deck can interact with it, with the memorization of a value between several instances of the plugin's actions being its major focus. \
 As such, a Stream Deck profile is provided alongside the plugin in order to see its functionality in action.
 
+# JavaScript version (YearSelectorJS plugin)
 ## How it functions
 A user can tap one of the Stream Deck keys contained in the aforementioned Stream Deck profile, or place on one of the Stream Deck keys one of the actions of the plugin, titled **YearSelector** and **YearWitness** which are available from the action list. \
 When a Selector action is clicked, the pressed key will change color and appear blue, while the previous highlighted key will revert back to its original color. The Witness instances will also change their value. \
