@@ -18,12 +18,12 @@ Click on the **zinc** package and scroll to the bottom until you attain **Zinc-W
 
 # How to use it
 The YearSelector action permits the user to set a value to be taken by the plugin when clicked (0, 5, 10, 15 or 20). \
-When a key is pressed, its background color will be set to blue, and the last key pressed will revert to its original state (which is to say that its background will lose its blue status).
+When a key is pressed, its background color will be set to blue, and the last key pressed will revert to its original state (which is to say that its background will lose its blue status). \
 <img width="107" alt="yearselectorpharo action list" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/c4851239-fcb6-40ca-90ff-7f94916f9f95">
 
 The YearWitness action shows which value is currently taken by the plugin global variable. \
 Every YearWitness has the same value, since it's a global variable available to every instance of the plugin, which is different from how a YearSelector instance handles its internal value, being chosen from the Property Inspector list. \
-Pressing a YearWitness value will put the value back to 0 and will also make its background blue.
+Pressing a YearWitness value will put the value back to 0 and will also make its background blue. \
 <img width="120" alt="yearwitness actionlist" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/97dfb236-9805-40ef-9c63-18848b7e7243">
 
 PercentSelector and PercentWitness work in the same way where PercentSelector can take the following values : 50, 100, 120 and 200.
