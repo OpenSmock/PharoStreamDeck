@@ -1,7 +1,8 @@
 # The JavaScript side of things
-Uses a second WebSocket in order to communicate with Pharo
+In terms of structure, the [Sources](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorPharo/YearSelectorPharo%20JavaScript%20part/Sources/com.thales.pharostreamdeck.sdPlugin) subfolder of the [YearSelectorPharo JavaScript part folder](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorPharo/YearSelectorPharo%20JavaScript%20part) is a mix between [basic WebSocket communication](https://github.com/OpenSmock/PharoStreamDeck/tree/main/webSocket) and [YearSelectorJS](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS).
 
-![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/ccf47487-fd8d-4994-bdd1-3edbc5ff24bf)
+How this plugin works and communicates with the differents parts involved is explained in this image (uses notably a second WebSocket):
+![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/e57389f7-9eb3-42a5-a642-e1fbeefea8e6)
 
 ## Complementary informations
 ### Pharo
