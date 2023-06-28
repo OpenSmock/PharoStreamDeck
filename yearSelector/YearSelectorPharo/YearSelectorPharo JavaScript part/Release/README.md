@@ -17,7 +17,7 @@ Then, click on the **Browse** tab and select the **Git Repositories Browser** op
 Click on the **zinc** package and scroll to the bottom until you attain **Zinc-WebSocket-Core**. Right-click on it and select **Load**.
 
 # How to use it
-The YearSelectorPhaeo action permits the user to set a value to be taken by the plugin when clicked (0, 5, 10, 15 or 20). \
+The YearSelectorPharo action permits the user to set a value to be taken by the plugin when clicked (0, 5, 10, 15 or 20). \
 When a key is pressed, its background color will be set to blue, and the last key pressed will revert to its original state (which is to say that its background will lose its blue status). \
 <img width="107" alt="yearselectorpharo action list" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/c4851239-fcb6-40ca-90ff-7f94916f9f95">
 
@@ -29,6 +29,9 @@ Pressing a YearWitness value will put the value back to 0 and will also make its
 PercentSelector and PercentWitness work in the same way where PercentSelector can take the following values : 50, 100, 120 and 200.
 <img width="104" alt="percentselector action list" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/5fa62531-4ea3-41bc-9634-e3d9d365b965">
 <img width="107" alt="percentwitness action list" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/34efcc55-7a53-448c-95d5-c3c2c7bef0ef">
+
+The following image shows the plugin category in the action list
+<img width="131" alt="plugin action list" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/c567b5a5-d75b-478f-8772-cdb4207d85a2">
 
 ### AppLaunch package
 The AppLaunch package is a way to interact with the YearSelector and PercentSelector classes.
