@@ -19,38 +19,6 @@ In terms of structure, the [Sources](https://github.com/OpenSmock/PharoStreamDec
 How this plugin works and communicates with the differents parts involved is explained in this image :
 ![english pharo and stream deck drawio](https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/e57389f7-9eb3-42a5-a642-e1fbeefea8e6)
 
-### AppLaunch package
-The AppLaunch package is a way to interact with the YearSelector and PercentSelector classes.
-
-An instance of AppLaunch needs to be created in Pharo to launch a server and the second WebSocket.
-In a Playground, execute the following line of code : `a := AppLaunch new`
-
-Here's what it looks like after executing this previous Pharo line of code and launching the Stream Deck application, same as before: \
-<img width="572" alt="stream deck not clicked" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/fe134aae-a2b2-4a8f-a405-668ed34ec81b">
-
-Year actions are on the first row, Percent actions on the second. \
-Left side of the profile : YearWitness and PercentWitness actions (text not being part of the plugin) \
-Right side of the profile : YearSelector and PercentSelector actions
-
-The year value can be chosen between 0, 5, 10, 15 and 20. \
-The percent value can be chosen between 50, 100, 120 and 200.
-
-Then executing these lines of Pharo code:
-```smalltalk
-a year: 10.
-a percent: 100
-```
-<img width="575" alt="100 10 clicked" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/71e90616-8a84-473c-8709-3c94013816b9">
-
-### GUI
-<img width="1280" alt="updated gui" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/b16c2019-22b3-47c4-8558-4e1e461dabd7">
-Pressing one of the plugin keys on the Stream Deck, as well as pressing one of the graphical interface's buttons or using the year: and percent: methods in conjunction with the AppLaunch class, will highlight the pressed Selector instance on the Stream Deck as well as on the graphical interface, but also update the relevant Witness instance (relevant in terms of which plugin is selected).
-
-After executing the previous lines of Pharo code:
-<img width="1280" alt="100 10 clicked gui" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/d608622e-04d2-4d62-8cbb-633bba5021df">
-
-One of the other uses of this GUI is that it can interact with the Stream Deck application (with the plugin and its profile) even if a Stream Deck is not plugged in.
-
 ## Complementary informations
 ### Pharo
 [WebSocket (using Zinc)](https://github.com/svenvc/docs/blob/master/zinc/zinc-websockets-paper.md) \
