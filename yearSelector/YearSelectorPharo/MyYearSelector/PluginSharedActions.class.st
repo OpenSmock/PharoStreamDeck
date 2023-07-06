@@ -1,7 +1,7 @@
 "
 For the Class part: I am an abstract class which possess the shared actions between YearSelector and PercentSelector
 
-For the Responsibility part: I launch a server then treat the different events that are received from index.html (the JavaScript side of the plugin,which also sends some info about the Stream Deck at its launch). With the use of the initServer method, each event is treated by the relevant Pharo class
+For the Responsibility part: I launch a server then treat the different events that are received from index.html (the JavaScript side of the plugin, which also sends some info about the Stream Deck at its launch). With the use of the initServer method, each event is treated by the relevant Pharo class
 
 For the Collaborators Part: My main collaborator is the Stream Deck application, which permits the use of profiles and placing actions on its grid through the PharoStreamDeck plugin
 
@@ -14,7 +14,7 @@ uuid is the unique value identifying the plugin (inPluginUUID in JavaScript code
 WebSocket memorizes the WebSocket that is launched in initServer to send messages in other functions, notably with the arrays' content
 plugin memorizes the current selected plugin, so that it can highlight the relevant Selector instances and update the values of the relevant Witness instances
 arraySetImage and arrayGetSettings are used to send in bulk multiple events of the type of their names
-action memorizes the action field that is sent when the initial message is received, so that it can easily differentaite between Year and Percent instances (corresponds to the UUID field in manifest.json for every action)
+action memorizes the action field that is sent when the initial message is received, so that it can easily differentiate between Year and Percent instances (corresponds to the UUID field in manifest.json for every action)
 launchedServerState and launchedServer are the instance variables of the LaunchedServer class, to know whether or not one is launched
 arrayPlugin is the instance variable of the ArrayPlugin class, to know which plugins are launched
 "
@@ -438,7 +438,7 @@ PluginSharedActions >> sendUpdatePluginWitnessInstances [
 
 { #category : #accessing }
 PluginSharedActions >> sendValueHasChangedEvent: aNumber [
-	"changes the plugin value, also updatew the value shown on relevant Witness instances and highlight the relevant Selector instances"
+	"changes the plugin value, also updates the value shown on relevant Witness instances and highlight the relevant Selector instances"
 	self pluginValueSuperclass: aNumber.
 	
 	self modifyPluginWitnessValue.
