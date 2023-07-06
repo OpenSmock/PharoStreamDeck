@@ -3,7 +3,7 @@ For the Class part: I represent a container for the instances of the PluginShare
 
 For the Responsibility part: I contain the subclasses of PluginSharedActions by using methods that can directly modify their state, such as their pluginValue selected. I also use a LaunchedServer to  launch only one ZnManaging process and a PharoStreamDeckGUI to modify its state.
 
-For the Collaborators Part: My main collaborator are PluginSharedActions and its subclasses, which interact with index.html as well as the Stream Deck, LaunchedServer and PharoStreamDeckGUI.
+For the Collaborators Part: My main collaborators are PluginSharedActions and its subclasses, which interact with index.html as well as the Stream Deck, LaunchedServer and PharoStreamDeckGUI.
 
 Public API and Key Messages
 How to create instances:
