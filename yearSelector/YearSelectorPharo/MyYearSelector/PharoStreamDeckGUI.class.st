@@ -1,5 +1,5 @@
 "
-For the Class part:  I'm a Graphical User Interface for the MyApp class, replicating what is shown on the Stream Deck.
+For the Class part: I'm a Graphical User Interface for the MyApp class, replicating what is shown on the Stream Deck.
 
 For the Responsibility part: I can select a year and a percent value, highlight the pressed button and show what arethe current values taken by the MyApp class for year and percent. I can communicate with the Stream Deck if it's launched, but my UI doesn't need it in order to communicate with the Pharo classes.
 
