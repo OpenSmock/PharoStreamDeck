@@ -19,9 +19,7 @@
 		//Finally, this file transmits these JSON strings to the Stream Deck for the actions to be executed
 
 		//first part of the code
-		//the Web page needs to be loaded first, then the server
 		//webSocketInterval is the variable that permits an automatic connection to the WebSocket
-		//no need to refresh the page if a server is started
 		//socket being the WebSocket performing the communication between the Stream Deck and this file
 		var socket = null;
 		var websocketInterval = null;
@@ -37,7 +35,8 @@
 				//Plugin <-- Pharo part in terms of data exchange
 				//also Stream Deck <-- Plugin part
 				//equals to Stream Deck <-- Plugin <-- Pharo part
-				//treatment by one of the SDK events (websocket being the WebSocket between the plugin and Pharo)
+				//treatment by one of the SDK events 
+				//websocket being the WebSocket performing the communication between this file and Pharo
 				//only sends stringified JSON
 				console.log("socket event: " + event.data);
 				websocket.send(event.data);
@@ -60,7 +59,6 @@
 		//second part of the code
 		//primarily based on this Elgato plugin
 		//https://github.com/elgatosf/streamdeck-numberdisplay/tree/master/Sources/com.elgato.numberdisplay.sdPlugin
-		//websocket being the WebSocket performing the communication between this file and Pharo
 		var websocket = null;
 		var pluginUUID = null;
 		var DestinationEnum = Object.freeze({ "HARDWARE_AND_SOFTWARE": 0, "HARDWARE_ONLY": 1, "SOFTWARE_ONLY": 2 });
@@ -75,14 +73,13 @@
 			//each variable is associated to its eponym field, apart from the event field that differs
 
 			//onKeyDown isn't needed here, but follows the same function signature as onKeyUp
-			//clicking on a YearWitness resets the value
 			onKeyUp: function (action, context, settings, coordinates, userDesiredState) {
 				var json = {
-					//the field event is used for identifying this function in Pharo (isn't normally transmitted)
+					//the event field is used for identifying this function in Pharo (isn't normally transmitted)
 					"event": "keyUp",
 					"action": action,
 					"context": context,
-					//settings already contains a settings field which contains the year value
+					//settings already contains a settings field which contains the plugins' values
 					"payload": settings,
 					"coordinates": coordinates,
 					"userDesiredState": userDesiredState,
@@ -182,16 +179,12 @@
 				else if (event == "willAppear") {
 					var settings = jsonPayload['settings'];
 					var coordinates = jsonPayload['coordinates'];
-					//added action parameter for yearWitnessSet in Pharo
 					selectorAction.onWillAppear(action, context, settings, coordinates);
-
-					//yearWitnessArray became yearWitnessSet in Pharo
 				}
-				//when the user switches between profiles or deletes an action, empty yearWitnessArray to not accumulate yearWitness instances since they're all created during willAppear
+				//when the user switches between profiles or deletes an action, empty the relevant arrays to not accumulate Witness instances since they're all created during willAppear
 				else if (event == "willDisappear") {
 					witnessAction.onWillDisappear();
 				}
-				//didReceiveSettings is used for the MyApp class, for the highlightYearSelectorReceive: method
 				else if (event == "sendToPlugin" || event == "didReceiveSettings") {
 					//event.data is undefined if left unparsed, can't send it directly
 					if (isOpen(socket)) {
