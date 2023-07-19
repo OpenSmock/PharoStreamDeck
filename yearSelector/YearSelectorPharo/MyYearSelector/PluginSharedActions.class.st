@@ -10,7 +10,7 @@ Since I'm an abstract class, I'm not supposed to be launched.
 However, YearSelector and PercentSelector are concrete implementations of myself and they themselves can be launched through YearSelector new and PercentSelector new.
 
 Instance variables:
-uuid is the unique value identifying the plugin (inPluginUUID in JavaScript code). It's sent via the registration procedure, recuperated from the connectElgatoStreamDeckSocket() function (see SDK documentation - https://docs.elgato.com/sdk/plugins/registration-procedure#compiled-plugin-registration), since globalSettings events require more than a context value to share a setting between instances of plugins (see SDK documentation - https://docs.elgato.com/sdk/plugins/events-sent#setglobalsettings)
+uuid is the unique value identifying the plugin (inPluginUUID in JavaScript code). It's sent via the registration procedure, recuperated from the connectElgatoStreamDeckSocket() function (see SDK documentation - https://docs.elgato.com/sdk/plugins/registration-procedure#compiled-plugin-registration), since globalSettings events require more than a context value to share a setting between instances of plugins (see SDK documentation - https://docs.elgato.com/sdk/plugins/events-sent#getglobalsettings)
 WebSocket memorizes the WebSocket that is launched in initServer to send messages in other functions, notably with the arrays' content
 plugin memorizes the current selected plugin, so that it can highlight the relevant Selector instances and update the values of the relevant Witness instances
 arraySetImage and arrayGetSettings are used to send in bulk multiple events of the type of their names
@@ -218,7 +218,7 @@ PluginSharedActions >> initialize [
 
 { #category : #accessing }
 PluginSharedActions >> keyUp: jsonObj [
-	"sends multiple events (setSettings, setGlobalSettings which sends getGlobalSettings so that the plugin receives a didReceiveGlobalSettings event)"
+	"sends multiple events (setSettings, getGlobalSettings so that the plugin receives a didReceiveGlobalSettings event)"
 
 	| jsonSettings context arrayEvents jsonFormattedSettings highlightedImage jsonContext jsonWillAppear jsonFormattedWillAppear defaultImage varObj |
 	"varObj being a year or a percent depending on the class it comes from"
