@@ -10,7 +10,7 @@ Since I'm an abstract class, I'm not supposed to be launched.
 However, YearSelector and PercentSelector are concrete implementations of myself and they themselves can be launched through YearSelector new and PercentSelector new.
 
 Instance variables:
-uuid is the unique value identifying the plugin (inPluginUUID in JavaScript code). It's sent via the registration procedure, recuperated from the connectElgatoStreamDeckSocket() function (see SDK documentation - https://developer.elgato.com/documentation/stream-deck/sdk/registration-procedure/#compiled-plugin-registration) and is used in the setGlobalSettings: method for its context field, since globalSettings events require more than a context value to share a setting between instances of plugins (see SDK documentation - events sent https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setglobalsettings)
+uuid is the unique value identifying the plugin (inPluginUUID in JavaScript code). It's sent via the registration procedure, recuperated from the connectElgatoStreamDeckSocket() function (see SDK documentation - https://docs.elgato.com/sdk/plugins/registration-procedure#compiled-plugin-registration), since globalSettings events require more than a context value to share a setting between instances of plugins (see SDK documentation - https://docs.elgato.com/sdk/plugins/events-sent#setglobalsettings)
 WebSocket memorizes the WebSocket that is launched in initServer to send messages in other functions, notably with the arrays' content
 plugin memorizes the current selected plugin, so that it can highlight the relevant Selector instances and update the values of the relevant Witness instances
 arraySetImage and arrayGetSettings are used to send in bulk multiple events of the type of their names
@@ -74,9 +74,7 @@ PluginSharedActions >> determineTypeObj [
 
 { #category : #accessing }
 PluginSharedActions >> getGlobalSettings: jsonObj [
-	"not automatically called when setGlobalSettings is called, which is why this method is needed"
-
-	"here, the getGlobalSettings event has no need to be sent to the plugin since the actions directly take place in Pharo"
+	"the getGlobalSettings event has no need to be sent to the plugin since the actions directly take place in Pharo"
 
 	| varObj json pluginWitnessInstances |
 	varObj := jsonObj at: typeObj.
@@ -122,7 +120,7 @@ PluginSharedActions >> highlightPluginSelectorReceive: jsonObj [
 	self determineTypeObj.
 
 	context := jsonObj at: 'context'.
-	"values saved in the plugin field contained inside the payload field in setSettings: are obtained back with a settings field placed between them (see SDK documentation - https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setsettings"
+	"values saved in the plugin field contained inside the payload field in setSettings: are obtained back with a settings field placed between them (see SDK documentation - https://docs.elgato.com/sdk/plugins/events-sent#setsettings)"
 	varObj := (jsonObj at: 'payload' at: 'settings') at: typeObj.
 
 	"sets the new blue background"
@@ -153,7 +151,7 @@ PluginSharedActions >> highlightPluginSelectorSend [
 
 { #category : #'as yet unclassified' }
 PluginSharedActions >> initServer [
-	"Creates a ZnManagingMultiThreadedServer HTTP port 8080 process, which needs to be terminated 	through the Process Browser if another server is to be launched"
+	"Creates a ZnManagingMultiThreadedServer HTTP port 8080 process, which needs to be terminated through the Process Browser if another server is to be launched"
 
 	| jsonObject server arrayPluginContents |
 
@@ -188,7 +186,7 @@ PluginSharedActions >> initServer [
 					          self willAppearEvent: jsonObject ].
 
 				          event = 'willDisappear' ifTrue: [ self willDisappear ].
-				          "setGlobalSettings getGlobalSettings, setTitle and setSettings are only invoked, they're not received as is"
+				          "getGlobalSettings, setTitle and setSettings are only invoked, they're not received as is"
 				          "setTitle and setSettings are called when selecting a value from the Property Inspector of a Selector instance"
 
 				          "setImage is directly received when the plugin receives the didReceiveGlobalSettings event in order to reset the backgrounds of the keys"
@@ -240,21 +238,6 @@ PluginSharedActions >> keyUp: jsonObj [
 	"values need to be saved for each plugin"
 	(arrayPlugin selectorAction includes: action) ifTrue: [
 		varObj := jsonObj at: 'payload' at: typeObj ].
-
-	jsonSettings := Dictionary new
-		                at: 'event' put: 'setSettings';
-		                at: 'context' put: context;
-		                at: typeObj put: varObj;
-		                yourself.
-	"STONJSON toString conversion is performed in setSettings, setGlobalSettings and getGlobalSettings"
-	jsonFormattedSettings := self setSettings: jsonSettings.
-
-	"setGlobalSettings and getGlobalSettings (called in setGlobalSettings) have no object given to them since their event is always the same, they just need a uuid and a plugin value (the second one is only needed for setGlobalSettings), an instance variable of one of the subclasses of PluginSharedActions (year or percent)"
-	jsonContext := Dictionary new
-		               at: 'context' put: context;
-		               at: typeObj put: varObj;
-		               yourself.
-	self setGlobalSettings: jsonContext.
 
 	jsonWillAppear := Dictionary new
 		                  at: 'action' put: action;
@@ -459,32 +442,6 @@ PluginSharedActions >> setCurrentImage: context with: img [
 ]
 
 { #category : #accessing }
-PluginSharedActions >> setGlobalSettings: jsonObj [
-	"didReceiveGlobalSettings event is received after calling the getGlobalSettings API for the plugin, it is NOT called automatically when setGlobalSettings is called"
-
-	"this function serves to share the year/percent value between Year/PercentSelector actions and Year/PercentWitness actions, so that the instances of the second are informed when a change is made"
-
-	"this function sets a new year/percent value to be shared between instances"
-
-	"globalSettings events use a uuid for the context field, even though the name of the field is context"
-
-	| jsonSetGlobalSettings jsonFormattedSetGlobalSettings varObj |
-	varObj := jsonObj at: typeObj.
-
-	jsonSetGlobalSettings := Dictionary new
-		                         at: 'event' put: 'setGlobalSettings';
-		                         at: 'context' put: uuid;
-		                         "not put inside a settings field since the SDK takes care of this operation (see SDK documentation - https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setsettings)"
-		                         at: 'payload'
-		                         at: typeObj
-		                         put: varObj;
-		                         yourself.
-
-	jsonFormattedSetGlobalSettings := STONJSON toString:
-		                                  jsonSetGlobalSettings
-]
-
-{ #category : #accessing }
 PluginSharedActions >> setImage: jsonObj [
 
 	| jsonFormattedObject json context image payload |
@@ -652,7 +609,7 @@ PluginSharedActions >> typeObj: newTypeObj [
 { #category : #accessing }
 PluginSharedActions >> uuid: anObject [
 
-	"used for the globalSettings event (get and set) for their context field. These settings are preserved between instances, notably for the plugin value for the subclasses of PluginSharedActions"
+	"used for the getGlobalSettings event for their context field. These settings are preserved between instances, notably for the plugin value for the subclasses of PluginSharedActions"
 
 	uuid := anObject
 ]
