@@ -2,17 +2,16 @@
   "Actions": [
     {
       "Icon": "img/yearSelectorIcon",
-      "Name": "YearSelectorPharo",
+      "Name": "YearSelector",
       "States": [
         {
-          "Image": "img/actionIcon",
-          "TitleAlignment": "middle",
-          "FontSize": "16"
+          "Image": "img/selectorIcon",
+          "TitleAlignment": "middle"
         }
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Permits the user to choose a value and highlights the last key pressed. This value is then displayed on a YearWitness",
-      "UUID": "com.thales.pharostreamdeck.yearselector",
+      "UUID": "com.thales.supportwizarddeck.yearselector",
       "PropertyInspectorPath": "yearSelector_pi.html"
     },
     {
@@ -20,29 +19,29 @@
       "Name": "PercentSelector",
       "States": [
         {
-          "Image": "img/actionIcon",
-          "TitleAlignment": "middle",
-          "FontSize": "16"
+          "Image": "img/selectorIcon",
+          "TitleAlignment": "middle"
         }
       ],
       "SupportedInMultiActions": false,
-      "Tooltip": "Permits the user to choose a value and highlights the last key pressed. This value is then displayed on a YearWitness",
-      "UUID": "com.thales.pharostreamdeck.percentselector",
+      "Tooltip": "Permits the user to choose a value and highlights the last key pressed. This value is then displayed on a PercentWitness",
+      "UUID": "com.thales.supportwizarddeck.percentselector",
       "PropertyInspectorPath": "percentSelector_pi.html"
     },
     {
       "Icon": "img/witnessIcon",
-      "Name": "YearWitnessPharo",
+      "Name": "YearWitness",
       "States": [
         {
           "Image": "img/actionIcon",
           "TitleAlignment": "middle",
+          "TitleColor": "#c8c8c8",
           "FontSize": "16"
         }
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Shows the year value, pressing it resets the value to 0",
-      "UUID": "com.thales.pharostreamdeck.yearwitness"
+      "UUID": "com.thales.supportwizarddeck.yearwitness"
     },
     {
       "Icon": "img/witnessIcon",
@@ -55,13 +54,41 @@
         }
       ],
       "SupportedInMultiActions": false,
-      "Tooltip": "Shows the percent value, pressing it resets the value to 0",
-      "UUID": "com.thales.pharostreamdeck.percentwitness"
+      "Tooltip": "Shows the percent (operational capacity) value, pressing it resets the value to 0",
+      "UUID": "com.thales.supportwizarddeck.percentwitness"
+    },
+    {
+      "Icon": "img/supportModelIcon",
+      "Name": "Model",
+      "States": [
+        {
+          "Image": "img/modelIcon",
+          "TitleAlignment": "middle",
+          "FontSize": "5"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Permits the user to choose a support model for the Support Wizard application",
+      "UUID": "com.thales.supportwizarddeck.model",
+      "PropertyInspectorPath": "model_pi.html"
+    },
+    {
+      "Icon": "img/resetConfigurationIcon",
+      "Name": "Reset Configuration",
+      "States": [
+        {
+          "Image": "img/resetConfigurationIcon",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Permits the user to reset the configuration of the Support Wizard application",
+      "UUID": "com.thales.supportwizarddeck.resetconfiguration"
     }
   ],
   "Profiles": [
     {
-      "Name": "YearSelectorPharo",
+      "Name": "SupportWizardDeck",
       "DeviceType": 2,
       "Readonly": false,
       "DontAutoSwitchWhenInstalled": false
@@ -70,12 +97,12 @@
   "SDKVersion": 2,
   "Author": "Eliott GUEVEL",
   "CodePath": "index.html",
-  "Description": "This plugin shows a value with the YearWitness action and permits to choose from a list of values available from the Property Inspector with the YearSelector action",
-  "Name": "PharoStreamDeck",
+  "Description": "This plugin permits the use of the Support Wizard application in a variety of ways",
+  "Name": "SupportWizardDeck",
   "Icon": "img/pluginIcon",
   "URL": "https://github.com/OpenSmock/PharoStreamDeck",
   "Version": "1.0",
-  "Category": "PharoStreamDeck",
+  "Category": "SupportWizardDeck",
   "CategoryIcon": "img/pluginIcon",
   "OS": [
     {

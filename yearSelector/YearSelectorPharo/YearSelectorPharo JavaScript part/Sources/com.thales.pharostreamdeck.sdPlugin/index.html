@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>com.thales.pharostreamdeck</title>
+	<title>com.thales.supportwizarddeck</title>
 	<meta charset="utf-8" />
 </head>
 
@@ -25,7 +25,7 @@
 		var websocketInterval = null;
 
 		var connect_socket = function () {
-			//secure WebSocket variant (wss://) doesn't permit sending messages in this context, since the server launched in Pharo is HTTP and not HTTPS
+			//secure WebSocket variant (wss://) doesn't permit sending messages in this context, since the Zinc server launched in Pharo is HTTP and not HTTPS
 			//creates only one ZnManagingMultiThreadedServer HTTP Worker in this context in Pharo
 			socket = new WebSocket("ws://localhost:8080/pharoBridge");
 
@@ -104,7 +104,7 @@
 				}
 			},
 
-			//setTitle, setSettings, setGlobalSettings and getGlobalSettings are done in Pharo
+			//setTitle, setSettings and getGlobalSettings are done in Pharo
 		};
 
 		var witnessAction = {

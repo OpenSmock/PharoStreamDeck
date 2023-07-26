@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>com.thales.yearSelectorPharo PI</title>
+    <title>com.thales.supportwizarddeck.yearSelector PI</title>
     <link rel="stylesheet" href="sdpi.css">
     <script src="common.js"></script>
 </head>
@@ -62,6 +62,7 @@
                     payload[param] = value;
                 }
                 $SD.api.sendToPlugin(uuid, pluginAction, payload);
+                //$SD.api.setSettings(uuid, payload);
             }
         }
     </script>

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>com.thales.percentSelector PI</title>
+    <title>com.thales.supportwizarddeck.model PI</title>
     <link rel="stylesheet" href="sdpi.css">
     <script src="common.js"></script>
 </head>
@@ -11,13 +11,16 @@
 <body>
     <div class="sdpi-wrapper">
         <div type="select" class="sdpi-item">
-            <div class="sdpi-item-label">Change operational activity rate</div>
+            <div class="sdpi-item-label">Change support model</div>
             <select class="sdpi-item-value select setvalueSelect"
                 onchange="sendValueToPlugin(Number(event.target.value), 'setValue')">
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="120">120</option>
-                <option value="200">200</option>
+                <!-- numbers are replaced by strings in Pharo so that it gets the names of the support models once the application is launched (which cannot be done as easily in JavaScript) -->
+                <option value="1">On Demand</option>
+                <option value="2">Follow On</option>
+                <option value="3">Contractor Logistic</option>
+                <option value="4">Performance Based</option>
+                <!-- no number 5 since it's one of the values selectable by the YearSelector plugin -->
+                <option value="6">Mission Success</option>
             </select>
         </div>
     </div>
@@ -46,13 +49,11 @@
             // console.log("SENDING VALUE TO PLUGIN: ", value, uuid, pluginAction);
             if (param === 'setValue') {
                 oValueSelector && Array.prototype.forEach.call(oValueSelector.options, function (o) {
-                    if(value != "") {
-                        const val = Math.round(value);
-                        if (o.value !== val) {
-                            oValueSelector.value = val;
-                        }
+                    if (value != "") {
+                        oValueSelector.value = value;
                     }
-                })
+                }
+                )
             }
 
             if ($SD && $SD.connection) {
