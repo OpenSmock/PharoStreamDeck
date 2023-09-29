@@ -68,7 +68,7 @@
         }
       ],
       "SupportedInMultiActions": false,
-      "Tooltip": "Permits the user to choose a support model for the Support Wizard application",
+      "Tooltip": "Permits the user to choose a support model for the TestApplication",
       "UUID": "com.thales.testapplication.model",
       "PropertyInspectorPath": "model_pi.html"
     },
@@ -82,7 +82,7 @@
         }
       ],
       "SupportedInMultiActions": false,
-      "Tooltip": "Permits the user to reset the configuration of the Support Wizard application",
+      "Tooltip": "Permits the user to reset the configuration of the TestApplication",
       "UUID": "com.thales.testapplication.resetconfiguration"
     }
   ],
