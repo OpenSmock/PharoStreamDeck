@@ -11,7 +11,7 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Permits the user to choose a value and highlights the last key pressed. This value is then displayed on a YearWitness",
-      "UUID": "com.thales.supportwizarddeck.yearselector",
+      "UUID": "com.thales.testapplication.yearselector",
       "PropertyInspectorPath": "yearSelector_pi.html"
     },
     {
@@ -25,7 +25,7 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Permits the user to choose a value and highlights the last key pressed. This value is then displayed on a PercentWitness",
-      "UUID": "com.thales.supportwizarddeck.percentselector",
+      "UUID": "com.thales.testapplication.percentselector",
       "PropertyInspectorPath": "percentSelector_pi.html"
     },
     {
@@ -41,7 +41,7 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Shows the year value, pressing it resets the value to 0",
-      "UUID": "com.thales.supportwizarddeck.yearwitness"
+      "UUID": "com.thales.testapplication.yearwitness"
     },
     {
       "Icon": "img/witnessIcon",
@@ -55,7 +55,7 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Shows the percent (operational capacity) value, pressing it resets the value to 0",
-      "UUID": "com.thales.supportwizarddeck.percentwitness"
+      "UUID": "com.thales.testapplication.percentwitness"
     },
     {
       "Icon": "img/supportModelIcon",
@@ -69,7 +69,7 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Permits the user to choose a support model for the Support Wizard application",
-      "UUID": "com.thales.supportwizarddeck.model",
+      "UUID": "com.thales.testapplication.model",
       "PropertyInspectorPath": "model_pi.html"
     },
     {
@@ -83,12 +83,12 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Permits the user to reset the configuration of the Support Wizard application",
-      "UUID": "com.thales.supportwizarddeck.resetconfiguration"
+      "UUID": "com.thales.testapplication.resetconfiguration"
     }
   ],
   "Profiles": [
     {
-      "Name": "SupportWizardDeck",
+      "Name": "TestApplicatio,",
       "DeviceType": 2,
       "Readonly": false,
       "DontAutoSwitchWhenInstalled": false
@@ -97,12 +97,12 @@
   "SDKVersion": 2,
   "Author": "Eliott GUEVEL",
   "CodePath": "index.html",
-  "Description": "This plugin permits the use of the Support Wizard application in a variety of ways",
-  "Name": "SupportWizardDeck",
+  "Description": "This plugin permits the use of the TestApplication in a variety of ways",
+  "Name": "TestApplication",
   "Icon": "img/pluginIcon",
   "URL": "https://github.com/OpenSmock/PharoStreamDeck",
   "Version": "1.0",
-  "Category": "SupportWizardDeck",
+  "Category": "TestApplication",
   "CategoryIcon": "img/pluginIcon",
   "OS": [
     {
