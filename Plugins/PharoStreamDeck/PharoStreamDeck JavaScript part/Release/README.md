@@ -1,11 +1,11 @@
 # How to install
 Prerequisite :
-- the Elgato Stream Deck application is installed on your device (which you can download from [here](https://www.elgato.com/us/en/s/downloads), by selecting the Stream Deck category)
+- the Elgato Stream Deck application is installed on your device (which you can download from [here](https://www.elgato.com/us/en/s/downloads) by selecting the Stream Deck category)
 
-Download the plugin and the profile, then double-click on them both. They're both named **PharoStreamDeck**. \
+Download the plugin and the profile then double-click on them both. They're both named **PharoStreamDeck**. \
 The profile will be available from the profile list without overriding other Stream Deck profiles. It will have no effect without the plugin since the actions cannot have any effect by themselves.
 
-In a Pharo VM, execute the following import command in a Playground:
+In a Pharo VM, execute the following import command in a Playground (accessible from the **Browse** tab of Pharo):
 ```smalltalk
 Metacello new
                baseline: 'MyYearSelector';
@@ -13,20 +13,20 @@ Metacello new
                onConflictUseIncoming;
                load
 ```
-Then, click on the **Browse** tab and select the **Git Repositories Browser** option. \
-Click on the **zinc** package and scroll to the bottom until you attain **Zinc-WebSocket-Core**. Right-click on it and select **Load**.
+Then, click again on the **Browse** tab and select the **Git Repositories Browser** option. \
+Click on the **zinc** package and scroll to the bottom until you attain **Zinc-WebSocket-Core**. Right-click on it and select **Load**. This will charge the contents of the package inside your Pharo image in order to use WebSockets.
 
 # How to use it
-The YearSelectorPharo action permits the user to set a value to be taken by the plugin when clicked (0, 5, 10, 15 or 20). \
-When a key is pressed, its background color will be set to blue, and the last key pressed will revert to its original state (which is to say that its background will lose its blue status). \
+The **YearSelectorPharo** action permits the user to set a value to be taken by the plugin when clicked (0, 5, 10, 15 or 20). \
+When a key is pressed, its background color will be set to blue and the last key pressed will revert to its original state (which is to say that its background will lose its blue status). \
 <img width="107" alt="yearselectorpharo action list" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/c4851239-fcb6-40ca-90ff-7f94916f9f95">
 
-The YearWitnessPharo action shows which value is currently taken by the plugin global variable. \
-Every YearWitness has the same value, since it's a global variable available to every instance of the plugin, which is different from how a YearSelector instance handles its internal value, being chosen from the Property Inspector list. \
+The **YearWitnessPharo** action shows which value is currently taken by the plugin global variable. \
+Every YearWitness has the same value since it's a global variable available to every instance of the plugin, which is different from how a YearSelector instance handles its internal value, instead being chosen from the Property Inspector list. \
 Pressing a YearWitness value will put the value back to 0 and will also make its background blue. \
 <img width="120" alt="yearwitness actionlist" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/97dfb236-9805-40ef-9c63-18848b7e7243">
 
-PercentSelector and PercentWitness work in the same way where PercentSelector can take the following values : 50, 100, 120 and 200.
+PercentSelector and PercentWitness work in the same way where PercentSelector can take the following values: 50, 100, 120 and 200.
 <img width="104" alt="percentselector action list" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/5fa62531-4ea3-41bc-9634-e3d9d365b965">
 <img width="107" alt="percentwitness action list" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/34efcc55-7a53-448c-95d5-c3c2c7bef0ef">
 
@@ -46,8 +46,8 @@ Year actions are on the first row, Percent actions on the second. \
 Left side of the profile : YearWitness and PercentWitness actions (text not being part of the plugin) \
 Right side of the profile : YearSelector and PercentSelector actions
 
-The year value can be chosen between 0, 5, 10, 15 and 20. \
-The percent value can be chosen between 50, 100, 150 and 200.
+The `year` value can be chosen between 0, 5, 10, 15 and 20. \
+The `percent ` value can be chosen between 50, 100, 150 and 200.
 
 Then executing these lines of Pharo code:
 ```smalltalk
@@ -58,7 +58,7 @@ a percent: 100
 
 ### GUI
 <img width="1280" alt="updated gui" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/b16c2019-22b3-47c4-8558-4e1e461dabd7">
-Pressing one of the plugin keys on the Stream Deck, as well as pressing one of the graphical interface's buttons or using the year: and percent: methods in conjunction with the AppLaunch class, will highlight the pressed Selector instance on the Stream Deck as well as on the graphical interface, but also update the relevant Witness instance (relevant in terms of which plugin is selected).
+Pressing one of the plugin keys on the Stream Deck as well as pressing one of the graphical interface's buttons or using the year: and percent: methods in conjunction with the AppLaunch class will highlight the pressed Selector instance on the Stream Deck as well as on the graphical interface, but also update the relevant Witness instance (relevant in terms of which plugin is selected).
 
 After executing the previous lines of Pharo code:
 <img width="1280" alt="100 10 clicked gui" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/d608622e-04d2-4d62-8cbb-633bba5021df">
