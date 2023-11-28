@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>com.thales.yearSelectorPharo</title>
+	<title>com.thales.testapplication</title>
 	<meta charset="utf-8" />
 </head>
 
@@ -19,15 +19,13 @@
 		//Finally, this file transmits these JSON strings to the Stream Deck for the actions to be executed
 
 		//first part of the code
-		//the Web page needs to be loaded first, then the server
 		//webSocketInterval is the variable that permits an automatic connection to the WebSocket
-		//no need to refresh the page if a server is started
 		//socket being the WebSocket performing the communication between the Stream Deck and this file
 		var socket = null;
 		var websocketInterval = null;
 
 		var connect_socket = function () {
-			//secure WebSocket variant (wss://) doesn't permit sending messages in this context, since the server launched in Pharo is HTTP and not HTTPS
+			//secure WebSocket variant (wss://) doesn't permit sending messages in this context, since the Zinc server launched in Pharo is HTTP and not HTTPS
 			//creates only one ZnManagingMultiThreadedServer HTTP Worker in this context in Pharo
 			socket = new WebSocket("ws://localhost:8080/pharoBridge");
 
@@ -37,9 +35,10 @@
 				//Plugin <-- Pharo part in terms of data exchange
 				//also Stream Deck <-- Plugin part
 				//equals to Stream Deck <-- Plugin <-- Pharo part
-				//treatment by one of the SDK events (websocket being the WebSocket between the plugin and Pharo)
+				//treatment by one of the SDK events 
+				//websocket being the WebSocket performing the communication between this file and Pharo
 				//only sends stringified JSON
-				//console.log("socket event: " + event.data);
+				console.log("socket event: " + event.data);
 				websocket.send(event.data);
 			}
 
@@ -60,7 +59,6 @@
 		//second part of the code
 		//primarily based on this Elgato plugin
 		//https://github.com/elgatosf/streamdeck-numberdisplay/tree/master/Sources/com.elgato.numberdisplay.sdPlugin
-		//websocket being the WebSocket performing the communication between this file and Pharo
 		var websocket = null;
 		var pluginUUID = null;
 		var DestinationEnum = Object.freeze({ "HARDWARE_AND_SOFTWARE": 0, "HARDWARE_ONLY": 1, "SOFTWARE_ONLY": 2 });
@@ -68,21 +66,20 @@
 		var yearWitnessArray = [];
 
 		//Plugin --> Pharo part
-		var yearSelectorAction = {
-			type: "com.thales.yearselectorpharo.action",
+		var selectorAction = {
+			type: "com.thales.yearselectorpharo.selector",
 
 			//only parameters are sent in the form of stringified JSON data, treatment and formatting of JSON strings is done in Pharo
 			//each variable is associated to its eponym field, apart from the event field that differs
 
 			//onKeyDown isn't needed here, but follows the same function signature as onKeyUp
-			//clicking on a YearWitness resets the value
 			onKeyUp: function (action, context, settings, coordinates, userDesiredState) {
 				var json = {
-					//the field event is used for identifying this function in Pharo (isn't normally transmitted)
+					//the event field is used for identifying this function in Pharo (isn't normally transmitted)
 					"event": "keyUp",
 					"action": action,
 					"context": context,
-					//settings already contains a settings field which contains the year value
+					//settings already contains a settings field which contains the plugins' values
 					"payload": settings,
 					"coordinates": coordinates,
 					"userDesiredState": userDesiredState,
@@ -107,11 +104,11 @@
 				}
 			},
 
-			//setTitle, setSettings, setGlobalSettings and getGlobalSettings are done in Pharo
+			//setTitle, setSettings and getGlobalSettings are done in Pharo
 		};
 
-		var yearWitnessAction = {
-			type: "com.thales.yearselectorpharo.yearwitness",
+		var witnessAction = {
+			type: "com.thales.yearselectorpharo.witness",
 
 			//setTitle is done in Pharo
 
@@ -164,7 +161,7 @@
 
 			websocket.onmessage = function (evt) {
 				// Received message from Stream Deck
-				//console.log("event.data: " + evt.data);
+				console.log("event.data: " + evt.data);
 				var jsonObj = JSON.parse(evt.data);
 				var event = jsonObj['event'];
 				var action = jsonObj['action'];
@@ -177,21 +174,18 @@
 					var settings = jsonPayload['settings'];
 					var coordinates = jsonPayload['coordinates'];
 					var userDesiredState = jsonPayload['userDesiredState'];
-					yearSelectorAction.onKeyUp(action, context, settings, coordinates, userDesiredState);
+					selectorAction.onKeyUp(action, context, settings, coordinates, userDesiredState);
 				}
 				else if (event == "willAppear") {
 					var settings = jsonPayload['settings'];
 					var coordinates = jsonPayload['coordinates'];
-					//added action parameter for yearWitnessSet in Pharo
-					yearSelectorAction.onWillAppear(action, context, settings, coordinates);
-
-					//yearWitnessArray became yearWitnessSet in Pharo
+					selectorAction.onWillAppear(action, context, settings, coordinates);
 				}
-				//when the user switches between profiles or deletes an action, empty yearWitnessArray to not accumulate yearWitness instances since they're all created during willAppear
+				//when the user switches between profiles or deletes an action, empty the relevant arrays to not accumulate Witness instances since they're all created during willAppear
 				else if (event == "willDisappear") {
-					yearWitnessAction.onWillDisappear();
+					witnessAction.onWillDisappear();
 				}
-				else if (event == "sendToPlugin") {
+				else if (event == "sendToPlugin" || event == "didReceiveSettings") {
 					//event.data is undefined if left unparsed, can't send it directly
 					if (isOpen(socket)) {
 						socket.send(JSON.stringify(jsonObj));

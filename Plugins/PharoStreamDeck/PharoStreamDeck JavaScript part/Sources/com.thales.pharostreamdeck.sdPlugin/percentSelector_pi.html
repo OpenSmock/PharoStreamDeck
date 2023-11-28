@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>com.thales.pharostreamdeck.percentSelector PI</title>
+    <link rel="stylesheet" href="sdpi.css">
+    <script src="common.js"></script>
+</head>
+
+<body>
+    <div class="sdpi-wrapper">
+        <div type="select" class="sdpi-item">
+            <div class="sdpi-item-label">Change operational activity rate</div>
+            <select class="sdpi-item-value select setvalueSelect"
+                onchange="sendValueToPlugin(Number(event.target.value), 'setValue')">
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="120">120</option>
+                <option value="200">200</option>
+            </select>
+        </div>
+    </div>
+
+    <script>
+        var pluginAction = null,
+            uuid = '',
+            oValueSelector = document.querySelector(".setvalueSelect");
+
+        if ($SD) {
+            $SD.on('connected', function (jsonObj) {
+                uuid = jsonObj['uuid'];
+                if (jsonObj.hasOwnProperty('actionInfo')) {
+                    pluginAction = jsonObj.actionInfo['action'];
+                }
+            });
+        };
+
+        /** you can also use ES6 syntax like so:
+        *
+        *   if ($SD) $SD.on('connected', (jsonObj) => { uuid=jsonObj.uuid }));
+        *    
+        */
+
+        function sendValueToPlugin(value, param) {
+            // console.log("SENDING VALUE TO PLUGIN: ", value, uuid, pluginAction);
+            if (param === 'setValue') {
+                oValueSelector && Array.prototype.forEach.call(oValueSelector.options, function (o) {
+                    if(value != "") {
+                        const val = Math.round(value);
+                        if (o.value !== val) {
+                            oValueSelector.value = val;
+                        }
+                    }
+                })
+            }
+
+            if ($SD && $SD.connection) {
+                var payload = {};
+                if (param) {
+                    payload[param] = value;
+                }
+                $SD.api.sendToPlugin(uuid, pluginAction, payload);
+            }
+        }
+    </script>
+</body>
+
+</html>
