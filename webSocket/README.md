@@ -2,11 +2,11 @@
 This project permits the communication between a Web page wrote in HTML and JavaScript and a server written in Pharo.
 Its primary features are as described below:
 - Automatic reconnection to the server until one is launched
-- Communication possible between the server and the Web page through JSON strings sent in a WebSocket (use of the following methods: JSON.stringify() and JSON.parse() for the JavaScript side, STONJSON toString: and STONJSON fromString: for the Pharo side)
+- Communication between the server and the Web page through JSON strings sent in a WebSocket (use of the following methods: JSON.stringify() and JSON.parse() for the JavaScript side, STONJSON toString: and STONJSON fromString: for the Pharo side)
 - Web page checks if the WebSocket is open before sending a message through the isOpen() method
 
 ## Testing this project
-Launch server.html, execute the code contained within server.st in a Playground, then you should see some data sent from Pharo being shown in the Developer Tools of your Web browser (opened via F12), and the URL of server.html (starting with file://, the location of your file in your file explorer) being sent to Pharo.
+Launch server.html, execute the code contained within server.st in a Playground then you should see some data sent from Pharo being shown in the Developer Tools of your Web browser (opened via F12) and the URL of server.html (starting with file:// then followed by the location of your file in your file explorer) being sent to Pharo.
 
 ## Complementary informations
 ### Pharo
