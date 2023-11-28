@@ -26,7 +26,7 @@ Every YearWitness has the same value since it's a global variable available to e
 Pressing a YearWitness value will put the value back to 0 and will also make its background blue. \
 <img width="120" alt="yearwitness actionlist" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/97dfb236-9805-40ef-9c63-18848b7e7243">
 
-PercentSelector and PercentWitness work in the same way where PercentSelector can take the following values: 50, 100, 120 and 200.
+**PercentSelector** and **PercentWitness** work in the same way where PercentSelector can take the following values: 50, 100, 120 and 200.
 <img width="104" alt="percentselector action list" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/5fa62531-4ea3-41bc-9634-e3d9d365b965">
 <img width="107" alt="percentwitness action list" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/34efcc55-7a53-448c-95d5-c3c2c7bef0ef">
 
@@ -34,7 +34,7 @@ The following image shows the plugin category in the action list \
 <img width="131" alt="plugin action list" src="https://github.com/OpenSmock/PharoStreamDeck/assets/76944457/c567b5a5-d75b-478f-8772-cdb4207d85a2">
 
 ### AppLaunch package
-The AppLaunch package is a way to interact with the YearSelector and PercentSelector classes.
+The **AppLaunch** package is a way to interact with the YearSelector and PercentSelector classes.
 
 An instance of AppLaunch needs to be created in Pharo to launch a server and the second WebSocket.
 In a Playground, execute the following line of code : `a := AppLaunch new`
