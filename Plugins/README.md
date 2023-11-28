@@ -1,11 +1,12 @@
-This project shows how a plugin for the Elgato Stream Deck can interact with it, with the memorization of a value between several instances of the plugin's actions being its major focus. \
+This project shows how a plugin for the Elgato Stream Deck can interact with it with the memorization of a value between several instances of the plugin's actions being its major focus. \
 As such, a Stream Deck profile is provided alongside the plugin in order to see its functionalities in action.
 
 # JavaScript version (YearSelectorJS plugin)
 ## How it functions
-A user can tap one of the Stream Deck keys contained in the aforementioned Stream Deck profile, or place on one of the Stream Deck keys one of the actions of the plugin, titled **YearSelector** and **YearWitness** which are available from the action list. \
-When a Selector action is clicked, the pressed key will change color and appear blue, while the previous highlighted key will revert back to its original color. The Witness instances will also change their value. \
-The profile keeps track of the values, for Selector actions as well as Witness ones, which mean that when the Stream Deck software is opened again the same values will be shown on the profile.
+A user can tap one of the Stream Deck keys contained in the aforementioned Stream Deck profile or place on one of the Stream Deck keys one of the actions of the plugin which are titled **YearSelector** and **YearWitness**. They're available from the action list. \
+When a Selector action is clicked, the pressed key will change color and appear blue while the previous highlighted key will revert back to its original color. \
+The Witness instances will also change their value. \
+The profile keeps track of the values for Selector actions as well as Witness ones, which mean that when the Stream Deck software is opened again the same values will be shown on the profile.
 
 You can download this plugin from its [Release](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS/Release) folder.
 
@@ -13,9 +14,9 @@ You can download this plugin from its [Release](https://github.com/OpenSmock/Pha
 This version shows how Pharo, JavaScript and the Stream Deck SDK as well as JSON data sent through WebSockets can interact.
 
 The Pharo profile is organized in the same way as the JavaScript version. \
-It also functions the same way with more parts involved, having the YearSelector and YearWitness actions where this version also includes the **PercentSelector** and **PercentWitness** actions.
+It also functions the same way with more parts involved, having the YearSelector and YearWitness actions and also includes the **PercentSelector** and **PercentWitness** actions.
 
-The detailed documentation of this plugin is available in its [Release](https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorPharo/YearSelectorPharo%20JavaScript%20part/Release) folder which is also where you can download it.
+The detailed documentation of this plugin is available in its [Release](https://github.com/OpenSmock/PharoStreamDeck/tree/main/Plugins/PharoStreamDeck/PharoStreamDeck%20JavaScript%20part/Release) folder which is also where you can download it.
 
 ## Complementary informations
 ### Pharo
