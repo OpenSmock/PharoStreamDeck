@@ -1,10 +1,11 @@
 Class {
-	#name : #AppLaunchTest,
-	#superclass : #TestCase,
-	#category : #MyYearSelector
+	#name : 'AppLaunchTest',
+	#superclass : 'TestCase',
+	#category : 'MyYearSelector',
+	#package : 'MyYearSelector'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 AppLaunchTest >> testAppInitialize [
 	"can't include a test which would test the communication between JavaScript and Pharo. The only way is to follow in order the data exchanges, starting with the Stream Deck to the plugin by launching the Stream Deck application after creating an instance of AppLaunch"
 
@@ -14,7 +15,7 @@ AppLaunchTest >> testAppInitialize [
 	self assert: a percent equals: 50
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AppLaunchTest >> testAppOtherValues [
 
 	| a |
@@ -25,7 +26,7 @@ AppLaunchTest >> testAppOtherValues [
 	self assert: a percent equals: 100
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AppLaunchTest >> testAppOtherValuesFailed [
 
 	| a |
@@ -37,7 +38,7 @@ AppLaunchTest >> testAppOtherValuesFailed [
 	self assert: a percent equals: 50
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AppLaunchTest >> testDictionaryAtString [
 
 	| d typeObj |
@@ -47,7 +48,7 @@ AppLaunchTest >> testDictionaryAtString [
 	self assert: (d at: typeObj) equals: 'year'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AppLaunchTest >> testNumberInAuthorizedNumbers [
 	"modifying the selected plugin changes the selected plugin for every plugin"
 
@@ -65,7 +66,7 @@ AppLaunchTest >> testNumberInAuthorizedNumbers [
 		equals: percentSelector arrayPlugin plugin
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AppLaunchTest >> testRegex [
 
 	| string |
@@ -79,7 +80,7 @@ AppLaunchTest >> testRegex [
 	self deny: (string matchesRegex: 'ho')
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AppLaunchTest >> testSameSubstring [
 
 	| string |
@@ -88,7 +89,7 @@ AppLaunchTest >> testSameSubstring [
 	self assert: (string includesSubstring: 'percent').
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AppLaunchTest >> testSubstringPharoStreamDeck [
 
 	| string string2 string3 string4 |

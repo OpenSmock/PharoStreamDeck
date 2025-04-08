@@ -19,16 +19,17 @@ a := AppLaunch new
 	pharostreamdeck:		<PharoStreamDeckGUI>
 "
 Class {
-	#name : #AppLaunch,
-	#superclass : #Object,
+	#name : 'AppLaunch',
+	#superclass : 'Object',
 	#instVars : [
 		'myApp',
 		'pharostreamdeck'
 	],
-	#category : #MyYearSelector
+	#category : 'MyYearSelector',
+	#package : 'MyYearSelector'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AppLaunch >> initialize [
 	"MyApp is a simple interface for YearSelector and PercentSelector which explains its lack of methods"
 
@@ -43,31 +44,31 @@ AppLaunch >> initialize [
 	super initialize
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AppLaunch >> myApp [
 
 	^ myApp
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AppLaunch >> percent [
 
 	^ myApp percent
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AppLaunch >> percent: aPercent [
 
 	myApp percent: aPercent
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AppLaunch >> year [
 
 	^ myApp year
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AppLaunch >> year: aYear [
 
 	myApp year: aYear

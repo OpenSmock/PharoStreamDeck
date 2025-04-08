@@ -1,1 +1,1 @@
-Package { #name : #MyYearSelector }
+Package { #name : 'MyYearSelector' }

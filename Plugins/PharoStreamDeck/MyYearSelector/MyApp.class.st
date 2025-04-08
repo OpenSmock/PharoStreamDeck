@@ -21,23 +21,24 @@ arrayPlugin is used for methods relative to plugin values in the MyApp class, to
 launchedServer and serverState are used to launch only one ZnManagingMultiThreadedSerevr HTTP server, no matter the number of plugins (instances of PluginSharedActions)
 "
 Class {
-	#name : #MyApp,
-	#superclass : #Object,
+	#name : 'MyApp',
+	#superclass : 'Object',
 	#instVars : [
 		'arrayPlugin',
 		'launchedServer',
 		'pharostreamdeck'
 	],
-	#category : #MyYearSelector
+	#category : 'MyYearSelector',
+	#package : 'MyYearSelector'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 MyApp >> arrayPlugin [
 
 	^ arrayPlugin
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 MyApp >> chooseCurrentPlugin: index [
 
 	| arrayPluginContents plugin |
@@ -49,7 +50,7 @@ MyApp >> chooseCurrentPlugin: index [
 	^ plugin
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 MyApp >> initArrayPlugins [
 	"each plugin is aware of the existence of the other plugins, so that the numberInAuthorizedNumbers: method in PluginSharedActions can determine which plugin to reference to update their respective Witness instances' value"
 
@@ -58,7 +59,7 @@ MyApp >> initArrayPlugins [
 	arrayPluginContents do: [ :each | each arrayPlugin: arrayPlugin ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 MyApp >> initGUI: aPharoStreamDeckGUI [
 
 	| arrayPluginContents |
@@ -73,7 +74,7 @@ MyApp >> initGUI: aPharoStreamDeckGUI [
 		each pharoStreamDeckGUI: pharostreamdeck ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 MyApp >> initPlugin: aPlugin [
 
 	| pluginSelector |
@@ -82,7 +83,7 @@ MyApp >> initPlugin: aPlugin [
 	arrayPlugin arrayPluginContents add: pluginSelector
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 MyApp >> initPlugins [
 	"launches an instance of every subclass of PluginSharedActions, which are YearSelector and PercentSelector"
 
@@ -96,7 +97,7 @@ MyApp >> initPlugins [
 	self initServer
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 MyApp >> initServer [
 	
 	| pluginSelector arrayPluginContents |
@@ -105,19 +106,19 @@ MyApp >> initServer [
 	pluginSelector initServer
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 MyApp >> initialize [
 
 	self initPlugins
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 MyApp >> launchServerPlugin: pluginSelector [
 
 	pluginSelector launchedServer: launchedServer.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 MyApp >> percent [
 	
 	| plugin |
@@ -125,7 +126,7 @@ MyApp >> percent [
 	^ plugin pluginValue
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 MyApp >> percent: aPercent [
 	
 	| plugin |
@@ -134,7 +135,7 @@ MyApp >> percent: aPercent [
 	plugin sendValueHasChangedEvent: aPercent.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 MyApp >> year [
 	
 	| plugin |
@@ -142,7 +143,7 @@ MyApp >> year [
 	^ plugin pluginValue
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 MyApp >> year: aYear [
 
 	| plugin |

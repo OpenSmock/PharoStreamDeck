@@ -15,30 +15,31 @@ year (the plugin value)
 arrayJSONSetTitleAndSettingsYearWitness (used to send setTitle and setSettings events to keep track of the values shown and saved)
 "
 Class {
-	#name : #YearSelector,
-	#superclass : #PluginSharedActions,
+	#name : 'YearSelector',
+	#superclass : 'PluginSharedActions',
 	#instVars : [
 		'yearWitnessSet',
 		'yearSelectorSet',
 		'year',
 		'arrayJSONSetTitleAndSettingsYearWitness'
 	],
-	#category : #MyYearSelector
+	#category : 'MyYearSelector',
+	#package : 'MyYearSelector'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 YearSelector >> arrayJSONSetTitleAndSettingsPluginWitness [
 
 	^ arrayJSONSetTitleAndSettingsYearWitness
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 YearSelector >> authorizedNumbers [
 	"these numbers are the only values permitted to be taken by a YearSelector through its Property Inspector, defined in yearSelector_pi.html"
 	^ #( 0 5 10 15 20 )
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 YearSelector >> initialize [
 
 	super initialize.
@@ -48,19 +49,19 @@ YearSelector >> initialize [
 	year := 0
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 YearSelector >> pluginSelectorSet [
 
 	^ yearSelectorSet
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 YearSelector >> pluginValue [
 
 	^ year
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 YearSelector >> pluginValue: aYear [
 
 	year := aYear.
@@ -68,19 +69,19 @@ YearSelector >> pluginValue: aYear [
 	pharostreamdeck year: aYear.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 YearSelector >> pluginWitnessSet [
 
 	^ yearWitnessSet
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 YearSelector >> selectorAction [ 
 
 	^ 'com.thales.pharostreamdeck.yearselector'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 YearSelector >> witnessAction [ 
 
 	^ 'com.thales.pharostreamdeck.yearwitness'

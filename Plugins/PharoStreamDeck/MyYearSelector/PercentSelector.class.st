@@ -15,30 +15,31 @@ percent (the plugin value)
 arrayJSONSetTitleAndSettingsPercentWitness (used to send setTitle and setSettings events to keep track of the values shown and saved)
 "
 Class {
-	#name : #PercentSelector,
-	#superclass : #PluginSharedActions,
+	#name : 'PercentSelector',
+	#superclass : 'PluginSharedActions',
 	#instVars : [
 		'percentSelectorSet',
 		'percentWitnessSet',
 		'percent',
 		'arrayJSONSetTitleAndSettingsPercentWitness'
 	],
-	#category : #MyYearSelector
+	#category : 'MyYearSelector',
+	#package : 'MyYearSelector'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PercentSelector >> arrayJSONSetTitleAndSettingsPluginWitness [
 
 	^ arrayJSONSetTitleAndSettingsPercentWitness
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PercentSelector >> authorizedNumbers [
 	"these numbers are the only values permitted to be taken by a PercentSelector through its Property Inspector, defined in percentSelector_pi.html"
 	^  #( 50 100 120 200 )
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PercentSelector >> initialize [
 
 	super initialize.
@@ -48,19 +49,19 @@ PercentSelector >> initialize [
 	percent := 50
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PercentSelector >> pluginSelectorSet [
 
 	^ percentSelectorSet
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PercentSelector >> pluginValue [
 
 	^ percent
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PercentSelector >> pluginValue: aPercent [
 
 	percent := aPercent.
@@ -68,19 +69,19 @@ PercentSelector >> pluginValue: aPercent [
 	pharostreamdeck percent: aPercent.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PercentSelector >> pluginWitnessSet [
 
 	^ percentWitnessSet
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PercentSelector >> selectorAction [ 
 
 	^ 'com.thales.pharostreamdeck.percentselector'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PercentSelector >> witnessAction [ 
 
 	^ 'com.thales.pharostreamdeck.percentwitness'

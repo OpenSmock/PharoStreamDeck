@@ -24,8 +24,8 @@ For the Collaborators Part: My main collaborator is the MyApp class, since it la
 	myApp:		<Object>
 "
 Class {
-	#name : #PharoStreamDeckGUI,
-	#superclass : #SpDemoButtonsPresenter,
+	#name : 'PharoStreamDeckGUI',
+	#superclass : 'SpDemoButtonsPresenter',
 	#instVars : [
 		'buttonZero',
 		'buttonFive',
@@ -48,10 +48,11 @@ Class {
 		'myApp',
 		'buttonHundredTwenty'
 	],
-	#category : #MyYearSelector
+	#category : 'MyYearSelector',
+	#package : 'MyYearSelector'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PharoStreamDeckGUI >> connectPresenters [
 	"example inspired from the code available in the Help tab -> Spec2 demo -> Buttons -> Code tab"
 
@@ -83,7 +84,7 @@ PharoStreamDeckGUI >> connectPresenters [
 	"buttonList do: [ :each | self selectedButton: each with: each label ]"
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PharoStreamDeckGUI >> defaultLayout [
 
 	^ SpBoxLayout newVertical
@@ -113,7 +114,7 @@ PharoStreamDeckGUI >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PharoStreamDeckGUI >> highlightPressedButton [
 	"resets the background of every button"
 
@@ -125,7 +126,7 @@ PharoStreamDeckGUI >> highlightPressedButton [
 		percent asString = each label ifTrue: [ each state: true ] ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PharoStreamDeckGUI >> initializePresenters [
 
 	buttonZero := self newButton label: '0'.
@@ -179,24 +180,24 @@ PharoStreamDeckGUI >> initializePresenters [
 	buttonList do: [ :each | self focusOrder add: each ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PharoStreamDeckGUI >> myApp: aMyApp [
 
 	myApp := aMyApp
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PharoStreamDeckGUI >> percent: aPercent [
 
 	percent := aPercent.
-	myApp percent: aPercent.
+	"myApp percent: aPercent."
 	
 	"can't put these methods in selectedButton: with:, doesn't work"
 	self updateWitnessButtons.
 	self highlightPressedButton.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PharoStreamDeckGUI >> selectedButton: button with: pluginValue [
 	"updates the value depending on the button affiliated to a plugin"
 
@@ -205,13 +206,13 @@ PharoStreamDeckGUI >> selectedButton: button with: pluginValue [
 		self percent: pluginValue ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PharoStreamDeckGUI >> title [
 
 	^ 'PharoStreamDeck'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PharoStreamDeckGUI >> updateWitnessButtons [
 	"updates the relevant Witness instance through MyApp's plugin value"
 
@@ -219,11 +220,11 @@ PharoStreamDeckGUI >> updateWitnessButtons [
 	buttonWitnessPercent label: percent asString
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PharoStreamDeckGUI >> year: aYear [
 
 	year := aYear.
-	myApp year: aYear.
+	"myApp year: aYear."
 
 	"can't put these methods in selectedButton: with: , doesn't work"
 	self updateWitnessButtons.

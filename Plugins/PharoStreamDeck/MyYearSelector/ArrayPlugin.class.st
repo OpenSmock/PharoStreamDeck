@@ -13,16 +13,17 @@ ArrayPlugin new
 	plugin:			<Object>
 "
 Class {
-	#name : #ArrayPlugin,
-	#superclass : #Object,
+	#name : 'ArrayPlugin',
+	#superclass : 'Object',
 	#instVars : [
 		'arrayPluginContents',
 		'plugin'
 	],
-	#category : #MyYearSelector
+	#category : 'MyYearSelector',
+	#package : 'MyYearSelector'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ArrayPlugin >> actionSelectorWitness: index [
 	"puts in an array the names of the Selector and Witness actions for a plugin"
 
@@ -37,25 +38,25 @@ ArrayPlugin >> actionSelectorWitness: index [
 	^ arrayPluginSelectorWitness
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ArrayPlugin >> arrayJSONSetTitleAndSettingsPluginWitness [
 
 	^ plugin arrayJSONSetTitleAndSettingsPluginWitness
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 ArrayPlugin >> arrayPluginContents [
 
 	^ arrayPluginContents
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 ArrayPlugin >> initialize [
 
 	arrayPluginContents := OrderedCollection new: 2.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ArrayPlugin >> numberInAuthorizedNumbers: aNumber [
 	"by using the authorizedNumbers: method of each plugin, determines which plugin is the one that needs its Witness values modified"
 
@@ -74,37 +75,37 @@ ArrayPlugin >> numberInAuthorizedNumbers: aNumber [
 	foundNumber ifTrue: [ plugin pluginValue: number ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ArrayPlugin >> plugin [
 
 	^ plugin
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ArrayPlugin >> plugin: aPlugin [
 
 	plugin := aPlugin
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ArrayPlugin >> pluginSelectorSet [
 
 	^ plugin pluginSelectorSet
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ArrayPlugin >> pluginValue [
 
 	^ plugin pluginValue
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ArrayPlugin >> pluginWitnessSet [
 
 	^ plugin pluginWitnessSet
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ArrayPlugin >> selectorAction [
 
 	| arrayPluginSelector |
@@ -114,7 +115,7 @@ ArrayPlugin >> selectorAction [
 	^ arrayPluginSelector
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ArrayPlugin >> selectorPercentAction [
 
 	| percentPlugin |
@@ -122,7 +123,7 @@ ArrayPlugin >> selectorPercentAction [
 	^ percentPlugin selectorAction
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ArrayPlugin >> selectorYearAction [
 
 	| yearPlugin |
@@ -130,7 +131,7 @@ ArrayPlugin >> selectorYearAction [
 	^ yearPlugin selectorAction
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ArrayPlugin >> witnessAction [
 
 	| arrayPluginWitness |

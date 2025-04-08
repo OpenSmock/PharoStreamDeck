@@ -13,28 +13,29 @@ LaunchedServer new.
 	launchedServerState:		<Boolean>
 "
 Class {
-	#name : #LaunchedServer,
-	#superclass : #Object,
+	#name : 'LaunchedServer',
+	#superclass : 'Object',
 	#instVars : [
 		'launchedServerState'
 	],
-	#category : #MyYearSelector
+	#category : 'MyYearSelector',
+	#package : 'MyYearSelector'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 LaunchedServer >> initialize [
 
 	launchedServerState ifNil: [ launchedServerState := false ].
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 LaunchedServer >> launchedServerState [
 	"used in the initServer method of PluginSharedActions"
 
 	^ launchedServerState
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 LaunchedServer >> launchedServerState: aBoolean [
 	"used in the initServer method of PluginSharedActions"
 
