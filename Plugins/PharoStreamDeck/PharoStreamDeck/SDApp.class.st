@@ -32,8 +32,12 @@ SDApp class >> showWindow [
 	| app |
 	
 	app := self new.
-	app addNewPlugin: YearSelector new.
-	app addNewPlugin: SDPercentSelector new.
+	app addNewPlugin: (YearSelector new
+		initServer ;
+		yourself).
+	app addNewPlugin: (SDPercentSelector new
+		initServer ;
+		yourself).
 	
 	^ app
 
