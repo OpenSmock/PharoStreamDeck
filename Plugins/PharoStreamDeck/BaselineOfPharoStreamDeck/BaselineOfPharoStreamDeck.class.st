@@ -12,9 +12,7 @@ BaselineOfPharoStreamDeck >> baseline: spec [
 	spec for: #common do: [
 		self dependencies: spec.
 		spec package: 'PharoStreamDeck' ;
-			package: 'PharoStreamDeck-Example' ;
-			package: 'PharoStreamDeck-Tests' ;
-			package: 'PharoStreamDeck-Tools' ]
+			package: 'PharoStreamDeck-Tests'  ]
 ]
 
 { #category : 'accessing' }

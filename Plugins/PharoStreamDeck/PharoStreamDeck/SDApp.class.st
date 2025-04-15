@@ -18,8 +18,9 @@ Class {
 		'pluginList',
 		'server'
 	],
-	#category : 'PharoStreamDeck',
-	#package : 'PharoStreamDeck'
+	#category : 'PharoStreamDeck-App',
+	#package : 'PharoStreamDeck',
+	#tag : 'App'
 }
 
 { #category : 'script' }
