@@ -65,13 +65,13 @@ PluginSharedActions >> arrayPlugin: anArrayPlugin [
 
 { #category : 'accessing' }
 PluginSharedActions >> determineTypeObj [
-	
 	"actionSelectorWitness: changes the current plugin selected"
-	((arrayPlugin actionSelectorWitness: 1) includes: action) ifTrue: [ 
-		typeObj := 'year' ].
-	((arrayPlugin actionSelectorWitness: 1) includes: action) ifFalse: [
-		((arrayPlugin actionSelectorWitness: 2) includes: action) ifTrue: [
-			typeObj := 'percent' ] ]
+
+	((arrayPlugin actionSelectorWitness: 1) includes: action)
+		ifTrue: [ typeObj := 'year' ]
+		ifFalse: [
+			((arrayPlugin actionSelectorWitness: 2) includes: action) ifTrue: [
+				typeObj := 'percent' ] ]
 ]
 
 { #category : 'accessing' }
@@ -226,6 +226,59 @@ PluginSharedActions >> keyUp: jsonObj [
 	"varObj being a year or a percent depending on the class it comes from"
 	"action being only affected to a value in willAppear: and keyUp: "
 	action := jsonObj at: 'action'.
+	context := jsonObj at: 'context'.
+
+	defaultImage := 'img/actionIcon.png'.
+	highlightedImage := 'img/actionIconHighlighted.png'.
+
+	self determineTypeObj.
+
+	"resets value to 0 if a Year/PercentWitness is pressed (for setTitle and setSettings)"
+	"checks for every plugin if its type is Witness"
+	(arrayPlugin witnessAction includes: action) ifTrue: [ varObj := 0 ].
+
+	"values need to be saved for each plugin"
+	(arrayPlugin selectorAction includes: action) ifTrue: [
+		varObj := jsonObj at: 'payload' at: typeObj ].
+
+	jsonWillAppear := Dictionary new
+		                  at: 'action' put: action;
+		                  at: 'context' put: context;
+		                  at: 'payload' at: typeObj put: varObj;
+		                  yourself.
+	jsonFormattedWillAppear := (self willAppear: jsonWillAppear) at: 1.
+
+	"used to reset keys highlighted by a command sent in the Pharo IDE using the MyApp class, these messages are sent before jsonFormattedSetHighlightedImage"
+	arraySetImage := OrderedCollection new.
+
+	arrayPlugin pluginWitnessSet do: [ :each |
+		self setCurrentImage: each with: defaultImage ].
+
+	arrayPlugin pluginSelectorSet do: [ :each |
+		self setCurrentImage: each with: defaultImage ].
+
+	self sendImages.
+
+	"updates the plugin value of the relevant subclass of the PluginSharedActions class, which is needed to update the Witness instances"
+	self sendValueHasChangedEvent: varObj.
+
+	"returns the different events"
+	arrayEvents := Array new: 2.
+	"these attributes are all stringified JSON"
+	arrayEvents at: 1 put: jsonFormattedSettings.
+	arrayEvents at: 2 put: jsonFormattedWillAppear.
+
+	^ arrayEvents
+]
+
+{ #category : 'accessing' }
+PluginSharedActions >> keyUpBis: jsonObj [
+	"sends multiple events (setSettings, getGlobalSettings so that the plugin receives a didReceiveGlobalSettings event)"
+
+	| jsonSettings context arrayEvents jsonFormattedSettings highlightedImage jsonContext jsonWillAppear jsonFormattedWillAppear defaultImage varObj |
+	"varObj being a year or a percent depending on the class it comes from""action being only affected to a value in willAppear: and keyUp: "
+	action := jsonObj at: 'action'.
+	Transcript show: action.
 	context := jsonObj at: 'context'.
 
 	defaultImage := 'img/actionIcon.png'.
