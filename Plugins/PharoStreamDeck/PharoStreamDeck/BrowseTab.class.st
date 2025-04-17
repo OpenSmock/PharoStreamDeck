@@ -34,6 +34,16 @@ BrowseTab >> arrayJSONSetTitleAndSettingsPluginWitness [
 	^ arrayJSONSetTitleAndSettingsYearWitness
 ]
 
+{ #category : 'initialization' }
+BrowseTab >> initialize [
+
+	super initialize.
+	yearWitnessSet := OrderedCollection new.
+	yearSelectorSet := OrderedCollection new.
+	arrayJSONSetTitleAndSettingsYearWitness := OrderedCollection new.
+
+]
+
 { #category : 'accessing' }
 BrowseTab >> pluginAction [
 

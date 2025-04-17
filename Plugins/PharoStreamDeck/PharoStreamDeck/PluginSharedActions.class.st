@@ -22,14 +22,15 @@ Class {
 	#name : 'PluginSharedActions',
 	#superclass : 'Object',
 	#instVars : [
-		'WebSocket',
 		'action',
 		'arrayGetSettings',
 		'arrayPlugin',
 		'arraySetImage',
 		'launchedServer',
 		'uuid',
-		'typeObj'
+		'typeObj',
+		'webSocket',
+		'serverStarted'
 	],
 	#classVars : [
 		'pharostreamdeck'
@@ -46,12 +47,6 @@ PluginSharedActions class >> isAbstract [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> WebSocket: aWebSocket [
-
-	WebSocket := aWebSocket
-]
-
-{ #category : 'accessing' }
 PluginSharedActions >> arrayPlugin [
 
 	^ arrayPlugin
@@ -61,6 +56,47 @@ PluginSharedActions >> arrayPlugin [
 PluginSharedActions >> arrayPlugin: anArrayPlugin [
 
 	arrayPlugin := anArrayPlugin
+]
+
+{ #category : 'accessing' }
+PluginSharedActions >> connected: aWebsocket receives: aMessage [
+
+	| event jsonObject arrayPluginContents |
+	serverStarted := true.
+
+	"gives the WebSocket to every plugin"
+	arrayPluginContents := arrayPlugin arrayPluginContents.
+	arrayPluginContents do: [ :each | each webSocket: aWebsocket ].
+	"self inform: 'Received message: ' , message printString."
+	"treats the data received accordingly, redirecting events to their respective method"
+	jsonObject := STONJSON fromString: aMessage.
+	event := jsonObject at: 'event'.
+
+	"custom fields (i.e. ones that aren't required by an event as described in the SDK) are sent through the payload attribute of a JSON string"
+	"string associated to inRegisterEvent in JavaScript"
+	event = 'registerPlugin' ifTrue: [
+		self registerPluginEvent: jsonObject ].
+
+	"called when a key is pressed, is only a received event, doesn't need to be sent back to the plugin"
+	event = 'keyUp' ifTrue: [ self keyUpEvent: jsonObject ].
+
+	"called when one of the keys of the PharoStreamDeck plugin is present on the current displayed plugin"
+	"event = 'willAppear' ifTrue: [ self willAppearEvent: jsonObject ]."
+
+	"event = 'willDisappear' ifTrue: [ self willDisappear ]."
+	"getGlobalSettings, setTitle and setSettings are only invoked, they're not received as is"
+	"setTitle and setSettings are called when selecting a value from the Property Inspector of a Selector instance"
+
+	"setImage is directly received when the plugin receives the didReceiveGlobalSettings event in order to reset the backgrounds of the keys"
+	"event = 'setImage' ifTrue: [ self setImageEvent: jsonObject ]."
+
+	"received when the getSettings event is sent, is used to receive the year value through a context of a Year/PercentSelector instance"
+	"event = 'didReceiveSettings' ifTrue: [
+		self highlightPluginSelectorReceive: jsonObject ]."
+
+	"event received when a value is changed from the Property Inspector of a Year/PercentSelector instance
+	UNUSED"
+	"event = 'sendToPlugin' ifTrue: [ self sendToPluginEvent: jsonObject ]"
 ]
 
 { #category : 'accessing' }
@@ -155,67 +191,24 @@ PluginSharedActions >> highlightPluginSelectorSend [
 PluginSharedActions >> initServer [
 	"Creates a ZnManagingMultiThreadedServer HTTP port 8080 process, which needs to be terminated through the Process Browser if another server is to be launched"
 
-	| jsonObject server arrayPluginContents |
-
-	server := ZnWebSocket
-		          startServerOn: 8080
-		          prefix: 'pharoBridge'
-		          do: [ :webSocket |
-			          [
-			          webSocket runWith: [ :message |
-				          | event |
-				          self launchedServerStateChange: true.
-
-				          "gives the WebSocket to every plugin"
-				          arrayPluginContents := arrayPlugin arrayPluginContents.
-				          arrayPluginContents do: [ :each |
-					          each WebSocket: webSocket ].
-				          "self inform: 'Received message: ' , message printString."
-				          "treats the data received accordingly, redirecting events to their respective method"
-				          jsonObject := STONJSON fromString: message.
-				          event := jsonObject at: 'event'.
-
-				          "custom fields (i.e. ones that aren't required by an event as described in the SDK) are sent through the payload attribute of a JSON string"
-				          "string associated to inRegisterEvent in JavaScript"
-				          event = 'registerPlugin' ifTrue: [
-					          self registerPluginEvent: jsonObject ].
-
-				          "called when a key is pressed, is only a received event, doesn't need to be sent back to the plugin"
-				          event = 'keyUp' ifTrue: [ self keyUpEvent: jsonObject ].
-
-				          "called when one of the keys of the PharoStreamDeck plugin is present on the current displayed plugin"
-				          event = 'willAppear' ifTrue: [
-					          self willAppearEvent: jsonObject ].
-
-				          event = 'willDisappear' ifTrue: [ self willDisappear ].
-				          "getGlobalSettings, setTitle and setSettings are only invoked, they're not received as is"
-				          "setTitle and setSettings are called when selecting a value from the Property Inspector of a Selector instance"
-
-				          "setImage is directly received when the plugin receives the didReceiveGlobalSettings event in order to reset the backgrounds of the keys"
-				          event = 'setImage' ifTrue: [
-					          self setImageEvent: jsonObject ].
-
-				          "received when the getSettings event is sent, is used to receive the year value through a context of a Year/PercentSelector instance"
-				          event = 'didReceiveSettings' ifTrue: [
-					          self highlightPluginSelectorReceive: jsonObject ].
-
-				          "event received when a value is changed from the Property Inspector of a Year/PercentSelector instance"
-				          event = 'sendToPlugin' ifTrue: [
-					          self sendToPluginEvent: jsonObject ] ] ]
-				          on: ConnectionClosed , PrimitiveFailed
-				          do: [ "ignore close"
-					          self launchedServerStateChange: false ].
-			          self inform: 'The server is closed' ]
+	ZnWebSocket
+		startServerOn: 8080
+		prefix: 'pharoBridge'
+		do: [ :aWebSocket |
+			[ aWebSocket runWith: [ :message | self connected: aWebSocket receives: message] ]
+				on: ConnectionClosed , PrimitiveFailed
+				do: [ "ignore close" self launchedServerStateChange: false ].
+			self inform: 'The server is closed' ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'initialization' }
 PluginSharedActions >> initialize [
 
 	super initialize.
-
-	arraySetImage := OrderedCollection new.
-	arrayGetSettings := OrderedCollection new.
-	arrayPlugin := ArrayPlugin new.
+	serverStarted := false.
+	"arraySetImage := OrderedCollection new."
+	"arrayGetSettings := OrderedCollection new."
+	arrayPlugin := ArrayPlugin new
 ]
 
 { #category : 'accessing' }
@@ -333,7 +326,7 @@ PluginSharedActions >> keyUpEvent: jsonObject [
 	jsonSettings := arrayEvents at: 1.
 	jsonWillAppear := arrayEvents at: 2.
 
-	WebSocket sendMessage: jsonSettings.
+	webSocket sendMessage: jsonSettings.
 	self sendUpdatePluginWitnessInstances
 ]
 
@@ -403,7 +396,7 @@ PluginSharedActions >> registerPluginEvent: jsonObject [
 
 	| json |
 	json := self registerPlugin: jsonObject.
-	WebSocket sendMessage: json
+	webSocket sendMessage: json
 ]
 
 { #category : 'accessing' }
@@ -412,7 +405,7 @@ PluginSharedActions >> sendGetSettings [
 
 	"done that way since the setSettings event sent in keyUp is necessary to keep track of each instance's value, also calls a didReceiveSettings event which updates every Year/PercentSelector having the same value as the one clicked"
 
-	arrayGetSettings do: [ :each | WebSocket sendMessage: each ].
+	arrayGetSettings do: [ :each | webSocket sendMessage: each ].
 
 	"removes the previous elements stocked in order to not stack multiple times the same context with different values"
 	arrayGetSettings removeAll
@@ -422,7 +415,7 @@ PluginSharedActions >> sendGetSettings [
 PluginSharedActions >> sendImages [
 	"sends defaultImage or highlightedImage depending on the sender for every Year/PercentSelector instance"
 
-	arraySetImage do: [ :each | WebSocket sendMessage: each ].
+	arraySetImage do: [ :each | webSocket sendMessage: each ].
 
 	"removes the previous elements stocked in order to not stack multiple times the same context with different values"
 	arraySetImage removeAll
@@ -459,8 +452,8 @@ PluginSharedActions >> sendToPluginEvent: jsonObject [
 	jsonSettings := arrayEvents at: 1.
 	jsonTitle := arrayEvents at: 2.
 
-	WebSocket sendMessage: jsonSettings.
-	WebSocket sendMessage: jsonTitle
+	webSocket sendMessage: jsonSettings.
+	webSocket sendMessage: jsonTitle
 ]
 
 { #category : 'accessing' }
@@ -468,7 +461,7 @@ PluginSharedActions >> sendUpdatePluginWitnessInstances [
 	"updates every Year/PercentWitness instance"
 
 	arrayPlugin arrayJSONSetTitleAndSettingsPluginWitness do: [ :each |
-		WebSocket sendMessage: each ].
+		webSocket sendMessage: each ].
 
 	"removes the previous elements stocked in order to not stack multiple times the same context with different values"
 	arrayPlugin arrayJSONSetTitleAndSettingsPluginWitness removeAll
@@ -527,7 +520,7 @@ PluginSharedActions >> setImageEvent: jsonObject [
 
 	| json |
 	json := self setImage: jsonObject.
-	WebSocket sendMessage: json
+	webSocket sendMessage: json
 ]
 
 { #category : 'accessing' }
@@ -670,6 +663,12 @@ PluginSharedActions >> uuid: anObject [
 ]
 
 { #category : 'accessing' }
+PluginSharedActions >> webSocket: aWebSocket [
+
+	webSocket := aWebSocket
+]
+
+{ #category : 'accessing' }
 PluginSharedActions >> willAppear: jsonObj [
 
 	| context varObj subdictionary arrayEvents payload |
@@ -713,8 +712,8 @@ PluginSharedActions >> willAppearEvent: jsonObject [
 	jsonTitle := arrayEvents at: 1.
 	jsonSettings := arrayEvents at: 2.
 	"updates every Year/PercentWitness value if the current Stream Deck profile is changed (default value being 0)"
-	WebSocket sendMessage: jsonTitle.
-	WebSocket sendMessage: jsonSettings
+	webSocket sendMessage: jsonTitle.
+	webSocket sendMessage: jsonSettings
 ]
 
 { #category : 'as yet unclassified' }
