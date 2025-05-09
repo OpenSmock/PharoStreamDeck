@@ -1,106 +1,79 @@
 "
-For the Class part: I am an abstract class which possess the shared actions between YearSelector and PercentSelector
+For the Class part: I am the class where most of the messages get sent. I redirect received messages to the appropriate method and action. I can also send data to the plugin when needed.
 
-For the Responsibility part: I launch a server then treat the different events that are received from index.html (the JavaScript side of the plugin, which also sends some info about the Stream Deck at its launch). With the use of the initServer method, each event is treated by the relevant Pharo class
+For the Responsibility part: I launch a server then treat the different events that are received from index.html (the JavaScript side of the plugin, which also sends some info about the Stream Deck at its launch). With the use of the initServer and `connected:receives:` method, each event is treated by the relevant Pharo class.
 
 For the Collaborators Part: My main collaborator is the Stream Deck application, which permits the use of profiles and placing actions on its grid through the PharoStreamDeck plugin
 
-How to create instances:
-Since I'm an abstract class, I'm not supposed to be launched.
-However, YearSelector and PercentSelector are concrete implementations of myself and they themselves can be launched through YearSelector new and PercentSelector new.
+How to create instances: I am launched in the `SDAppLaunch start`  method.
+SDPlugin new.
 
-Instance variables:
-uuid is the unique value identifying the plugin (inPluginUUID in JavaScript code). It's sent via the registration procedure, recuperated from the connectElgatoStreamDeckSocket() function (see SDK documentation - https://docs.elgato.com/sdk/plugins/registration-procedure#compiled-plugin-registration), since globalSettings events require more than a context value to share a setting between instances of plugins (see SDK documentation - https://docs.elgato.com/sdk/plugins/events-sent#getglobalsettings)
-WebSocket memorizes the WebSocket that is launched in initServer to send messages in other functions, notably with the arrays' content
-plugin memorizes the current selected plugin, so that it can highlight the relevant Selector instances and update the values of the relevant Witness instances
-arraySetImage and arrayGetSettings are used to send in bulk multiple events of the type of their names
-action memorizes the action field that is sent when the initial message is received, so that it can easily differentiate between Year and Percent instances (corresponds to the UUID field in manifest.json for every action)
-launchedServerState and launchedServer are the instance variables of the LaunchedServer class, to know whether or not one is launched
-arrayPlugin is the instance variable of the ArrayPlugin class, to know which plugins are launched
+**Instance variables:**
+action: String, the uuid of the received message indicating which action is targeted. 
+uuid: String, is it really useful ?
+webSocket : ZnWebSocket, current websocket in use
+serverStarted : Boolean, is the server started or not
+receivedUUID: String received at register plugin.
 "
 Class {
-	#name : 'PluginSharedActions',
+	#name : 'SDPlugin',
 	#superclass : 'Object',
 	#instVars : [
 		'action',
 		'arrayGetSettings',
-		'arrayPlugin',
 		'arraySetImage',
-		'launchedServer',
 		'uuid',
 		'typeObj',
 		'webSocket',
-		'serverStarted'
+		'serverStarted',
+		'receivedUUID'
 	],
 	#classVars : [
-		'pharostreamdeck'
+		'arrayPlugin'
 	],
-	#category : 'PharoStreamDeck-Tools',
+	#category : 'PharoStreamDeck-Core',
 	#package : 'PharoStreamDeck',
-	#tag : 'Tools'
+	#tag : 'Core'
 }
 
-{ #category : 'testing' }
-PluginSharedActions class >> isAbstract [
-
-	^ self == PluginSharedActions
-]
-
 { #category : 'accessing' }
-PluginSharedActions >> arrayPlugin [
+SDPlugin >> arrayPlugin [
 
 	^ arrayPlugin
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> arrayPlugin: anArrayPlugin [
-
+SDPlugin >> arrayPlugin: anArrayPlugin [
+	
 	arrayPlugin := anArrayPlugin
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> connected: aWebsocket receives: aMessage [
+SDPlugin >> connected: aWebsocket receives: aMessage [
 
-	| event jsonObject arrayPluginContents |
-	serverStarted := true.
-
-	"gives the WebSocket to every plugin"
-	arrayPluginContents := arrayPlugin arrayPluginContents.
-	arrayPluginContents do: [ :each | each webSocket: aWebsocket ].
-	"self inform: 'Received message: ' , message printString."
-	"treats the data received accordingly, redirecting events to their respective method"
+	| event jsonObject |
+	"self inform: 'Received message: ' , message printString.""treats the data received accordingly, redirecting events to their respective method"
 	jsonObject := STONJSON fromString: aMessage.
 	event := jsonObject at: 'event'.
-
+	action := jsonObject at: 'action'.
+	Transcript
+		show: aMessage;
+		cr.
 	"custom fields (i.e. ones that aren't required by an event as described in the SDK) are sent through the payload attribute of a JSON string"
 	"string associated to inRegisterEvent in JavaScript"
 	event = 'registerPlugin' ifTrue: [
 		self registerPluginEvent: jsonObject ].
 
 	"called when a key is pressed, is only a received event, doesn't need to be sent back to the plugin"
-	event = 'keyUp' ifTrue: [ self keyUpEvent: jsonObject ].
+	event = 'keyUp' ifTrue: [ self keyUp: jsonObject ].
 
-	"called when one of the keys of the PharoStreamDeck plugin is present on the current displayed plugin"
-	"event = 'willAppear' ifTrue: [ self willAppearEvent: jsonObject ]."
+	event = 'didReceiveSettings' ifTrue: [ self receiveSettings: jsonObject ].
 
-	"event = 'willDisappear' ifTrue: [ self willDisappear ]."
-	"getGlobalSettings, setTitle and setSettings are only invoked, they're not received as is"
-	"setTitle and setSettings are called when selecting a value from the Property Inspector of a Selector instance"
-
-	"setImage is directly received when the plugin receives the didReceiveGlobalSettings event in order to reset the backgrounds of the keys"
-	"event = 'setImage' ifTrue: [ self setImageEvent: jsonObject ]."
-
-	"received when the getSettings event is sent, is used to receive the year value through a context of a Year/PercentSelector instance"
-	"event = 'didReceiveSettings' ifTrue: [
-		self highlightPluginSelectorReceive: jsonObject ]."
-
-	"event received when a value is changed from the Property Inspector of a Year/PercentSelector instance
-	UNUSED"
-	"event = 'sendToPlugin' ifTrue: [ self sendToPluginEvent: jsonObject ]"
+	event = 'willAppear' ifTrue: [ self willAppear: jsonObject  ]
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> determineTypeObj [
+SDPlugin >> determineTypeObj [
 	"actionSelectorWitness: changes the current plugin selected"
 
 	((arrayPlugin actionSelectorWitness: 1) includes: action)
@@ -111,7 +84,7 @@ PluginSharedActions >> determineTypeObj [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> getGlobalSettings: jsonObj [
+SDPlugin >> getGlobalSettings: jsonObj [
 	"the getGlobalSettings event has no need to be sent to the plugin since the actions directly take place in Pharo"
 
 	| varObj json pluginWitnessInstances |
@@ -128,7 +101,7 @@ PluginSharedActions >> getGlobalSettings: jsonObj [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> getSettings: context [
+SDPlugin >> getSettings: context [
 	"used for highlightYearSelector: , so that the action value can be retrieved from a context. It's a way to know which Stream Deck has which action value attached to it."
 
 	| settings jsonSettings |
@@ -142,7 +115,7 @@ PluginSharedActions >> getSettings: context [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> highlightPluginSelectorReceive: jsonObj [
+SDPlugin >> highlightPluginSelectorReceive: jsonObj [
 	"highlight Year/PercentSelector values with the chosen (valid value since checked in [variable of the class]: ) plugin value"
 
 	"context is linked to an action value by the getSettings event which makes the plugin receive a didReceiveSettings event transmitting the action value, which is updated if keyUp: is triggered"
@@ -172,100 +145,54 @@ PluginSharedActions >> highlightPluginSelectorReceive: jsonObj [
 	self sendImages
 ]
 
-{ #category : 'accessing' }
-PluginSharedActions >> highlightPluginSelectorSend [
-	"highlight Year/PercentSelector values with the chosen (valid value since checked in [variable of the class]: ) plugin value"
-
-	"context is linked to an action value by the getSettings event which makes the plugin receive a didReceiveSettings event transmitting the action value, which is updated if keyUp: is triggered"
-
-	"receives multiple times the same event, no need for a do: loop"
-
-	| jsonSettings |
-	arrayPlugin pluginSelectorSet do: [ :each |
-		jsonSettings := self getSettings: each.
-		arrayGetSettings add: jsonSettings.
-		self sendGetSettings ]
-]
-
-{ #category : 'as yet unclassified' }
-PluginSharedActions >> initServer [
+{ #category : 'initialization' }
+SDPlugin >> initServer [
 	"Creates a ZnManagingMultiThreadedServer HTTP port 8080 process, which needs to be terminated through the Process Browser if another server is to be launched"
-
-	ZnWebSocket
+	| server |
+	server := ZnWebSocket
 		startServerOn: 8080
 		prefix: 'pharoBridge'
 		do: [ :aWebSocket |
-			[ aWebSocket runWith: [ :message | self connected: aWebSocket receives: message] ]
+			[
+			aWebSocket isConnected
+				ifTrue: [
+					serverStarted := true.
+					webSocket :=aWebSocket .
+					arrayPlugin do: [ :each | each webSocket: aWebSocket ].
+					aWebSocket runWith: [ :message |
+						self inform: 'Received message: ' , message printString.
+						self connected: aWebSocket receives: message ] ]
+				ifFalse: [ self error: 'The socket isn''t connected' ] ]
 				on: ConnectionClosed , PrimitiveFailed
-				do: [ "ignore close" self launchedServerStateChange: false ].
-			self inform: 'The server is closed' ]
+				do: [ "ignore close"
+					serverStarted := nil.
+					arrayPlugin removeAll ].
+			self inform: 'The server is closed'.
+			serverStarted := nil ].
 ]
 
 { #category : 'initialization' }
-PluginSharedActions >> initialize [
+SDPlugin >> initialize [
 
 	super initialize.
-	serverStarted := false.
-	"arraySetImage := OrderedCollection new."
-	"arrayGetSettings := OrderedCollection new."
-	arrayPlugin := ArrayPlugin new
+
+	uuid := 'com.thales.pharostreamdeck'.
+	arrayPlugin := SDAppLaunch arrayPlugin.
+	serverStarted ifNil: [ "arraySetImage := OrderedCollection new." "arrayGetSettings := OrderedCollection new."
+		self initServer ]
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> keyUp: jsonObj [
-	"sends multiple events (setSettings, getGlobalSettings so that the plugin receives a didReceiveGlobalSettings event)"
-
-	| jsonSettings context arrayEvents jsonFormattedSettings highlightedImage jsonContext jsonWillAppear jsonFormattedWillAppear defaultImage varObj |
-	"varObj being a year or a percent depending on the class it comes from"
-	"action being only affected to a value in willAppear: and keyUp: "
-	action := jsonObj at: 'action'.
-	context := jsonObj at: 'context'.
-
-	defaultImage := 'img/actionIcon.png'.
-	highlightedImage := 'img/actionIconHighlighted.png'.
-
-	self determineTypeObj.
-
-	"resets value to 0 if a Year/PercentWitness is pressed (for setTitle and setSettings)"
-	"checks for every plugin if its type is Witness"
-	(arrayPlugin witnessAction includes: action) ifTrue: [ varObj := 0 ].
-
-	"values need to be saved for each plugin"
-	(arrayPlugin selectorAction includes: action) ifTrue: [
-		varObj := jsonObj at: 'payload' at: typeObj ].
-
-	jsonWillAppear := Dictionary new
-		                  at: 'action' put: action;
-		                  at: 'context' put: context;
-		                  at: 'payload' at: typeObj put: varObj;
-		                  yourself.
-	jsonFormattedWillAppear := (self willAppear: jsonWillAppear) at: 1.
-
-	"used to reset keys highlighted by a command sent in the Pharo IDE using the MyApp class, these messages are sent before jsonFormattedSetHighlightedImage"
-	arraySetImage := OrderedCollection new.
-
-	arrayPlugin pluginWitnessSet do: [ :each |
-		self setCurrentImage: each with: defaultImage ].
-
-	arrayPlugin pluginSelectorSet do: [ :each |
-		self setCurrentImage: each with: defaultImage ].
-
-	self sendImages.
-
-	"updates the plugin value of the relevant subclass of the PluginSharedActions class, which is needed to update the Witness instances"
-	self sendValueHasChangedEvent: varObj.
-
-	"returns the different events"
-	arrayEvents := Array new: 2.
-	"these attributes are all stringified JSON"
-	arrayEvents at: 1 put: jsonFormattedSettings.
-	arrayEvents at: 2 put: jsonFormattedWillAppear.
-
-	^ arrayEvents
+SDPlugin >> keyUp: jsonObj [
+	|actualPlugin|
+	
+	actualPlugin := self whichAction: action.
+	actualPlugin  pluginAction.
+	^actualPlugin 
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> keyUpBis: jsonObj [
+SDPlugin >> keyUpBis: jsonObj [
 	"sends multiple events (setSettings, getGlobalSettings so that the plugin receives a didReceiveGlobalSettings event)"
 
 	| jsonSettings context arrayEvents jsonFormattedSettings highlightedImage jsonContext jsonWillAppear jsonFormattedWillAppear defaultImage varObj |
@@ -318,10 +245,11 @@ PluginSharedActions >> keyUpBis: jsonObj [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> keyUpEvent: jsonObject [
+SDPlugin >> keyUpEvent: jsonObject [
+	"Used to be called by connect: receives: instead of keyUp"
 
 	| arrayEvents jsonSettings jsonWillAppear |
-	arrayEvents := self keyUp: jsonObject.
+	arrayEvents := self keyUpBis: jsonObject.
 
 	jsonSettings := arrayEvents at: 1.
 	jsonWillAppear := arrayEvents at: 2.
@@ -331,19 +259,7 @@ PluginSharedActions >> keyUpEvent: jsonObject [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> launchedServer: server [
-
-	launchedServer := server
-]
-
-{ #category : 'accessing' }
-PluginSharedActions >> launchedServerStateChange: launchedServerState [
-
-	launchedServer launchedServerState: launchedServerState
-]
-
-{ #category : 'accessing' }
-PluginSharedActions >> modifyPluginWitnessValue [
+SDPlugin >> modifyPluginWitnessValue [
 	"this method is used to change every Year/PercentWitness instance's value"
 
 	| json varObj |
@@ -357,50 +273,30 @@ PluginSharedActions >> modifyPluginWitnessValue [
 	self sendUpdatePluginWitnessInstances
 ]
 
-{ #category : 'as yet unclassified' }
-PluginSharedActions >> pharoStreamDeckGUI: pharostreamdeckGUI [
+{ #category : 'accessing' }
+SDPlugin >> receiveSettings: aJSONObj [
 
-	pharostreamdeck := pharostreamdeckGUI
+Transcript show: aJSONObj 
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> pluginValueSuperclass: aNumber [
-	"verify that aNumber is equal to one of the numbers returned by the authorizedNumbers method, which are values transmitted from the Property Inspector."
+SDPlugin >> receivedUUID: aUUID [
 
-	"also calls other methods to change every Year/PercentWitness instance's value as well as highlight Year/PercentSelector values with the chosen (valid) plugin value."
-
-	| pluginValue |
-	"for the current plugin, will still execute numberInAuthorizedNumbers: if the same percent value is active while the previous input was related to a YearSelector plugin value"
-	pluginValue := arrayPlugin pluginValue.
-	pluginValue = aNumber ifTrue: [ ^ self ].
-
-	arrayPlugin numberInAuthorizedNumbers: aNumber
+	receivedUUID := aUUID
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> registerPlugin: jsonObj [
-	"the uuid field is only transmitted when registerPlugin() is called in index.html"
+SDPlugin >> registerPluginEvent: aJSONObject [
 
-	"transmits the event to the first WebSocket since it isn't done in the JavaScript code"
 
-	| uuidObj json |
-	uuidObj := jsonObj at: 'uuid'.
-	self uuid: uuidObj.
+	self receivedUUID: (aJSONObject at: 'uuid') .
 
-	json := STONJSON toString: jsonObj.
-	^ json
+	Transcript show: (STONJSON toString: aJSONObject) .
+	webSocket sendMessage: (STONJSON toString: aJSONObject)
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> registerPluginEvent: jsonObject [
-
-	| json |
-	json := self registerPlugin: jsonObject.
-	webSocket sendMessage: json
-]
-
-{ #category : 'accessing' }
-PluginSharedActions >> sendGetSettings [
+SDPlugin >> sendGetSettings [
 	"gets the settings for every Year/PercentSelector instance by sending a setSettings event which adds a parameter to the settings of every instance"
 
 	"done that way since the setSettings event sent in keyUp is necessary to keep track of each instance's value, also calls a didReceiveSettings event which updates every Year/PercentSelector having the same value as the one clicked"
@@ -412,7 +308,7 @@ PluginSharedActions >> sendGetSettings [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> sendImages [
+SDPlugin >> sendImages [
 	"sends defaultImage or highlightedImage depending on the sender for every Year/PercentSelector instance"
 
 	arraySetImage do: [ :each | webSocket sendMessage: each ].
@@ -422,7 +318,7 @@ PluginSharedActions >> sendImages [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> sendToPlugin: jsonObj [
+SDPlugin >> sendToPlugin: jsonObj [
 
 	| newValue dictionaryNewValue context arrayEvents |
 	action := jsonObj at: 'action'.
@@ -444,7 +340,7 @@ PluginSharedActions >> sendToPlugin: jsonObj [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> sendToPluginEvent: jsonObject [
+SDPlugin >> sendToPluginEvent: jsonObject [
 
 	| arrayEvents jsonSettings jsonTitle |
 	arrayEvents := self sendToPlugin: jsonObject.
@@ -457,7 +353,7 @@ PluginSharedActions >> sendToPluginEvent: jsonObject [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> sendUpdatePluginWitnessInstances [
+SDPlugin >> sendUpdatePluginWitnessInstances [
 	"updates every Year/PercentWitness instance"
 
 	arrayPlugin arrayJSONSetTitleAndSettingsPluginWitness do: [ :each |
@@ -468,7 +364,7 @@ PluginSharedActions >> sendUpdatePluginWitnessInstances [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> sendValueHasChangedEvent: aNumber [
+SDPlugin >> sendValueHasChangedEvent: aNumber [
 	"changes the plugin value, also updates the value shown on relevant Witness instances and highlight the relevant Selector instances"
 	self pluginValueSuperclass: aNumber.
 	
@@ -477,7 +373,7 @@ PluginSharedActions >> sendValueHasChangedEvent: aNumber [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> setCurrentImage: context with: img [
+SDPlugin >> setCurrentImage: context with: img [
 
 	| jsonDefaultImage jsonFormattedImage |
 	jsonDefaultImage := Dictionary new
@@ -490,7 +386,7 @@ PluginSharedActions >> setCurrentImage: context with: img [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> setImage: jsonObj [
+SDPlugin >> setImage: jsonObj [
 
 	| jsonFormattedObject json context image payload |
 	context := jsonObj at: 'context'.
@@ -516,7 +412,7 @@ PluginSharedActions >> setImage: jsonObj [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> setImageEvent: jsonObject [
+SDPlugin >> setImageEvent: jsonObject [
 
 	| json |
 	json := self setImage: jsonObject.
@@ -524,7 +420,7 @@ PluginSharedActions >> setImageEvent: jsonObject [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> setSettings: jsonObj [
+SDPlugin >> setSettings: jsonObj [
 	"settings save data persistently, such as a value selected in the Property Inspector for a Year/PercentSelector"
 
 	"function called from keyUp: and sendToPlugin: "
@@ -544,7 +440,7 @@ PluginSharedActions >> setSettings: jsonObj [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> setTitle: jsonObj [
+SDPlugin >> setTitle: jsonObj [
 
 	| jsonFormattedTitle context jsonTitle jsonSettings jsonFormattedSettings arrayEvents varObj |
 	context := jsonObj at: 'context'.
@@ -579,7 +475,7 @@ PluginSharedActions >> setTitle: jsonObj [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> setTitleAndSettingsWitness: jsonObj [
+SDPlugin >> setTitleAndSettingsWitness: jsonObj [
 
 	| context jsonTitle jsonFormattedTitle jsonSettings jsonFormattedSettings varObj |
 	"this method is used to update every Year/PercentWitness instance through their context, which is the unique value that represents an instance"
@@ -619,7 +515,7 @@ PluginSharedActions >> setTitleAndSettingsWitness: jsonObj [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> setTitlePI: jsonObj [
+SDPlugin >> setTitlePI: jsonObj [
 	"for values received through the sendToPlugin event (value changed in the Property Inspector of a Year/PercentSelector instance)"
 
 	"data persistence is limited to the launched server, as opposed to the JavaScript version of this plugn which has no constraint whatsoever"
@@ -649,13 +545,19 @@ PluginSharedActions >> setTitlePI: jsonObj [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> typeObj: newTypeObj [
+SDPlugin >> typeObj: newTypeObj [
 
 	typeObj := newTypeObj 
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> uuid: anObject [
+SDPlugin >> uuid [
+
+	^ uuid
+]
+
+{ #category : 'accessing' }
+SDPlugin >> uuid: anObject [
 
 	"used for the getGlobalSettings event for their context field. These settings are preserved between instances, notably for the plugin value for the subclasses of PluginSharedActions"
 
@@ -663,24 +565,55 @@ PluginSharedActions >> uuid: anObject [
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> webSocket: aWebSocket [
+SDPlugin >> webSocket: aWebSocket [
 
 	webSocket := aWebSocket
 ]
 
 { #category : 'accessing' }
-PluginSharedActions >> willAppear: jsonObj [
+SDPlugin >> whichAction: anAction [
+
+	| arrayPlug |
+	arrayPlug := SDAppLaunch arrayPlugin.
+	arrayPlug do: [ :each |
+		(each uuidAction = anAction) ifTrue: [
+			
+			^ each ] ].
+	self error: 'There''s an issue with your plugin''s UUID'
+]
+
+{ #category : 'accessing' }
+SDPlugin >> willAppear: jsonObj [
+
+	self inform: jsonObj
+]
+
+{ #category : 'accessing' }
+SDPlugin >> willAppearEvent: jsonObject [
+
+	| arrayEvents jsonTitle jsonSettings |
+	arrayEvents := self willAppear: jsonObject.
+
+	"setTitle: calls setSettings: "
+	jsonTitle := arrayEvents at: 1.
+	jsonSettings := arrayEvents at: 2.
+	"updates every Year/PercentWitness value if the current Stream Deck profile is changed (default value being 0)"
+	webSocket sendMessage: jsonTitle.
+	webSocket sendMessage: jsonSettings
+]
+
+{ #category : 'accessing' }
+SDPlugin >> willAppearbis: jsonObj [
 
 	| context varObj subdictionary arrayEvents payload |
 	context := jsonObj at: 'context'.
 	action := jsonObj at: 'action'.
-	
-	self determineTypeObj.
 
+	self determineTypeObj.
+	varObj := 0.
 	payload := jsonObj at: 'payload' ifAbsent: [ payload := 0 ].
 
 	"initialize every value to be 0 so that nil isn't shown"
-	payload = 0 ifTrue: [ varObj := 0 ].
 	payload = 0 ifFalse: [ varObj := payload at: typeObj ].
 
 	"no punctuation apart from the dots that act as separators for the unique identifier"
@@ -698,29 +631,14 @@ PluginSharedActions >> willAppear: jsonObj [
 		                 yourself.
 
 	arrayEvents := self setTitle: subdictionary.
-
 	^ arrayEvents
 ]
 
-{ #category : 'accessing' }
-PluginSharedActions >> willAppearEvent: jsonObject [
-
-	| arrayEvents jsonTitle jsonSettings |
-	arrayEvents := self willAppear: jsonObject.
-
-	"setTitle: calls setSettings: "
-	jsonTitle := arrayEvents at: 1.
-	jsonSettings := arrayEvents at: 2.
-	"updates every Year/PercentWitness value if the current Stream Deck profile is changed (default value being 0)"
-	webSocket sendMessage: jsonTitle.
-	webSocket sendMessage: jsonSettings
-]
-
 { #category : 'as yet unclassified' }
-PluginSharedActions >> willDisappear [
+SDPlugin >> willDisappear [
 	"removes all Witness instances through their context as well as all setTitle events for Witness instances for the relevant Pharo class when the user changes to a profile that doesn't contain an instance of an action from the PharoStreamDeck plugin"
 
-	arrayPlugin pluginWitnessSet removeAll.
-	arrayPlugin pluginSelectorSet removeAll.
-	arrayPlugin arrayJSONSetTitleAndSettingsPluginWitness removeAll
+	SDAppLaunch arrayPlugin removeAll.
+	"arrayPlugin pluginSelectorSet removeAll.
+	arrayPlugin arrayJSONSetTitleAndSettingsPluginWitness removeAll"
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : 'AppLaunchTest',
+	#name : 'SDAppLaunchTest',
 	#superclass : 'TestCase',
 	#instVars : [
 		'launch'
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : 'running' }
-AppLaunchTest >> cleanUp [
+SDAppLaunchTest >> cleanUp [
 
 	launch class arrayPlugin removeAll.
 	launch := nil.
@@ -19,22 +19,14 @@ AppLaunchTest >> cleanUp [
 ]
 
 { #category : 'running' }
-AppLaunchTest >> setUp [
+SDAppLaunchTest >> setUp [
 	super setUp.
-	launch := SDAppLaunch new.
+	launch := SDAppLaunch start.
 	"Put here a common initialization logic for tests"
 ]
 
 { #category : 'tests' }
-AppLaunchTest >> testAppInitialize [
-	"can't include a test which would test the communication between JavaScript and Pharo. The only way is to follow in order the data exchanges, starting with the Stream Deck to the plugin by launching the Stream Deck application after creating an instance of AppLaunch"
-
-	self assert: launch class arrayPlugin size equals: 2.
-	self cleanUp.
-]
-
-{ #category : 'tests' }
-AppLaunchTest >> testWhichPlugin [
+SDAppLaunchTest >> testWhichPlugin [
 	"can't include a test which would test the communication between JavaScript and Pharo. The only way is to follow in order the data exchanges, starting with the Stream Deck to the plugin by launching the Stream Deck application after creating an instance of AppLaunch"
 
 	| actionUUID actionName |
@@ -47,6 +39,6 @@ AppLaunchTest >> testWhichPlugin [
 	actionUUID := 'com.thales.pharostreamdeck.browsetab'.
 	self
 		assert: (actionName whichAction: actionUUID) class
-		equals: BrowseTab.
+		equals: SystemBrowseTab.
 	self cleanUp
 ]
