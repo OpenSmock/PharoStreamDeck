@@ -20,6 +20,6 @@ BaselineOfPharoStreamDeck >> baseline: spec [
 BaselineOfPharoStreamDeck >> dependencies: spec [
 
 	spec
-		baseline: 'ZincHTTPComponentsWebSockets'
+		baseline: 'ZincHTTPComponentsWebSocket'
 		with: [ spec repository: 'github://svenvc/zinc/repository' ]
 ]
