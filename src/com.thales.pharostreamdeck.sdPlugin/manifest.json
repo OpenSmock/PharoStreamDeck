@@ -1,0 +1,254 @@
+{
+  "Actions": [
+    {
+      "Icon": "images/LightnessMode",
+      "Name": "Change Theme",
+      "States": [
+        {
+          "Image": "images/LightnessMode",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Switches themes between light and dark on pharo",
+      "UUID": "com.thales.pharostreamdeck.changetheme"
+    },
+	{
+      "Icon": "images/ReferencesToIt",
+      "Name": "References",
+      "States": [
+        {
+          "Image": "images/ReferencesToIt",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Switches themes between light and dark on pharo",
+      "UUID": "com.thales.pharostreamdeck.browsereferences"
+    },
+	{
+      "Icon": "images/FileBrowser",
+      "Name": "File Browser",
+      "States": [
+        {
+          "Image": "images/FileBrowser",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Permits the user to open the file browser in pharo",
+      "UUID": "com.thales.pharostreamdeck.filebrowser"
+    },{
+      "Icon": "images/Finder",
+      "Name": "Finder",
+      "States": [
+        {
+          "Image": "images/Finder",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Permits the user to open the finder in pharo",
+      "UUID": "com.thales.pharostreamdeck.finder"
+    },{
+      "Icon": "images/GitRepository",
+      "Name": "Git",
+      "States": [
+        {
+          "Image": "images/GitRepository",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Permits the user to open the git/iceberg view in pharo",
+      "UUID": "com.thales.pharostreamdeck.git"
+    },{
+      "Icon": "images/Playground",
+      "Name": "Playground",
+      "States": [
+        {
+          "Image": "images/Playground",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Permits the user to open a playground in pharo",
+      "UUID": "com.thales.pharostreamdeck.playground"
+    },{
+      "Icon": "images/Save",
+      "Name": "Save Image",
+      "States": [
+        {
+          "Image": "images/Save",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Permits the user to save the image in pharo",
+      "UUID": "com.thales.pharostreamdeck.saveimage"
+    },{
+      "Icon": "images/Settings",
+      "Name": "Settings",
+      "States": [
+        {
+          "Image": "images/Settings",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Permits the user to open the settings in pharo",
+      "UUID": "com.thales.pharostreamdeck.settings"
+    },
+	{
+      "Icon": "images/Transcript",
+      "Name": "Transcript",
+      "States": [
+        {
+          "Image": "images/Transcript",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Permits the user to open the transcript in pharo",
+      "UUID": "com.thales.pharostreamdeck.transcript"
+    },
+	{
+      "Icon": "images/DoIt",
+      "Name": "DoIt",
+      "States": [
+        {
+          "Image": "images/DoIt",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "The selected code in Pharo is executed (do it)",
+      "UUID": "com.thales.pharostreamdeck.doit"
+    },
+	{
+      "Icon": "images/ImplementorsOfIt",
+      "Name": "Implementors",
+      "States": [
+        {
+          "Image": "images/ImplementorsOfIt",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "The implementors of the selected code are shown in Pharo",
+      "UUID": "com.thales.pharostreamdeck.browseimplementors"
+    },
+	{
+      "Icon": "images/DebugIt",
+      "Name": "Debugger",
+      "States": [
+        {
+          "Image": "images/DebugIt",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Opens the debugger on selected code in Pharo",
+      "UUID": "com.thales.pharostreamdeck.debugit"
+    },
+	{
+      "Icon": "images/InspectIt",
+      "Name": "Inspector",
+      "States": [
+        {
+          "Image": "images/InspectIt",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Opens the inspector on selected code in Pharo",
+      "UUID": "com.thales.pharostreamdeck.inspectit"
+    },
+	{
+      "Icon": "images/PrintIt",
+      "Name": "Print",
+      "States": [
+        {
+          "Image": "images/PrintIt",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Prints the selected code in Pharo",
+      "UUID": "com.thales.pharostreamdeck.printit"
+    },
+	{
+      "Icon": "images/SendersOfIt",
+      "Name": "Senders",
+      "States": [
+        {
+          "Image": "images/SendersOfIt",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Prints the selected code in Pharo",
+      "UUID": "com.thales.pharostreamdeck.browsesenders"
+    },
+	{
+      "Icon": "images/BrowseFullClass",
+      "Name": "Browse Full Class",
+      "States": [
+        {
+          "Image": "images/BrowseFullClass",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Prints the selected code in Pharo",
+      "UUID": "com.thales.pharostreamdeck.browsefullclass"
+    },
+    {
+      "Icon": "images/SystemBrowser",
+      "Name": "System Browser",
+      "States": [
+        {
+          "Image": "images/SystemBrowser",
+          "TitleAlignment": "middle",
+          "FontSize": "16"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Opens a system browser tab in Pharo",
+      "UUID":"com.thales.pharostreamdeck.systembrowse"
+    }
+  ],
+  
+	"Profiles": [
+    {
+      "Name": "PharoStreamDeck",
+      "DeviceType": 2,
+      "Readonly": false,
+      "DontAutoSwitchWhenInstalled": false
+    }
+  ],
+  "SDKVersion": 2,
+  "Author": "Nolwenn PELLARD & Louison RABREAU",
+  "CodePath": "index.html",
+  "Description": "This plugin permits the use of Pharo with a pharo coded plugin",
+  "Name": "PharoStreamDeck",
+  "Icon": "images/pluginIcon",
+  "URL": "https://github.com/OpenSmock/PharoStreamDeck",
+  "Version": "1.0",
+  "Category": "PharoStreamDeck",
+  "CategoryIcon": "images/pluginIcon",
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.11"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Software": 
+    {
+      "MinimumVersion" : "4.1"
+    }
+}

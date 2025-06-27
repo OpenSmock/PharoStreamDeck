@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="20.000002"
+   height="20.000002"
+   viewBox="0 0 5.2916671 5.2916671"
+   version="1.1"
+   id="svg1"
+   inkscape:export-filename="FileBrowser.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g10"
+       transform="matrix(0.52916667,0,0,0.52916667,-45.204758,-65.708666)"
+       inkscape:label="SystemBrowser">
+      <rect
+         style="display:inline;opacity:0;fill:#ffffff;stroke:none;stroke-width:0.502999;stroke-linecap:round;stroke-linejoin:round;stroke-dashoffset:3.2519"
+         id="rect10"
+         width="10"
+         height="10"
+         x="85.426323"
+         y="124.17385"
+         inkscape:label="Size" />
+      <path
+         id="path8"
+         style="fill:#969696;fill-opacity:1;stroke-width:0.553184;stroke-linecap:round;stroke-linejoin:round;stroke-dashoffset:3.2519"
+         d="m 87.7,124.9 v 1.2 h 5 v 0.56798 h 1.2 V 124.9 Z"
+         sodipodi:nodetypes="ccccccc"
+         inkscape:label="BackFile" />
+      <path
+         id="path5"
+         style="fill:#5e6365;fill-opacity:1;stroke-width:0.542431;stroke-linecap:round;stroke-linejoin:round;stroke-dashoffset:3.2519"
+         d="m 86.399895,126.60002 v 6.09989 h 1.199926 v -4.89996 h 2.800346 v 1.10019 h 1.199927 v -2.30012 z m 1.700154,2.30012 v 0.49971 h 1.79989 v -0.49971 z m 0,1.19993 v 0.49971 h 1.79989 v -0.49971 z"
+         inkscape:label="FrontFile" />
+      <path
+         id="path6"
+         style="opacity:1;fill:#1079c0;fill-opacity:1;stroke-width:0.583687;stroke-linecap:round;stroke-linejoin:round;stroke-dashoffset:3.2519"
+         d="m 92.7,127.1 v 1.8 h 1.8 v -1.8 z m -2.3,2.3 v 1.8 h 1.8 v -1.8 z m 2.3,0 v 1.8 h 1.8 v -1.8 z m -4.6,2.3 v 1.8 h 1.8 v -1.8 z m 2.3,0 v 1.8 h 1.8 v -1.8 z m 2.3,0 v 1.8 h 1.8 v -1.8 z"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccc"
+         inkscape:label="Blocs" />
+    </g>
+  </g>
+</svg>
