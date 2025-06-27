@@ -1,0 +1,15 @@
+SmalltalkCISpec {
+
+  #preLoading: '.github/ci/preLoading.st',
+
+  #loading : [
+    SCIMetacelloLoadSpec {
+      #baseline : 'PharoStreamDeck',
+      #directory : 'src',
+      #platforms : [ #pharo ]
+    }
+  ],
+  #testing : {
+    #packages : [ 'PharoStreamDeck-Tests' ]
+  }
+}
