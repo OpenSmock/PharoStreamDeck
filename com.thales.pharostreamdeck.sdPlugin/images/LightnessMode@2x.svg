@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="40"
+   height="40"
+   viewBox="0 0 10.583333 10.583333"
+   version="1.1"
+   id="svg1"
+   inkscape:export-filename="LightnessMode.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g78"
+       transform="matrix(1.3229123,0,0,1.322909,-133.61418,-187.85322)"
+       inkscape:label="LightnessMode">
+      <rect
+         style="display:none;opacity:0;fill:#ffffff;stroke:none;stroke-width:0.445359;stroke-linecap:round;stroke-linejoin:round;stroke-dashoffset:3.2519"
+         id="rect78"
+         width="8.8540821"
+         height="8.8540821"
+         x="100.60087"
+         y="141.60294"
+         inkscape:label="Size" />
+      <path
+         id="path70-2"
+         style="display:inline;opacity:1;fill:#5e6365;fill-opacity:1;stroke:none;stroke-width:0.447977;stroke-linecap:round;stroke-dasharray:none;stroke-dashoffset:3.2519;stroke-opacity:1"
+         d="m 104.99824,144.10025 a 1.9,1.9 0 0 0 -0.55345,0.0842 1.9,1.9 0 0 0 -0.0796,0.54312 1.9,1.9 0 0 0 1.90065,1.89859 1.9,1.9 0 0 0 0.55449,-0.0842 1.9,1.9 0 0 0 0.0796,-0.54209 v -0.002 a 1.9,1.9 0 0 0 -1.90169,-1.89756 z"
+         inkscape:label="Darker" />
+      <path
+         id="path70"
+         style="display:inline;opacity:1;fill:#969696;fill-opacity:1;stroke:none;stroke-width:0.447977;stroke-linecap:round;stroke-dasharray:none;stroke-dashoffset:3.2519;stroke-opacity:1"
+         d="m 103.99003,144.39222 a 1.9,1.9 0 0 0 -0.88986,1.60869 1.9,1.9 0 0 0 1.90066,1.89911 1.9,1.9 0 0 0 1.61333,-0.90176 2.3,2.3 0 0 1 -0.3483,0.0279 2.3,2.3 0 0 1 -2.30063,-2.29857 2.3,2.3 0 0 1 0.0248,-0.33538 z"
+         inkscape:label="Dark" />
+      <path
+         id="path75"
+         style="display:inline;opacity:1;fill:#b58240;fill-opacity:1;stroke:none;stroke-width:0.499999;stroke-linecap:round;stroke-dasharray:none;stroke-dashoffset:3.2519;stroke-opacity:1"
+         d="m 104.99979,142.00012 c -0.11795,-0.001 -0.24759,0.0902 -0.24959,0.25011 v 1.46761 a 2.3,2.3 0 0 1 0.24753,-0.0181 2.3,2.3 0 0 1 0.25218,0.0181 v -1.46761 c 9.4e-4,-0.1568 -0.13284,-0.24911 -0.25012,-0.25011 z m 2.66392,1.09812 c -0.0637,-0.003 -0.13136,0.0175 -0.18862,0.0734 l -1.03818,1.03818 a 2.3,2.3 0 0 1 0.35347,0.35347 l 1.03818,-1.03818 c 0.11154,-0.11021 0.0822,-0.26987 0,-0.35347 -0.0413,-0.0421 -0.10112,-0.0699 -0.16485,-0.0734 z m -5.32525,5.2e-4 c -0.0641,0.004 -0.12512,0.0318 -0.16692,0.0729 -0.0842,0.0826 -0.11168,0.23895 0,0.35347 l 1.03818,1.03818 a 2.3,2.3 0 0 1 0.35347,-0.35347 l -1.03818,-1.03818 c -0.0551,-0.0558 -0.12241,-0.0765 -0.18655,-0.0729 z m -1.08831,2.651 c -0.1635,-8e-4 -0.25111,0.13915 -0.25011,0.25011 0.001,0.12654 0.0933,0.24916 0.25011,0.25012 h 1.46761 a 2.3,2.3 0 0 1 -0.0176,-0.24857 2.3,2.3 0 0 1 0.0181,-0.25166 z m 6.03167,0 a 2.3,2.3 0 0 1 0.0181,0.24753 v 0.003 a 2.3,2.3 0 0 1 -0.0176,0.25012 h 1.46761 c 0.1568,9.4e-4 0.24912,-0.13284 0.25012,-0.25012 0.001,-0.11795 -0.0902,-0.24811 -0.25012,-0.25011 z m -4.0721,1.68672 -1.03818,1.03818 c -0.11618,0.11505 -0.0792,0.27618 0,0.35398 0.0903,0.0886 0.24191,0.11019 0.35347,0 l 1.03818,-1.03818 a 2.3,2.3 0 0 1 -0.35347,-0.35398 z m 3.58066,0 a 2.3,2.3 0 0 1 -0.35398,0.35347 l 1.03869,1.03869 c 0.11505,0.11618 0.27567,0.0792 0.35347,0 0.0886,-0.0903 0.11019,-0.24242 0,-0.35398 z m -2.04018,0.84594 v 1.46761 c -8e-4,0.1635 0.13863,0.25112 0.24959,0.25012 0.12654,-0.001 0.24916,-0.0933 0.25012,-0.25012 v -1.46761 a 2.3,2.3 0 0 1 -0.24908,0.0176 2.3,2.3 0 0 1 -0.25063,-0.0176 z"
+         inkscape:label="Light" />
+    </g>
+  </g>
+</svg>

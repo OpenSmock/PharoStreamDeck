@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>com.thales.pharostreamdeck</title> 
+	<meta charset="utf-8" />
+</head>
+
+<body>
+	<script>
+
+		
+		var socket = null;				//webSocket performing the communication between the Stream Deck and this file
+		var websocketInterval = null;	//permits an automatic connection to the WebSocket
+		
+		var connect_socket = function () {
+			
+			socket = new WebSocket("ws://localhost:8080/pharoBridge");	//creates only one ZnManagingMultiThreadedServer HTTP Worker
+
+			//when Pharo sends a message to the webpage : Pharo->Plugin->SD
+			socket.onmessage = function (event) {
+				console.log("socket event: " + event.data);
+
+				websocket.send(event.data);
+			}
+			
+			//launch another WebSocket if the first one fails
+			socket.onclose = function () {
+				setTimeout(connect_socket, 1000);	
+			}
+		}
+		//check if the connection has been established		
+		function isOpen(socket) {
+			if (socket.readyState === WebSocket.OPEN) {
+				return true;
+			}
+			return false;
+		}
+
+
+	//communication between the Stream Deck and this file, opened using the inPort parameter given to connectElgatoStreamDeckSocket()
+	//https://github.com/OpenSmock/PharoStreamDeck/tree/main/yearSelector/YearSelectorJS 
+	//https://github.com/elgatosf/streamdeck-numberdisplay/tree/master/Sources/com.elgato.numberdisplay.sdPlugin
+		
+		var websocket = null;
+		var pluginUUID = null;
+		var settingsCache = {};
+		var DestinationEnum = Object.freeze({ "HARDWARE_AND_SOFTWARE": 0, "HARDWARE_ONLY": 1, "SOFTWARE_ONLY": 2 });
+
+	  //Plugin->Pharo 
+		var tabAction = {
+			type: "com.thales.pharostreamdeck.tabaction",	//Model : "com.author.pluginName.actionName"
+			
+			//SD button pressed
+			onKeyUp: function (action, context, settings, coordinates, userDesiredState) {
+				//data transfert
+				var json = {
+					"event": "keyUp",		///identifies function in Pharo (is not transmitted normaly)
+					"action": action,
+					"userDesiredState": userDesiredState,
+					"context": context,
+					"payload": settings,	//contains parameters that contain the values of the plugins
+					"coordinates": coordinates
+				};
+				//.json processing and formatting in Pharo
+
+				if (isOpen(socket)) {
+					socket.send(JSON.stringify(json));	
+				}
+			},
+			//button that appears on the SD
+			onWillAppear: function (action, context, settings, coordinates) {
+				//data transfert
+				//.json processing and formatting in Pharo
+				var json = {
+					//the event field is used for identifying this function in Pharo (isn't normally transmitted)
+					"event": "willAppear",
+					"action": action,
+					"context": context,
+					"payload": settings,
+					"coordinates": coordinates,
+				};
+				if (isOpen(socket)) {
+					socket.send(JSON.stringify(json));
+				}
+			},
+
+			onWillDisappear: function () {
+				var json = {
+					"event": "willDisappear"
+				};
+				if (isOpen(socket)) {
+					socket.send(JSON.stringify(json));
+				}
+			},
+			
+			
+			//setTitle, setSettings and getGlobalSettings done in Pharo
+		}
+		
+		function handleSend(socket, stringifiedJson) {
+			if (isOpen(socket)) {
+				socket.send(stringifiedJson);
+			} else if (socket.readyState == WebSocket.CONNECTING) {
+				socket.addEventListener("open", () => handleSend(socket, stringifiedJson));
+			}
+		}; 
+	  //SD->Plugin
+		//delegates the events received to Pharo through the use of a second WebSocket
+		function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, inInfo) {
+			pluginUUID = inPluginUUID;
+			//port is 28196
+
+			websocket = new WebSocket("ws://127.0.0.1:" + inPort);	// Open the first web socket
+
+			function registerPlugin(inPluginUUID) {
+				var json = {
+					"event": inRegisterEvent,
+					"uuid": inPluginUUID
+				};
+				var stringifiedJson = JSON.stringify(json);
+
+				//launches the second WebSocket
+				connect_socket();
+				handleSend(socket, stringifiedJson);
+			};
+
+			// WebSocket is connected, send message
+			websocket.onopen = function () {
+				registerPlugin(pluginUUID);
+			};
+
+			websocket.onmessage = function (evt) {
+				// Received message from Stream Deck
+				console.log("event.data: " + evt.data);
+				var jsonObj = JSON.parse(evt.data);
+				var event = jsonObj['event'];
+				var action = jsonObj['action'];
+				var context = jsonObj['context'];
+				var jsonPayload = jsonObj['payload'] || {};
+
+				//didReceiveGlobalSettings treatment isn't needed for this project, handled in the getGlobalSettings part in Pharo
+		
+				if (event == "keyUp") {
+					var settings = jsonPayload['settings'];
+					var coordinates = jsonPayload['coordinates'];
+					var userDesiredState = jsonPayload['userDesiredState'];
+					tabAction.onKeyUp(action, context, settings, coordinates);
+				}
+				else if (event == "willAppear") {
+					var settings = jsonPayload['settings'];
+					var coordinates = jsonPayload['coordinates'];
+					tabAction.onWillAppear(action, context, settings, coordinates);
+				}
+				
+				//when the user switches between profiles or deletes an action
+				else if (event == "willDisappear") {
+					tabAction.onWillDisappear();
+				}
+
+				else if (event == "sendToPlugin" || event == "didReceiveSettings") {
+					if (isOpen(socket)) {
+						socket.send(JSON.stringify(jsonObj));
+					}
+				}
+			};
+			
+			// Websocket is closed
+			websocket.onclose = function () {
+			};
+		};
+	</script>
+</body>
+
+</html>
