@@ -22,7 +22,7 @@ SDInspectIt >> pluginAction [
 	self currentWorld activeHand keyboardFocus handleKeyDown: 
 	(KeyboardEvent new 
 		setType: #keydown 
-		buttons: KeyboardEvent ctrlKeyMask
+		buttons: self ctrlOrCmdKeyMask
 		position: 0@0
 		keyValue: $i asInteger 
 		charCode: $i asInteger
