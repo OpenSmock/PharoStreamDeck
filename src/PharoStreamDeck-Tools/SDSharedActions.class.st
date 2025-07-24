@@ -12,6 +12,13 @@ Class {
 	#package : 'PharoStreamDeck-Tools'
 }
 
+{ #category : 'environment' }
+SDSharedActions >> ctrlOrCmdKeyMask [
+
+	Smalltalk os current isMacOS | Smalltalk os current isMacOSX ifTrue: [ ^ KeyboardEvent cmdKeyMask ].
+	^ KeyboardEvent ctrlKeyMask
+]
+
 { #category : 'action' }
 SDSharedActions >> pluginAction [
 	"Action executed following a keyUp with the same uuid"
