@@ -22,7 +22,7 @@ SDBrowseReferences >> pluginAction [
 	self currentWorld activeHand keyboardFocus handleKeyDown: 
 	(KeyboardEvent new 
 		setType: #keydown 
-		buttons: KeyboardEvent ctrlKeyMask + KeyboardEvent shiftKeyMask 
+		buttons: self ctrlOrCmdKeyMask + KeyboardEvent shiftKeyMask 
 		position: 0@0
 		keyValue: $n asInteger 
 		charCode: $n asInteger
